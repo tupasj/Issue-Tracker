@@ -59,7 +59,7 @@ const Styles = createGlobalStyle`
     --eerie-black: #1B1B1E;
 }
 html, body, #root {
-	min-height: 100%;
+	min-height: 100vh;
 	font-family: Geneva, Verdana, sans-serif;
 }
 `;
