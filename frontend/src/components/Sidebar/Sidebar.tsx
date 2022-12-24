@@ -2,10 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Container = styled.aside`
-  position: fixed;
-  width: 200px;
-  height: 100%;
-  background-color: #f7faf9;
+  grid-area: sidebar;
   box-shadow: 1px 0px 1px 0px rgba(0, 0, 0, 0.15);
 `;
 

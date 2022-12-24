@@ -10,7 +10,7 @@ export const App = () => {
           <Route path="/" element={<Navigate to="/sign-in" />} />
           <Route path="/sign-in" element={<SignInPage form="login" />} />
           <Route path="/register" element={<SignInPage form="signup" />} />
-          <Route path="/app" element={<AppPage />} />
+          <Route path="/app/*" element={<AppPage />} />
         </Routes>
       </BrowserRouter>
     </GlobalStyles>
