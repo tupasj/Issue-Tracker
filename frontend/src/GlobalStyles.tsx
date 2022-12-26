@@ -62,14 +62,6 @@ html, body, #root {
 	min-height: 100vh;
 	font-family: Geneva, Verdana, sans-serif;
 }
-#root {
-	display: grid;
-	grid-template-columns: 200px 1fr;
-	grid-template-rows: 54px 1fr;
-	grid-template-areas:
-	"header header"
-	"sidebar main";
-}
 `;
 
 type Props = {

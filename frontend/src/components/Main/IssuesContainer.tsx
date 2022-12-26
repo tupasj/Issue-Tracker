@@ -1,14 +1,17 @@
 import styled from 'styled-components';
+import { IssuesOptionsBar, IssuesList } from '@/components/Main';
 
 const Container = styled.div`
-  background-color: #f7faf9;
+  height: 100%;
   border-radius: 6px;
+  background-color: #f7faf9;
 `;
 
 export const IssuesContainer = () => {
   return (
     <Container>
-      <p>IssuesContainer</p>
+      <IssuesOptionsBar />
+      <IssuesList />
     </Container>
   );
 };
