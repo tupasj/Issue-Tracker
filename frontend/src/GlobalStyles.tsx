@@ -58,6 +58,9 @@ const Styles = createGlobalStyle`
     --charcoal: #373F51;
     --eerie-black: #1B1B1E;
 }
+html {
+	box-sizing: border-box;
+}
 html, body, #root {
 	min-height: 100vh;
 	font-family: Geneva, Verdana, sans-serif;
