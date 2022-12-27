@@ -9,7 +9,7 @@ const Container = styled.div`
   cursor: pointer;
   position: relative;
   z-index: 4;
-  width: 250px;
+  width: 262px;
 `;
 
 const CurrentProject = styled.div`
@@ -20,7 +20,9 @@ const CurrentProject = styled.div`
   padding-left: 14px;
   padding-right: 14px;
   justify-content: center;
-  background-color: gray;
+  background-color: #f7faf9;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.25);
 `;
 
 const ProjectName = styled.span`
@@ -31,11 +33,15 @@ const ProjectName = styled.span`
 
 const DropdownMenuContainer = styled.div`
   position: absolute;
-  top: 34px;
+  top: 37px;
   width: 250px;
-  background-color: gray;
+  padding: 4px;
+  border-radius: 4px;
+  border-width: 2px;
+  border-color: rgba(0, 0, 0, 0.25);
+  border-style: solid;
+  background-color: #f7faf9;
   z-index: -1;
-  padding-top: 4px;
 `;
 
 const DropdownMenu = () => {

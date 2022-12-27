@@ -32,6 +32,7 @@ export const Sidebar = () => {
         <StyledLink to="/app/issues">Issues</StyledLink>
         <StyledLink to="/app/milestones">Milestones</StyledLink>
         <StyledLink to="/app/people">People</StyledLink>
+        <StyledLink to="/app/settings">Settings</StyledLink>
       </Links>
     </Container>
   );
