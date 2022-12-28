@@ -17,4 +17,8 @@ const Comment = db.define("comment", {
   },
 });
 
+(async () => {
+  await db.sync();
+})();
+
 export { Comment };

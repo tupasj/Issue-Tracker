@@ -12,6 +12,7 @@ const db = new Sequelize(
 
 const testDBConnection = async () => {
   try {
+    console.log("Connecting to database...");
     await db.authenticate();
     console.log("Database connection has been established successfully.");
   } catch (error) {
@@ -19,6 +20,4 @@ const testDBConnection = async () => {
   }
 };
 
-testDBConnection();
-
-export { db };
+export { db, testDBConnection };

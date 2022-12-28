@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { Sequelize, Model, DataTypes } from "sequelize";
 import { db } from "../config/database";
 
 const User = db.define("user", {
@@ -10,7 +10,14 @@ const User = db.define("user", {
       isEmail: true,
     },
   },
-  name: {
+  first_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isAlpha: true,
+    },
+  },
+  last_name: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
@@ -38,5 +45,9 @@ const User = db.define("user", {
     defaultValue: "regular",
   },
 });
+
+(async () => {
+  await db.sync();
+})();
 
 export { User };
