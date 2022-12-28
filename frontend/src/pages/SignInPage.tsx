@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { LoginForm, SignupForm } from '@/components/Elements/Form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
   display: flex;
@@ -50,6 +52,43 @@ const SignupMessage = styled.div`
   font-weight: bold;
 `;
 
+const ProjectPromptContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+`;
+
+const CreateProjectButton = styled.div`
+  color: white;
+  background-color: #30b930;
+  border-radius: 4px;
+  padding: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background-color: #2da82d;
+  }
+`;
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  font-size: 1.25rem;
+  font-weight: 600;
+`;
+
+const Bold = styled.div`
+  font-weight: 600;
+`;
+
+const Input = styled.input`
+  height: 32px;
+  padding-left: 6px;
+  padding-right: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
 const LoginFormContainer = () => {
   const navigate = useNavigate();
 
@@ -77,6 +116,22 @@ const SignupFormContainer = () => {
         Already have an account?{' '}
         <SwitchFormLink onClick={() => navigate(`/sign-in`)}>Sign in</SwitchFormLink>
       </SwitchFormMessage>
+    </FormContainer>
+  );
+};
+
+const ProjectPrompt = () => {
+  return (
+    <FormContainer>
+      <ProjectPromptContainer>
+        <div>It looks like you're not part of any projects right now.</div>
+        <CreateProjectButton>
+          Create a new project <StyledFontAwesomeIcon icon={faPlus} />
+        </CreateProjectButton>
+        <Bold>or</Bold>
+        <div>Join an ongoing project</div>
+        <Input type="text" placeholder="Enter project code..." />
+      </ProjectPromptContainer>
     </FormContainer>
   );
 };
