@@ -38,7 +38,12 @@ interface FormValues {
   passwordConfirmation: string;
 }
 
-export const SignupForm = () => {
+type Props = {
+  isLoading?: boolean;
+  setIsloading?: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const SignupForm = ({ isLoading, setIsloading }: Props) => {
   const [signedUp, setSignedUp] = useState(false);
   const [notificationText, setNotificationText] = useState('');
 
@@ -82,9 +87,9 @@ export const SignupForm = () => {
           validationSchema={validationSchema}
           validateOnBlur={validationActive}
           validateOnChange={validationActive}
-          onSubmit={(values, { resetForm }) => {
+          onSubmit={(values) => {
             onSubmit(values);
-            resetForm();
+            setSignedUp(true);
           }}
         >
           <Form>
