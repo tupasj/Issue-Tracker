@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { ErrorMessageText } from '@/components/Elements/Form';
+import { Input } from '@/components/Elements/Form';
 
 const FormWrapper = styled.div`
   padding: 15px;
@@ -10,24 +10,8 @@ const FormWrapper = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
   text-align: center;
-`;
-
-const FormControl = styled.div`
-  margin-top: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: start;
-`;
-
-const StyledField = styled(Field)`
-  height: 32px;
-  padding-left: 6px;
-  padding-right: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 `;
 
 const SignupButton = styled.button`
@@ -44,14 +28,11 @@ const SignupButton = styled.button`
   }
 `;
 
-const ErrorWrapper = styled.div`
-  height: 15px;
-`;
-
 const NotificationTextContainer = styled.div``;
 
 interface FormValues {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   passwordConfirmation: string;
@@ -62,14 +43,19 @@ export const SignupForm = () => {
   const [notificationText, setNotificationText] = useState('');
 
   const initialValues = {
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     passwordConfirmation: '',
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string()
+    firstName: Yup.string()
+      .required('This field is required.')
+      .min(2, 'Name should be a minimum of 2 characters.')
+      .max(50, 'Please enter a name of 50 characters or less'),
+    lastName: Yup.string()
       .required('This field is required.')
       .min(2, 'Name should be a minimum of 2 characters.')
       .max(50, 'Please enter a name of 50 characters or less'),
@@ -104,35 +90,16 @@ export const SignupForm = () => {
           <Form>
             <FormWrapper>
               <NotificationTextContainer>{notificationText}</NotificationTextContainer>
-              <FormControl>
-                <StyledField type="text" id="name" name="name" placeholder="Name" />
-              </FormControl>
-              <ErrorWrapper>
-                <ErrorMessage name="email" component={ErrorMessageText as any} />
-              </ErrorWrapper>
-              <FormControl>
-                <StyledField type="email" id="email" name="email" placeholder="Email" />
-              </FormControl>
-              <ErrorWrapper>
-                <ErrorMessage name="email" component={ErrorMessageText as any} />
-              </ErrorWrapper>
-              <FormControl>
-                <StyledField type="password" id="password" name="password" placeholder="Password" />
-              </FormControl>
-              <ErrorWrapper>
-                <ErrorMessage name="email" component={ErrorMessageText as any} />
-              </ErrorWrapper>
-              <FormControl>
-                <StyledField
-                  type="password"
-                  id="passwordConfirmation"
-                  name="passwordConfirmation"
-                  placeholder="Confirm password"
-                />
-              </FormControl>
-              <ErrorWrapper>
-                <ErrorMessage name="email" component={ErrorMessageText as any} />
-              </ErrorWrapper>
+              <Input type="text" id="firstName" name="firstName" placeholder="First name" />
+              <Input type="text" id="lastName" name="lastName" placeholder="Last name" />
+              <Input type="email" id="email" name="email" placeholder="Email" />
+              <Input type="password" id="password" name="password" placeholder="Password" />
+              <Input
+                type="password"
+                id="passwordConfirmation"
+                name="passwordConfirmation"
+                placeholder="Confirm password"
+              />
               <SignupButton type="submit" onClick={() => (validationActive = true)}>
                 Sign Up
               </SignupButton>

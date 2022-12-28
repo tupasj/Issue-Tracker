@@ -20,6 +20,8 @@ export const SettingsPage = () => {
       <H2>User</H2>
       <H3>Change profile picture</H3>
       <H3>Change display name</H3>
+      <H3>Add phone number</H3>
+      <input type="tel" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" />
     </Container>
   );
 };

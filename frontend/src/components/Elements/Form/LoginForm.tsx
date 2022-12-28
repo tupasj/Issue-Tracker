@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { ErrorMessageText } from '@/components/Elements/Form';
+import { Input } from '@/components/Elements/Form';
 
 const FormWrapper = styled.div`
   display: flex;
@@ -11,22 +11,6 @@ const FormWrapper = styled.div`
   align-items: center;
   gap: 10px;
   text-align: center;
-`;
-
-const FormControl = styled.div`
-  margin-top: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: start;
-`;
-
-const StyledField = styled(Field)`
-  height: 32px;
-  padding-left: 6px;
-  padding-right: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 `;
 
 const LoginButton = styled.button`
@@ -43,14 +27,9 @@ const LoginButton = styled.button`
   }
 `;
 
-const ErrorWrapper = styled.div`
-  height: 15px;
-`;
-
 const NotificationTextContainer = styled.div``;
 
 interface FormValues {
-  name: string;
   email: string;
   password: string;
 }
@@ -59,7 +38,6 @@ export const LoginForm = () => {
   const [notificationText, setNotificationText] = useState('');
 
   const initialValues = {
-    name: '',
     email: '',
     password: '',
   };
@@ -91,30 +69,8 @@ export const LoginForm = () => {
       <Form>
         <FormWrapper>
           <NotificationTextContainer>{notificationText}</NotificationTextContainer>
-          <FormControl>
-            <StyledField
-              className="form-input"
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-            />
-          </FormControl>
-          <ErrorWrapper>
-            <ErrorMessage name="email" component={ErrorMessageText as any} />
-          </ErrorWrapper>
-          <FormControl>
-            <StyledField
-              className="form-input"
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Password"
-            />
-          </FormControl>
-          <ErrorWrapper>
-            <ErrorMessage name="password" component={ErrorMessageText as any} />
-          </ErrorWrapper>
+          <Input type="email" id="email" name="email" placeholder="Email" />
+          <Input type="password" id="password" name="password" placeholder="Password" />
           <LoginButton type="submit" onClick={() => (validationActive = true)}>
             Log In
           </LoginButton>
