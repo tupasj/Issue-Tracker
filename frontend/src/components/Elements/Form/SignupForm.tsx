@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import axios from 'axios';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Input } from '@/components/Elements/Form';
@@ -75,7 +76,17 @@ export const SignupForm = ({ isLoading, setIsloading }: Props) => {
   });
 
   const onSubmit = async (values: FormValues) => {
-    console.log('values: ', values);
+    try {
+      await axios.post('http://localhost:4000/user/register', {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        email: values.email,
+        password: values.password,
+      });
+      console.log('values: ', values);
+    } catch (error) {
+      console.log('error: ', error);
+    }
   };
 
   let validationActive = false;
