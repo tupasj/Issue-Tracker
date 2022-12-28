@@ -6,6 +6,8 @@ const Milestone = db.define(
   {
     title: {
       type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
     },
     description: {
       type: DataTypes.TEXT,

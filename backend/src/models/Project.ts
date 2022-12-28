@@ -5,9 +5,11 @@ const Project = db.define("project", {
   uuid: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
+    unique: true,
   },
   name: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   issue_ids: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),

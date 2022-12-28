@@ -9,9 +9,11 @@ const Comment = db.define("comment", {
   },
   text_content: {
     type: DataTypes.TEXT,
+    allowNull: false,
   },
   posted_by: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
 });
 

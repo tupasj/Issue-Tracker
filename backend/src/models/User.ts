@@ -4,9 +4,12 @@ import { db } from "../config/database";
 const User = db.define("user", {
   email: {
     type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
   },
   name: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   phone_number: {
     type: DataTypes.INTEGER,
