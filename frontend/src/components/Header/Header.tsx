@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBinoculars } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { HeaderDropdown } from '@/components/Header';
+import { ProjectsDropdown, UserInfo } from '@/components/Header';
 
 const Container = styled.header`
   grid-area: header;
@@ -16,7 +16,7 @@ const Container = styled.header`
 
 const StyledLink = styled(Link)`
   position: absolute;
-  left: 18px;
+  left: 22px;
   &:link,
   :visited,
   :active {
@@ -39,7 +39,8 @@ export const Header = () => {
       <StyledLink to="/app/dashboard">
         <StyledFontAwesomeIcon icon={faBinoculars} />
       </StyledLink>
-      <HeaderDropdown />
+      <ProjectsDropdown />
+      <UserInfo />
     </Container>
   );
 };

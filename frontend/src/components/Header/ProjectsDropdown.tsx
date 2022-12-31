@@ -57,7 +57,7 @@ const DropdownMenu = () => {
   );
 };
 
-export const HeaderDropdown = () => {
+export const ProjectsDropdown = () => {
   const [dropdownActive, setDropdownActive] = useState(false);
 
   const toggleDropdown = () => {

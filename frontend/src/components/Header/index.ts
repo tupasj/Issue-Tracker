@@ -1,2 +1,3 @@
 export * from './Header';
-export * from './HeaderDropdown';
+export * from './ProjectsDropdown';
+export * from './UserInfo';

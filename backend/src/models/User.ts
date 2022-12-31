@@ -10,16 +10,17 @@ const User = db.define('user', {
       isEmail: true,
     },
   },
+  username: {
+    type: DataTypes.STRING,
+  },
   first_name: {
     type: DataTypes.STRING,
-    allowNull: false,
     validate: {
       isAlpha: true,
     },
   },
   last_name: {
     type: DataTypes.STRING,
-    allowNull: false,
     validate: {
       isAlpha: true,
     },
@@ -33,6 +34,9 @@ const User = db.define('user', {
       min: 8,
       max: 100,
     },
+  },
+  profile_image: {
+    type: DataTypes.STRING,
   },
   project_ids: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
