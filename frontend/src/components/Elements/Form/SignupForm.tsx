@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
@@ -45,6 +46,7 @@ type Props = {
 export const SignupForm = ({ isLoading, setIsloading }: Props) => {
   const [signedUp, setSignedUp] = useState(false);
   const [notificationText, setNotificationText] = useState('');
+  const navigate = useNavigate();
 
   const initialValues = {
     email: '',
@@ -66,10 +68,12 @@ export const SignupForm = ({ isLoading, setIsloading }: Props) => {
   const onSubmit = async (values: FormValues) => {
     try {
       console.log('values: ', values);
-      await axiosInstance.post('/user/register', {
+      const userCredentials = {
         email: values.email,
         password: values.password,
-      });
+      };
+      await axiosInstance.post('/user/register', userCredentials);
+      navigate('/app');
     } catch (error: any) {
       axiosErrorHandler(error);
     }

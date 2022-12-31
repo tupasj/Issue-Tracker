@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { Input } from '@/components/Elements/Form';
 
 const FormWrapper = styled.div`
@@ -36,6 +38,7 @@ interface FormValues {
 
 export const LoginForm = () => {
   const [notificationText, setNotificationText] = useState('');
+  const navigate = useNavigate();
 
   const initialValues = {
     email: '',
@@ -51,7 +54,13 @@ export const LoginForm = () => {
   });
 
   const onSubmit = async (values: FormValues) => {
-    console.log('values: ', values);
+    const userCredentials = {
+      email: values.email,
+      password: values.password,
+    };
+    const userInfo = await axiosInstance.post('/user/login', userCredentials);
+    console.log('userInfo: ', userInfo);
+    navigate('/app');
   };
 
   let validationActive = false;
