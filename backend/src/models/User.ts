@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
-import { db } from "../config/database";
+import { DataTypes } from 'sequelize';
+import { db } from '../config/database';
 
-const User = db.define("user", {
+const User = db.define('user', {
   email: {
     type: DataTypes.STRING,
     unique: true,
@@ -42,12 +42,14 @@ const User = db.define("user", {
   },
   type: {
     type: DataTypes.STRING,
-    defaultValue: "regular",
+    defaultValue: 'regular',
   },
 });
 
-(async () => {
-  await db.sync();
-})();
+if (process.env.TESTING == 'false') {
+  (async () => {
+    await db.sync();
+  })();
+}
 
 export { User };

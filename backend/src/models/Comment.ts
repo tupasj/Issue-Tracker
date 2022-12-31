@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
-import { db } from "../config/database";
+import { DataTypes } from 'sequelize';
+import { db } from '../config/database';
 
-const Comment = db.define("comment", {
+const Comment = db.define('comment', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -17,8 +17,10 @@ const Comment = db.define("comment", {
   },
 });
 
-(async () => {
-  await db.sync();
-})();
+if (process.env.TESTING == 'false') {
+  (async () => {
+    await db.sync();
+  })();
+}
 
 export { Comment };
