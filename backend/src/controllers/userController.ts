@@ -24,14 +24,12 @@ const getUser = async (req: Request, res: Response) => {
 };
 
 const createUser = async (req: Request, res: Response) => {
-  const { email, first_name, last_name, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
       email,
-      first_name,
-      last_name,
       password: hashedPassword,
     });
     res.status(201).json(newUser);

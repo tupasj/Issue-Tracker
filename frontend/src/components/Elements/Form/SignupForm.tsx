@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import axiosInstance from '@/lib/axiosInstance';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { Input } from '@/components/Elements/Form';
 
 const FormWrapper = styled.div`
@@ -32,8 +32,6 @@ const SignupButton = styled.button`
 const NotificationTextContainer = styled.div``;
 
 interface FormValues {
-  firstName: string;
-  lastName: string;
   email: string;
   password: string;
   passwordConfirmation: string;
@@ -49,22 +47,12 @@ export const SignupForm = ({ isLoading, setIsloading }: Props) => {
   const [notificationText, setNotificationText] = useState('');
 
   const initialValues = {
-    firstName: '',
-    lastName: '',
     email: '',
     password: '',
     passwordConfirmation: '',
   };
 
   const validationSchema = Yup.object({
-    firstName: Yup.string()
-      .required('This field is required.')
-      .min(2, 'Name should be a minimum of 2 characters.')
-      .max(50, 'Please enter a name of 50 characters or less'),
-    lastName: Yup.string()
-      .required('This field is required.')
-      .min(2, 'Name should be a minimum of 2 characters.')
-      .max(50, 'Please enter a name of 50 characters or less'),
     email: Yup.string().email('Invalid email format.').required('This field is required.'),
     password: Yup.string()
       .required('This field is required.')
@@ -77,13 +65,13 @@ export const SignupForm = ({ isLoading, setIsloading }: Props) => {
 
   const onSubmit = async (values: FormValues) => {
     try {
+      console.log('values: ', values);
       await axiosInstance.post('/user/register', {
         email: values.email,
         password: values.password,
       });
-      console.log('values: ', values);
-    } catch (error) {
-      console.log('error: ', error);
+    } catch (error: any) {
+      axiosErrorHandler(error);
     }
   };
 
@@ -104,8 +92,6 @@ export const SignupForm = ({ isLoading, setIsloading }: Props) => {
           <Form>
             <FormWrapper>
               <NotificationTextContainer>{notificationText}</NotificationTextContainer>
-              <Input type="text" id="firstName" name="firstName" placeholder="First name" />
-              <Input type="text" id="lastName" name="lastName" placeholder="Last name" />
               <Input type="email" id="email" name="email" placeholder="Email" />
               <Input type="password" id="password" name="password" placeholder="Password" />
               <Input
