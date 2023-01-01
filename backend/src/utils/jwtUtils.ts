@@ -35,6 +35,7 @@ const refreshToken = (req: Request, res: Response) => {
     (err: any, user: any) => {
       if (err) return res.sendStatus(403);
       //   const accessToken = generateAccessToken({ name: user.name });
+      // res.cookie('jwt', { accessToken }, { httpOnly: true });
       //   res.json({ accessToken: accessToken });
     }
   );
@@ -43,7 +44,8 @@ const refreshToken = (req: Request, res: Response) => {
 const deleteRefreshToken = (req: Request, res: Response) => {
   // @ts-ignore
   refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
-  res.sendStatus(204);
+  res.clearCookie('jwt');
+  res.sendStatus(204).end();
 };
 
 const generateTokens = (userEmail: object) => {

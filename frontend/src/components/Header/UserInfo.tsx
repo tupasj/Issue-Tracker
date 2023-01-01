@@ -51,11 +51,7 @@ export const UserInfo = () => {
       // @ts-ignore
       const email = userCtx.email;
       try {
-        const response = await axiosInstance.get(`/user/${email}/attributes?email=${email}`);
-        console.log('response: ', response);
-        console.log('userCtx: ', userCtx);
-        // setUserInfo(response.userInfo);
-        // console.log('userInfo: ', userInfo);
+        await axiosInstance.get(`/user/${email}/attributes?email=${email}`);
       } catch (error: any) {
         axiosErrorHandler(error);
       }

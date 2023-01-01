@@ -8,8 +8,8 @@ import {
 } from '../utils/jwtUtils';
 
 const getUserInfo = async (req: Request, res: Response) => {
-  console.log('req.params.email: ', req.params.email);
-  console.log('req.params.query', req.query);
+  // console.log('req.params.email: ', req.params.email);
+  // console.log('req.params.query', req.query);
   res.status(200).json(req.params.email);
 
   // try {
@@ -36,9 +36,10 @@ const createUser = async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
     });
+    const tokens = generateTokens({ email: email });
+    res.cookie('jwt', tokens, { httpOnly: true });
     res.status(201);
   } catch (error: any) {
-    console.log('error: ', error.message);
     res.status(400).json({ message: error.message });
   }
 };
@@ -72,6 +73,7 @@ const loginUser = async (req: Request, res: Response) => {
         userInfo,
         tokens,
       };
+      res.cookie('jwt', tokens, { httpOnly: true });
       res.status(200).json(userInfoObject);
     } else {
       throw new Error('Invalid credentials');
