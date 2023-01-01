@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { UserContext, UserContextInterface } from '@/context/UserContext';
 import { Header } from '@/components/Header';
 import { Sidebar } from '@/components/Sidebar';
 import { Main } from '@/components/Main';
@@ -13,12 +14,22 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 
-export const AppPage = () => {
+type AppPageProps = {
+  userEmail: string | null;
+};
+
+export const AppPage = ({ userEmail }: AppPageProps) => {
+  const definedUserContext: UserContextInterface = {
+    email: userEmail,
+  };
+
   return (
     <Container>
-      <Header />
-      <Sidebar />
-      <Main />
+      <UserContext.Provider value={definedUserContext}>
+        <Header />
+        <Sidebar />
+        <Main />
+      </UserContext.Provider>
     </Container>
   );
 };

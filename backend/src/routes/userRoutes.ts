@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  getUser,
+  getUserInfo,
   createUser,
   loginUser,
   logoutUser,
@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
-router.route('/').get(getUser);
 router.route('/register').post(createUser);
 router.route('/login').post(loginUser);
 router.route('/logout').delete(logoutUser);
 router.route('/refreshToken').post(refreshUserToken);
+router.route('/:email/attributes?').get(getUserInfo);
 
 export default router;

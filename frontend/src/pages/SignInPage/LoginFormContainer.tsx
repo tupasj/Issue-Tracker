@@ -37,14 +37,18 @@ const SwitchFormMessage = styled.div`
   font-size: 0.75rem;
 `;
 
-export const LoginFormContainer = () => {
+type Props = {
+  setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+export const LoginFormContainer = ({ setUserEmail }: Props) => {
   const navigate = useNavigate();
 
   return (
     <FormContainer>
       <Title>Welcome to Issue Tracker</Title>
       <SignInMessage>Sign in to your account</SignInMessage>
-      <LoginForm />
+      <LoginForm setUserEmail={setUserEmail} />
       <SwitchFormMessage>
         Don't have an account?{' '}
         <SwitchFormLink onClick={() => navigate(`/register`)}>Register now</SwitchFormLink>

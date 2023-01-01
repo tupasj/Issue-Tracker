@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
@@ -23,14 +21,13 @@ const SignupButton = styled.button`
   background-color: #5464e3;
   color: #fff;
   border: none;
+  font-weight: 600;
   cursor: pointer;
   transition: transform 200ms;
   &:hover {
     background-color: #3f4eca;
   }
 `;
-
-const NotificationTextContainer = styled.div``;
 
 interface FormValues {
   email: string;
@@ -41,13 +38,11 @@ interface FormValues {
 type Props = {
   isLoading?: boolean;
   setIsloading?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export const SignupForm = ({ isLoading, setIsloading }: Props) => {
-  const [signedUp, setSignedUp] = useState(false);
-  const [notificationText, setNotificationText] = useState('');
-  const navigate = useNavigate();
-
+export const SignupForm = ({ isLoading, setIsloading, setSignedUp, setUserEmail }: Props) => {
   const initialValues = {
     email: '',
     password: '',
@@ -67,13 +62,13 @@ export const SignupForm = ({ isLoading, setIsloading }: Props) => {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      console.log('values: ', values);
       const userCredentials = {
         email: values.email,
         password: values.password,
       };
+      setUserEmail(userCredentials.email);
       await axiosInstance.post('/user/register', userCredentials);
-      navigate('/app');
+      setSignedUp(true);
     } catch (error: any) {
       axiosErrorHandler(error);
     }
@@ -82,35 +77,32 @@ export const SignupForm = ({ isLoading, setIsloading }: Props) => {
   let validationActive = false;
   return (
     <>
-      {!signedUp && (
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          validateOnBlur={validationActive}
-          validateOnChange={validationActive}
-          onSubmit={(values) => {
-            onSubmit(values);
-            setSignedUp(true);
-          }}
-        >
-          <Form>
-            <FormWrapper>
-              <NotificationTextContainer>{notificationText}</NotificationTextContainer>
-              <Input type="email" id="email" name="email" placeholder="Email" />
-              <Input type="password" id="password" name="password" placeholder="Password" />
-              <Input
-                type="password"
-                id="passwordConfirmation"
-                name="passwordConfirmation"
-                placeholder="Confirm password"
-              />
-              <SignupButton type="submit" onClick={() => (validationActive = true)}>
-                Sign Up
-              </SignupButton>
-            </FormWrapper>
-          </Form>
-        </Formik>
-      )}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnBlur={validationActive}
+        validateOnChange={validationActive}
+        onSubmit={(values) => {
+          onSubmit(values);
+          setSignedUp(true);
+        }}
+      >
+        <Form>
+          <FormWrapper>
+            <Input type="email" id="email" name="email" placeholder="Email" />
+            <Input type="password" id="password" name="password" placeholder="Password" />
+            <Input
+              type="password"
+              id="passwordConfirmation"
+              name="passwordConfirmation"
+              placeholder="Confirm password"
+            />
+            <SignupButton type="submit" onClick={() => (validationActive = true)}>
+              Sign Up
+            </SignupButton>
+          </FormWrapper>
+        </Form>
+      </Formik>
     </>
   );
 };

@@ -22,6 +22,7 @@ const LoginButton = styled.button`
   background-color: #5464e3;
   color: #fff;
   border: none;
+  font-weight: 600;
   cursor: pointer;
   transition: transform 200ms;
   &:hover {
@@ -29,14 +30,20 @@ const LoginButton = styled.button`
   }
 `;
 
-const NotificationTextContainer = styled.div``;
+const NotificationTextContainer = styled.div`
+  color: #f40000;
+`;
 
 interface FormValues {
   email: string;
   password: string;
 }
 
-export const LoginForm = () => {
+type Props = {
+  setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+export const LoginForm = ({ setUserEmail }: Props) => {
   const [notificationText, setNotificationText] = useState('');
   const navigate = useNavigate();
 
@@ -58,9 +65,15 @@ export const LoginForm = () => {
       email: values.email,
       password: values.password,
     };
-    const userInfo = await axiosInstance.post('/user/login', userCredentials);
-    console.log('userInfo: ', userInfo);
-    navigate('/app');
+    try {
+      const userInfo = await axiosInstance.post('/user/login', userCredentials);
+      console.log('userInfo: ', userInfo);
+      setUserEmail(userCredentials.email);
+      navigate('/app');
+    } catch (error: any) {
+      setNotificationText(error.response.data.message);
+      axiosErrorHandler(error);
+    }
   };
 
   let validationActive = false;
