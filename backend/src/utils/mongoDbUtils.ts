@@ -4,8 +4,9 @@ import refreshTokenModel from '../models/refreshToken';
 const connectToMongoDB = async () => {
   try {
     console.log('Connecting to MongoDB...');
-    // @ts-ignore
-    const connnectionResponse = await mongoose.connect(process.env.MONGO_URI);
+    const connnectionResponse = await mongoose.connect(
+      process.env.MONGO_URI as string
+    );
     console.log(
       // @ts-ignore
       `MongoDB connected: ${connnectionResponse.connection.host}`.cyan.underline

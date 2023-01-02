@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SignupForm } from '@/components/Elements/Form';
-import { ProjectPrompt } from '@/pages/SignInPage';
+import { SignupForm, ProjectPrompt } from '@/pages/SignInPage';
 
 const SwitchFormLink = styled.span`
   color: #59b1e6;
@@ -37,7 +36,7 @@ type Props = {
 };
 
 export const SignupFormContainer = ({ setUserEmail }: Props) => {
-  const [signedUp, setSignedUp] = useState(true);
+  const [signedUp, setSignedUp] = useState(false);
   const navigate = useNavigate();
 
   return (

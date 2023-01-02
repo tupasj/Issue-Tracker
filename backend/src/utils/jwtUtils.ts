@@ -5,8 +5,7 @@ import refreshTokenModel from '../models/refreshToken';
 
 const generateAccessToken = (userEmail: object): string | undefined => {
   try {
-    // @ts-ignore
-    return jwt.sign(userEmail, process.env.ACCESS_TOKEN_SECRET, {
+    return jwt.sign(userEmail, process.env.ACCESS_TOKEN_SECRET as string, {
       expiresIn: '6h',
     });
   } catch (error: any) {
@@ -16,8 +15,7 @@ const generateAccessToken = (userEmail: object): string | undefined => {
 
 const generateRefreshToken = (userEmail: object): string | undefined => {
   try {
-    // @ts-ignore
-    return jwt.sign(userEmail, process.env.REFRESH_TOKEN_SECRET);
+    return jwt.sign(userEmail, process.env.REFRESH_TOKEN_SECRET as string);
   } catch (error: any) {
     console.log('generateRefreshToken error: ', error.message);
   }
@@ -29,8 +27,7 @@ const refreshToken = (req: Request, res: Response) => {
   // if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
   jwt.verify(
     refreshToken,
-    // @ts-ignore
-    process.env.REFRESH_TOKEN_SECRET,
+    process.env.REFRESH_TOKEN_SECRET as string,
     (err: any, user: any) => {
       if (err) return res.sendStatus(403);
       //   const accessToken = generateAccessToken({ name: user.name });

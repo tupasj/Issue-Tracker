@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { LoginForm } from '@/components/Elements/Form';
+import { LoginForm } from '@/pages/SignInPage';
 
 const Title = styled.div`
   margin-bottom: 18px;

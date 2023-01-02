@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-
-const Container = styled.div``;
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
 const H2 = styled.h2`
   padding-top: 22px;
@@ -35,17 +35,43 @@ const SubmitButton = styled.button`
   }
 `;
 
-const Form = styled.form`
+const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   gap: 12px;
   align-items: start;
 `;
 
+interface FormValues {
+  project_code?: string;
+  project_name?: string;
+  profile_picture?: string;
+  display_name?: string;
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  phone_number?: number | null;
+}
+
 export const SettingsPage = () => {
+  const initialValues = {
+    project_code: '',
+    project_name: '',
+    profile_picture: '',
+    display_name: '',
+    username: '',
+    first_name: '',
+    last_name: '',
+    phone_number: null,
+  };
+
+  const handleSubmit = (values: FormValues) => {
+    console.log('values: ', values);
+  };
+
   return (
-    <Container>
-      <Form>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <StyledForm>
         <H2>Projects</H2>
         <H3>Join a project</H3>
         <Input type="text" placeholder="Enter project code..." />
@@ -76,8 +102,8 @@ export const SettingsPage = () => {
         <Input type="text" placeholder="Last name" />
         <H3>Phone number</H3>
         <Input type="tel" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" />
-        <SubmitButton>Save changes</SubmitButton>
-      </Form>
-    </Container>
+        <SubmitButton type="submit">Save changes</SubmitButton>
+      </StyledForm>
+    </Formik>
   );
 };
