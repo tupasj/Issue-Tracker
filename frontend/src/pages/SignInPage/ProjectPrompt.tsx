@@ -18,10 +18,10 @@ const ProjectPromptContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 22px;
 `;
 
 const CreateProjectButton = styled.div`
+  margin-top: 8px;
   color: white;
   background-color: #30b930;
   border-radius: 4px;
@@ -39,6 +39,8 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 `;
 
 const Bold = styled.div`
+  padding-top: 20px;
+  padding-bottom: 20px;
   font-weight: 600;
 `;
 
@@ -48,18 +50,24 @@ const Input = styled.input`
   padding-right: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-top: 8px;
+`;
+
+const Text = styled.div`
+  padding-bottom: 8px;
 `;
 
 export const ProjectPrompt = () => {
   return (
     <FormContainer>
       <ProjectPromptContainer>
-        <div>It looks like you're not part of any projects right now.</div>
+        <Text>Signup successful!</Text>
+        <Text>Start by creating a new project or joining an existing one.</Text>
         <CreateProjectButton>
           Create a new project <StyledFontAwesomeIcon icon={faPlus} />
         </CreateProjectButton>
         <Bold>or</Bold>
-        <div>Join an ongoing project</div>
+        <Text>Join an ongoing project</Text>
         <Input type="text" placeholder="Enter project code..." />
       </ProjectPromptContainer>
     </FormContainer>

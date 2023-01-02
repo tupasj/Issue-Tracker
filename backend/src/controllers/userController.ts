@@ -84,7 +84,6 @@ const loginUser = async (req: Request, res: Response) => {
 };
 
 const logoutUser = async (req: Request, res: Response) => {
-  // Response should be http status code 200
   deleteRefreshToken(req, res);
 };
 

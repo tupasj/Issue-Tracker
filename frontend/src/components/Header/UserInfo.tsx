@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext } from '@/context/UserContext';
+import { UserInfoDropDown } from '@/components/Header';
 
 const Container = styled.div`
   position: absolute;
@@ -20,10 +21,6 @@ const ImgPlaceholder = styled.div`
   width: 46px;
   margin-left: 10px;
   margin-right: 4px;
-  cursor: pointer;
-`;
-
-const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
 `;
 
@@ -71,7 +68,7 @@ export const UserInfo = () => {
           <WrappedIcon icon={faCircleUser} />
         </IconWrapper>
       )}
-      <StyledFontAwesomeIcon icon={faAngleDown} />
+      <UserInfoDropDown />
     </Container>
   );
 };

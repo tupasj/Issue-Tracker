@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 // @ts-ignore
-const refreshTokenSchema = mongoose.Schema(
+const refreshTokenSchema = new mongoose.Schema(
   {
     identifier: String,
   },
