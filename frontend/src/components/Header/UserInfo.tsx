@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
@@ -41,6 +42,7 @@ type UserInfo = {
 
 export const UserInfo = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const navigate = useNavigate();
   const userCtx = useContext(UserContext);
 
   useEffect(() => {
@@ -48,9 +50,11 @@ export const UserInfo = () => {
       // @ts-ignore
       const email = userCtx.email;
       try {
-        await axiosInstance.get(`/user/${email}/attributes?email=${email}`);
+        const userInfoResponse = await axiosInstance.get(`/user/email=${email}`);
+        console.log('user email: ', userInfoResponse.data.email);
       } catch (error: any) {
         axiosErrorHandler(error);
+        navigate('/sign-in');
       }
     };
     fetchdata();
@@ -59,7 +63,7 @@ export const UserInfo = () => {
   return (
     <Container>
       {userCtx && <p>{userCtx.email}</p>}
-      {userInfo ? (
+      {userInfo?.profile_picture ? (
         <ImgPlaceholder>
           <img src={userInfo.profile_picture} alt="profile-image" />
         </ImgPlaceholder>

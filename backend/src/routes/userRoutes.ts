@@ -13,6 +13,6 @@ router.route('/register').post(createUser);
 router.route('/login').post(loginUser);
 router.route('/logout').delete(logoutUser);
 router.route('/refreshToken').post(refreshUserToken);
-router.route('/:email/attributes?').get(getUserInfo);
+router.route('/email=:email').get(getUserInfo);
 
 export default router;

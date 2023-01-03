@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { db } from '../config/database';
 import { User } from '../models/User';
 import bcrypt from 'bcrypt';
 import {
@@ -8,23 +9,33 @@ import {
 } from '../utils/jwtUtils';
 
 const getUserInfo = async (req: Request, res: Response) => {
-  // console.log('req.params.email: ', req.params.email);
-  // console.log('req.params.query', req.query);
-  res.status(200).json(req.params.email);
+  const { email } = req.params;
 
-  // try {
-  //   const user: any = await User.findOne({
-  //     where: { email },
-  //   });
-  //   if (!user) {
-  //     throw new Error('Invalid credentials');
-  //   }
+  try {
+    const user: any = await User.findOne({
+      where: { email },
+    });
+    if (!user) {
+      throw new Error('Invalid credentials');
+    }
 
-  //   res.status(200).json(user.requestedAttribute);
-  // } catch (error: any) {
-  //   console.log('error: ', error);
-  //   res.status(400).json({ message: error.message });
-  // }
+    const userInfo = {
+      email: user.email,
+      username: user.username,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      phone_number: user.phone_number,
+      profile_image: user.profile_image,
+      project_ids: user.project_ids,
+      status: user.status,
+      type: user.type,
+    };
+
+    res.status(200).json(userInfo);
+  } catch (error: any) {
+    console.log('error: ', error);
+    res.status(400).json({ message: error.message });
+  }
 };
 
 const createUser = async (req: Request, res: Response) => {
@@ -54,23 +65,12 @@ const loginUser = async (req: Request, res: Response) => {
     if (!user) {
       throw new Error('Invalid credentials');
     }
-    const userInfo = {
-      email: user.email,
-      username: user.username,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      phone_number: user.phone_number,
-      profile_image: user.profile_image,
-      project_ids: user.project_ids,
-      status: user.status,
-      type: user.type,
-    };
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
       const tokens = generateTokens({ email: email });
       const userInfoObject = {
-        userInfo,
+        email,
         tokens,
       };
       res.cookie('jwt', tokens, { httpOnly: true });
