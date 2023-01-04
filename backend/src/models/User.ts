@@ -39,8 +39,8 @@ const User = db.define('user', {
   profile_image: {
     type: DataTypes.STRING,
   },
-  project_ids: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
+  project_codes: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
   },
   status: {
     type: DataTypes.STRING,

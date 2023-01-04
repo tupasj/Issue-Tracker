@@ -13,10 +13,11 @@ const Container = styled.div`
 
 type Props = {
   form: string;
+  userEmail: string | null;
   setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export const SignInPage = ({ form, setUserEmail }: Props): any => {
+export const SignInPage = ({ form, userEmail, setUserEmail }: Props): any => {
   const [isLoading, setIsLoading] = useState(false);
 
   if (form === 'login') {
@@ -28,7 +29,7 @@ export const SignInPage = ({ form, setUserEmail }: Props): any => {
   } else if (form === 'signup') {
     return (
       <Container>
-        <SignupFormContainer setUserEmail={setUserEmail} />
+        <SignupFormContainer userEmail={userEmail} setUserEmail={setUserEmail} />
       </Container>
     );
   }

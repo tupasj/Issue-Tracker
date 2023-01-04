@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
-import { db } from "../config/database";
+import { DataTypes } from 'sequelize';
+import { db } from '../config/database';
 
-const Issue = db.define("issue", {
+const Issue = db.define('issue', {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -29,7 +29,7 @@ const Issue = db.define("issue", {
     type: DataTypes.ARRAY(DataTypes.STRING),
   },
   project_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   milestone: {

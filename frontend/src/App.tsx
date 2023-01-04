@@ -17,7 +17,7 @@ export const App = () => {
           />
           <Route
             path="/register"
-            element={<SignInPage form="signup" setUserEmail={setUserEmail} />}
+            element={<SignInPage form="signup" userEmail={userEmail} setUserEmail={setUserEmail} />}
           />
           <Route path="/app/*" element={<AppPage userEmail={userEmail} />} />
         </Routes>

@@ -32,10 +32,11 @@ const SwitchFormMessage = styled.div`
 `;
 
 type Props = {
+  userEmail: string | null;
   setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export const SignupFormContainer = ({ setUserEmail }: Props) => {
+export const SignupFormContainer = ({ userEmail, setUserEmail }: Props) => {
   const [signedUp, setSignedUp] = useState(false);
   const navigate = useNavigate();
 
@@ -43,7 +44,7 @@ export const SignupFormContainer = ({ setUserEmail }: Props) => {
     <FormContainer>
       {signedUp ? (
         <>
-          <ProjectPrompt />
+          <ProjectPrompt userEmail={userEmail} />
         </>
       ) : (
         <>

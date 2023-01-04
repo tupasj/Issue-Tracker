@@ -1,6 +1,9 @@
 import styled from 'styled-components';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const FormContainer = styled.div`
   display: flex;
@@ -20,22 +23,9 @@ const ProjectPromptContainer = styled.div`
   align-items: center;
 `;
 
-const CreateProjectButton = styled.div`
-  margin-top: 8px;
-  color: white;
-  background-color: #30b930;
-  border-radius: 4px;
-  padding: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  &:hover {
-    background-color: #2da82d;
-  }
-`;
-
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  font-size: 1.25rem;
-  font-weight: 600;
+  height: 22px;
+  cursor: pointer;
 `;
 
 const Bold = styled.div`
@@ -50,25 +40,72 @@ const Input = styled.input`
   padding-right: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-top: 8px;
+`;
+
+const MainText = styled.div`
+  padding-bottom: 32px;
+  font-weight: 600;
 `;
 
 const Text = styled.div`
-  padding-bottom: 8px;
+  padding-bottom: 10px;
 `;
 
-export const ProjectPrompt = () => {
+const InputGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+`;
+
+type Props = {
+  userEmail: string | null;
+};
+
+export const ProjectPrompt = ({ userEmail }: Props) => {
+  const [projectName, setProjectName] = useState('');
+  const [projectCode, setProjectCode] = useState('');
+  const navigate = useNavigate();
+
+  const addProject = async () => {
+    try {
+      const projectInfo = { projectName: projectName, email: userEmail };
+      const addProjectResponse = await axiosInstance.post('/projects', projectInfo);
+      console.log('addProjectResponse: ', addProjectResponse);
+      navigate('/app/dashboard');
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
+
+  const joinProject = async () => {
+    console.log('join project ', projectCode);
+  };
+
   return (
     <FormContainer>
       <ProjectPromptContainer>
-        <Text>Signup successful!</Text>
-        <Text>Start by creating a new project or joining an existing one.</Text>
-        <CreateProjectButton>
-          Create a new project <StyledFontAwesomeIcon icon={faPlus} />
-        </CreateProjectButton>
+        <MainText>Signup successful!</MainText>
+        <Text>Start by creating a new project.</Text>
+        <InputGroup>
+          <Input
+            type="text"
+            placeholder="Enter a project name"
+            onChange={(e) => setProjectName(e.target.value)}
+          />
+          <StyledFontAwesomeIcon icon={faArrowRight} onClick={addProject} />
+        </InputGroup>
         <Bold>or</Bold>
         <Text>Join an ongoing project</Text>
-        <Input type="text" placeholder="Enter project code..." />
+        <InputGroup>
+          <Input
+            type="text"
+            placeholder="Enter project code"
+            onChange={(e) => setProjectCode(e.target.value)}
+          />
+          <StyledFontAwesomeIcon icon={faArrowRight} onClick={joinProject} />
+        </InputGroup>
       </ProjectPromptContainer>
     </FormContainer>
   );
