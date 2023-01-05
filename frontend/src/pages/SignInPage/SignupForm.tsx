@@ -67,7 +67,8 @@ export const SignupForm = ({ isLoading, setIsloading, setSignedUp, setUserEmail 
         password: values.password,
       };
       setUserEmail(userCredentials.email);
-      await axiosInstance.post('/user/register', userCredentials);
+      const response = await axiosInstance.post('/user/register', userCredentials);
+      console.log('response: ', response);
       setSignedUp(true);
     } catch (error: any) {
       axiosErrorHandler(error);
@@ -89,9 +90,16 @@ export const SignupForm = ({ isLoading, setIsloading, setSignedUp, setUserEmail 
       >
         <Form>
           <FormWrapper>
-            <Input type="email" id="email" name="email" placeholder="Email" />
-            <Input type="password" id="password" name="password" placeholder="Password" />
+            <Input stacked={true} type="email" id="email" name="email" placeholder="Email" />
             <Input
+              stacked={true}
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password"
+            />
+            <Input
+              stacked={true}
               type="password"
               id="passwordConfirmation"
               name="passwordConfirmation"

@@ -34,9 +34,10 @@ const SwitchFormMessage = styled.div`
 type Props = {
   userEmail: string | null;
   setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentProject: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export const SignupFormContainer = ({ userEmail, setUserEmail }: Props) => {
+export const SignupFormContainer = ({ userEmail, setUserEmail, setCurrentProject }: Props) => {
   const [signedUp, setSignedUp] = useState(false);
   const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ export const SignupFormContainer = ({ userEmail, setUserEmail }: Props) => {
     <FormContainer>
       {signedUp ? (
         <>
-          <ProjectPrompt userEmail={userEmail} />
+          <ProjectPrompt userEmail={userEmail} setCurrentProject={setCurrentProject} />
         </>
       ) : (
         <>

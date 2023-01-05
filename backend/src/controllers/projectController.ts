@@ -6,8 +6,6 @@ const createProject = async (req: Request, res: Response) => {
   const { projectName, email } = req.body;
   const uid = new ShortUniqueId({ length: 8 });
   const shortID = uid();
-  console.log('req.body: ', req.body);
-  console.log('shortID: ', shortID);
 
   try {
     const newProject = {
@@ -15,15 +13,22 @@ const createProject = async (req: Request, res: Response) => {
       code: shortID,
       user_emails: [email],
     };
-    console.log('newProject: ', newProject);
     await Project.create(newProject);
     res.status(201).json(newProject);
   } catch (error: any) {
-    console.log('error: ', error.message);
     res.status(400).json({ message: error.message });
   }
 };
 
-const getProject = async (req: Request, res: Response) => {};
+const getProject = async (req: Request, res: Response) => {
+  const code = req.params.code;
+
+  try {
+    const retrievedProject = await Project.findOne({ where: { code } });
+    res.status(200).json(retrievedProject);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
 export { createProject, getProject };

@@ -43,7 +43,7 @@ const Input = styled.input`
 `;
 
 const MainText = styled.div`
-  padding-bottom: 32px;
+  padding-bottom: 28px;
   font-weight: 600;
 `;
 
@@ -59,13 +59,20 @@ const InputGroup = styled.div`
   margin-top: 4px;
 `;
 
+const NotificationBox = styled.div`
+  padding-bottom: 8px;
+  color: #f70000;
+`;
+
 type Props = {
   userEmail: string | null;
+  setCurrentProject: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export const ProjectPrompt = ({ userEmail }: Props) => {
+export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
   const [projectName, setProjectName] = useState('');
   const [projectCode, setProjectCode] = useState('');
+  const [notificationText, setNotificationText] = useState('');
   const navigate = useNavigate();
 
   const addProject = async () => {
@@ -80,13 +87,21 @@ export const ProjectPrompt = ({ userEmail }: Props) => {
   };
 
   const joinProject = async () => {
-    console.log('join project ', projectCode);
+    try {
+      const getProjectResponse = await axiosInstance.get(`/projects/${projectCode}`);
+      setCurrentProject(getProjectResponse.data.name);
+      navigate('/app/dashboard');
+    } catch (error: any) {
+      axiosErrorHandler(error);
+      setNotificationText('Invalid code');
+    }
   };
 
   return (
     <FormContainer>
       <ProjectPromptContainer>
         <MainText>Signup successful!</MainText>
+        <NotificationBox>{notificationText}</NotificationBox>
         <Text>Start by creating a new project.</Text>
         <InputGroup>
           <Input

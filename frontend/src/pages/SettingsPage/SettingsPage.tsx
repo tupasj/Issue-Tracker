@@ -1,23 +1,10 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-
-const H2 = styled.h2`
-  padding-top: 22px;
-  font-weight: 600;
-`;
-
-const H3 = styled.h3`
-  font-style: italic;
-`;
-
-const Input = styled.input`
-  height: 32px;
-  padding-left: 6px;
-  padding-right: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
+import { Input } from '@/components/Elements/Form';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { H2, H3 } from '@/components/Elements/Text';
 
 const SubmitButton = styled.button`
   display: block;
@@ -54,6 +41,9 @@ interface FormValues {
 }
 
 export const SettingsPage = () => {
+  const [validCodeText, setValidCodeText] = useState('');
+  const [validNameText, setValidNameText] = useState('');
+
   const initialValues = {
     project_code: '',
     project_name: '',
@@ -62,21 +52,54 @@ export const SettingsPage = () => {
     username: '',
     first_name: '',
     last_name: '',
-    phone_number: null,
+    phone_number: '' as any,
   };
 
-  const handleSubmit = (values: FormValues) => {
-    console.log('values: ', values);
+  const validationSchema = Yup.object({});
+
+  const submitCode = async (codeValue: any) => {
+    try {
+      const response = await axiosInstance.get(`/projects/${codeValue}`);
+      setValidCodeText(`Successfully joined project '${response.data.name}'.`);
+      return;
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+    return 'Invalid code';
   };
 
+  const handleSubmit = (values: FormValues) => {};
+
+  let validationActive = false;
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      validateOnBlur={validationActive}
+      validateOnChange={validationActive}
+      onSubmit={handleSubmit}
+    >
       <StyledForm>
         <H2>Projects</H2>
         <H3>Join a project</H3>
-        <Input type="text" placeholder="Enter project code..." />
+        <Input
+          stacked={false}
+          type="text"
+          id="code"
+          name="code"
+          placeholder="Enter project code..."
+          validate={submitCode}
+          successText={validCodeText}
+        />
         <H3>Delete a project</H3>
-        <Input type="text" placeholder="Enter project name.." />
+        <Input
+          stacked={false}
+          type="text"
+          id="project_name"
+          name="project_name"
+          placeholder="Enter project name.."
+          successText={validNameText}
+        />
         <H2>Personalization</H2>
         <H3>Change profile picture</H3>
         <input
@@ -96,12 +119,31 @@ export const SettingsPage = () => {
         </div>
         <H2>Add additional info</H2>
         <H3>Username</H3>
-        <Input type="text" placeholder="Username" />
+        <Input stacked={false} type="text" id="username" name="username" placeholder="Username" />
         <H3>First and last name</H3>
-        <Input type="text" placeholder="First name" />
-        <Input type="text" placeholder="Last name" />
+        <Input
+          stacked={false}
+          type="text"
+          id="first_name"
+          name="first_name"
+          placeholder="First name"
+        />
+        <Input
+          stacked={false}
+          type="text"
+          id="last_name"
+          name="last_name"
+          placeholder="Last name"
+        />
         <H3>Phone number</H3>
-        <Input type="tel" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" />
+        <Input
+          stacked={false}
+          type="tel"
+          id="phone_number"
+          name="phone_number"
+          placeholder="123-45-678"
+          pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+        />
         <SubmitButton type="submit">Save changes</SubmitButton>
       </StyledForm>
     </Formik>

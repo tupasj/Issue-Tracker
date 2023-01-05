@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useState } from 'react';
 import { LoginFormContainer, SignupFormContainer } from '@/pages/SignInPage';
 
 const Container = styled.div`
@@ -15,11 +14,10 @@ type Props = {
   form: string;
   userEmail: string | null;
   setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentProject: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export const SignInPage = ({ form, userEmail, setUserEmail }: Props): any => {
-  const [isLoading, setIsLoading] = useState(false);
-
+export const SignInPage = ({ form, userEmail, setUserEmail, setCurrentProject }: Props): any => {
   if (form === 'login') {
     return (
       <Container>
@@ -29,7 +27,11 @@ export const SignInPage = ({ form, userEmail, setUserEmail }: Props): any => {
   } else if (form === 'signup') {
     return (
       <Container>
-        <SignupFormContainer userEmail={userEmail} setUserEmail={setUserEmail} />
+        <SignupFormContainer
+          userEmail={userEmail}
+          setUserEmail={setUserEmail}
+          setCurrentProject={setCurrentProject}
+        />
       </Container>
     );
   }

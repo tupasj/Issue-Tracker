@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { useState } from 'react';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
 import { Project, AddNewProject } from '@/components/Elements/Project';
 import { TooltipWrapper } from '@/components/Elements/Text';
 
@@ -46,6 +47,14 @@ const DropdownMenuContainer = styled.div`
 
 const DropdownMenu = () => {
   const numbers: number[] = [1, 2, 3, 4];
+
+  const getProjects = async () => {
+    try {
+      // GET /user/projects
+    } catch (error: any) {
+      // axiosErrorHandler(error);
+    }
+  };
 
   return (
     <DropdownMenuContainer>

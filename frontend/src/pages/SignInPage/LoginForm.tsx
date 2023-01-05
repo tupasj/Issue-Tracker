@@ -90,8 +90,14 @@ export const LoginForm = ({ setUserEmail }: Props) => {
       <Form>
         <FormWrapper>
           <NotificationTextContainer>{notificationText}</NotificationTextContainer>
-          <Input type="email" id="email" name="email" placeholder="Email" />
-          <Input type="password" id="password" name="password" placeholder="Password" />
+          <Input stacked={true} type="email" id="email" name="email" placeholder="Email" />
+          <Input
+            stacked={true}
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+          />
           <LoginButton type="submit" onClick={() => (validationActive = true)}>
             Log In
           </LoginButton>
