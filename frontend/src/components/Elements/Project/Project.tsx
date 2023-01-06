@@ -10,6 +10,10 @@ const Container = styled.div`
   }
 `;
 
-export const Project = () => {
-  return <Container>Project name</Container>;
+type Props = {
+  children: React.ReactNode;
+};
+
+export const Project = ({ children }: Props) => {
+  return <Container>{children}</Container>;
 };

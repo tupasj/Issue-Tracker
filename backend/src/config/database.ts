@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, QueryTypes } from 'sequelize';
 
 const db = new Sequelize(
   'issue_tracker',
@@ -25,4 +25,4 @@ const testDBConnection = async () => {
   }
 };
 
-export { db, testDBConnection };
+export { db, testDBConnection, QueryTypes };

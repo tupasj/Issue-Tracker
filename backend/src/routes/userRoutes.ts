@@ -4,6 +4,7 @@ import {
   createUser,
   loginUser,
   logoutUser,
+  editUserInfo,
   refreshUserToken,
 } from '../controllers/userController';
 
@@ -13,6 +14,7 @@ router.route('/register').post(createUser);
 router.route('/login').post(loginUser);
 router.route('/logout').delete(logoutUser);
 router.route('/refreshToken').post(refreshUserToken);
+router.route('/email=:email/attributes?').patch(editUserInfo);
 router.route('/email=:email').get(getUserInfo);
 
 export default router;

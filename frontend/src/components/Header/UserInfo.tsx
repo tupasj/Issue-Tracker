@@ -47,8 +47,7 @@ export const UserInfo = () => {
 
   useEffect(() => {
     const fetchdata = async () => {
-      // @ts-ignore
-      const email = userCtx.email;
+      const email = userCtx?.email;
       try {
         const userInfoResponse = await axiosInstance.get(`/user/email=${email}`);
         console.log('user email: ', userInfoResponse.data.email);

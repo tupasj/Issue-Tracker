@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { db } from '../config/database';
+import { db, QueryTypes } from '../config/database';
 import { User } from '../models/User';
 import bcrypt from 'bcrypt';
 import {
@@ -26,7 +26,7 @@ const getUserInfo = async (req: Request, res: Response) => {
       last_name: user.last_name,
       phone_number: user.phone_number,
       profile_image: user.profile_image,
-      project_ids: user.project_ids,
+      project_codes: user.project_codes,
       status: user.status,
       type: user.type,
     };
@@ -83,13 +83,66 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
+const editUserInfo = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.params;
+    const query = req.query;
+
+    //  Get DB user
+    const dbUser: any = await User.findOne({
+      where: { email },
+    });
+
+    // Iterate through req.query
+    for (const queryProperty in query) {
+      const queryPropertyName = queryProperty;
+      let queryPropertyValue = query[queryProperty];
+
+      // For each req.query property, if name matches property name in db, then update the db value
+      for (const dbUserProperty in dbUser.dataValues) {
+        const dbUserPropertyName = dbUserProperty;
+        let dbUserPropertyValue = dbUser.dataValues[dbUserProperty];
+
+        if (dbUserPropertyName === queryPropertyName) {
+          if (Array.isArray(dbUserPropertyValue)) {
+            await db.query(
+              `UPDATE users SET project_codes = project_codes || '{${queryPropertyValue}}' WHERE email='${email}'`,
+              {
+                type: QueryTypes.UPDATE,
+              }
+            );
+          } else {
+            await db.query(
+              `UPDATE users SET ${dbUserPropertyName}='${queryPropertyValue}' WHERE email='${email}'`,
+              {
+                type: QueryTypes.UPDATE,
+              }
+            );
+          }
+          break;
+        }
+      }
+    }
+
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const logoutUser = async (req: Request, res: Response) => {
   deleteRefreshToken(req, res);
 };
 
 const refreshUserToken = async (req: Request, res: Response) => {
-  // Response should be http status code 200
   refreshToken(req, res);
 };
 
-export { getUserInfo, createUser, loginUser, logoutUser, refreshUserToken };
+export {
+  getUserInfo,
+  createUser,
+  loginUser,
+  logoutUser,
+  editUserInfo,
+  refreshUserToken,
+};

@@ -59,7 +59,7 @@ export const SettingsPage = () => {
 
   const submitCode = async (codeValue: any) => {
     try {
-      const response = await axiosInstance.get(`/projects/${codeValue}`);
+      const response = await axiosInstance.patch(`/user/attributes?project_codes=${codeValue}`);
       setValidCodeText(`Successfully joined project '${response.data.name}'.`);
       return;
     } catch (error: any) {

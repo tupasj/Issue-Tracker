@@ -12,9 +12,11 @@ const Project = db.define('project', {
   },
   issue_ids: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
+    defaultValue: [],
   },
   user_emails: {
     type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
   },
 });
 

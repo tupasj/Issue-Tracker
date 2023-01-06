@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Project } from '../models/Project';
+import { db, QueryTypes } from '../config/database';
 import ShortUniqueId from 'short-unique-id';
 
 const createProject = async (req: Request, res: Response) => {
@@ -14,6 +15,13 @@ const createProject = async (req: Request, res: Response) => {
       user_emails: [email],
     };
     await Project.create(newProject);
+    await db.query(
+      `UPDATE users SET project_codes = project_codes || '{${shortID}}' WHERE email='${email}';
+    `,
+      {
+        type: QueryTypes.UPDATE,
+      }
+    );
     res.status(201).json(newProject);
   } catch (error: any) {
     res.status(400).json({ message: error.message });

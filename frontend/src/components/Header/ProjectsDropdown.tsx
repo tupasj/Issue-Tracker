@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { UserContext } from '@/context/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { Project, AddNewProject } from '@/components/Elements/Project';
 import { TooltipWrapper } from '@/components/Elements/Text';
+import { Project, AddNewProject } from '@/components/Elements/Project';
 
 const Container = styled.div`
   cursor: pointer;
@@ -32,7 +33,7 @@ const ProjectName = styled.span`
   white-space: nowrap;
 `;
 
-const DropdownMenuContainer = styled.div`
+const DropdownContainer = styled.div`
   position: absolute;
   top: 37px;
   width: 250px;
@@ -45,31 +46,40 @@ const DropdownMenuContainer = styled.div`
   z-index: -1;
 `;
 
-const DropdownMenu = () => {
-  const numbers: number[] = [1, 2, 3, 4];
-
-  const getProjects = async () => {
-    try {
-      // GET /user/projects
-    } catch (error: any) {
-      // axiosErrorHandler(error);
-    }
-  };
-
-  return (
-    <DropdownMenuContainer>
-      {numbers.map((item) => {
-        return <Project key={item} />;
-      })}
-      <AddNewProject />
-    </DropdownMenuContainer>
-  );
-};
+interface Project {
+  map(arg0: (project: any) => void): import('react').ReactNode;
+  name: string;
+  code: string;
+}
 
 export const ProjectsDropdown = () => {
   const [dropdownActive, setDropdownActive] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const userCtx = useContext(UserContext);
+
+  const getProjects = async () => {
+    try {
+      const response = await axiosInstance.get(`/user/email=${userCtx?.email}`);
+      console.log('response: ', response);
+      const projectCodes = response.data.project_codes;
+      console.log('projectCodes: ', projectCodes);
+      for (let i = 0; i < projectCodes.length; i++) {
+        const response = await axiosInstance.get(`projects/${projectCodes[i]}`);
+        const projectCode = response.data.code;
+        console.log('projectCode: ', projectCode);
+        setProjects([...projects, projectCode]);
+      }
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
+
+  useEffect(() => {
+    getProjects();
+  }, []);
 
   const toggleDropdown = () => {
+    console.log('projects: ', projects);
     if (!dropdownActive) {
       setDropdownActive(true);
     } else if (dropdownActive) {
@@ -81,11 +91,21 @@ export const ProjectsDropdown = () => {
     <Container>
       <CurrentProject onClick={toggleDropdown}>
         <ProjectName>
-          <TooltipWrapper text="Project name">Project name</TooltipWrapper>
+          <TooltipWrapper text="Project name">{projects && <>{projects[0]}</>}</TooltipWrapper>
         </ProjectName>
         <FontAwesomeIcon icon={faAngleDown} />
       </CurrentProject>
-      {dropdownActive && <DropdownMenu />}
+      {dropdownActive && (
+        // @ts-ignore
+        <DropdownContainer>
+          {projects &&
+            projects.map((project) => {
+              // @ts-ignore
+              <Project>{project}</Project>;
+            })}
+          <AddNewProject />
+        </DropdownContainer>
+      )}
     </Container>
   );
 };
