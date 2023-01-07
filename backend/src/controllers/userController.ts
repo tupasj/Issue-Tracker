@@ -21,6 +21,7 @@ const getUserInfo = async (req: Request, res: Response) => {
 
     const userInfo = {
       email: user.email,
+      current_project: user.current_project,
       username: user.username,
       first_name: user.first_name,
       last_name: user.last_name,
@@ -105,6 +106,7 @@ const editUserInfo = async (req: Request, res: Response) => {
 
         if (dbUserPropertyName === queryPropertyName) {
           if (Array.isArray(dbUserPropertyValue)) {
+            console.log('update array');
             await db.query(
               `UPDATE users SET project_codes = project_codes || '{${queryPropertyValue}}' WHERE email='${email}'`,
               {
@@ -112,6 +114,7 @@ const editUserInfo = async (req: Request, res: Response) => {
               }
             );
           } else {
+            console.log('update non-array');
             await db.query(
               `UPDATE users SET ${dbUserPropertyName}='${queryPropertyValue}' WHERE email='${email}'`,
               {

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { UserContext, UserContextInterface } from '@/context/UserContext';
+import { UserContext, UserContextInterface, CurrentProjectContext } from '@/context';
 import { Header } from '@/components/Header';
 import { Sidebar } from '@/components/Sidebar';
 import { Main } from '@/components/Main';
@@ -14,11 +14,13 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 
-type AppPageProps = {
+type Props = {
   userEmail: string | null;
+  currentProject: any | null;
+  setCurrentProject: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const AppPage = ({ userEmail }: AppPageProps) => {
+export const AppPage = ({ userEmail, currentProject, setCurrentProject }: Props) => {
   const definedUserContext: UserContextInterface = {
     email: userEmail,
   };
@@ -26,9 +28,11 @@ export const AppPage = ({ userEmail }: AppPageProps) => {
   return (
     <Container>
       <UserContext.Provider value={definedUserContext}>
-        <Header />
-        <Sidebar />
-        <Main />
+        <CurrentProjectContext.Provider value={{ currentProject, setCurrentProject }}>
+          <Header />
+          <Sidebar />
+          <Main />
+        </CurrentProjectContext.Provider>
       </UserContext.Provider>
     </Container>
   );

@@ -5,7 +5,7 @@ import { SignInPage, AppPage } from '@/pages';
 
 export const App = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [currentProject, setCurrentProject] = useState<string | null>(null);
+  const [currentProject, setCurrentProject] = useState<any | null>(null);
 
   return (
     <GlobalStyles>
@@ -34,7 +34,16 @@ export const App = () => {
               />
             }
           />
-          <Route path="/app/*" element={<AppPage userEmail={userEmail} />} />
+          <Route
+            path="/app/*"
+            element={
+              <AppPage
+                userEmail={userEmail}
+                currentProject={currentProject}
+                setCurrentProject={setCurrentProject}
+              />
+            }
+          />
         </Routes>
       </BrowserRouter>
     </GlobalStyles>

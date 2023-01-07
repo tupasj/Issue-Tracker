@@ -66,7 +66,7 @@ const NotificationBox = styled.div`
 
 type Props = {
   userEmail: string | null;
-  setCurrentProject: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentProject: React.Dispatch<React.SetStateAction<any | null>>;
 };
 
 export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
@@ -78,8 +78,8 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
   const addProject = async () => {
     try {
       const projectInfo = { projectName: projectName, email: userEmail };
-      await axiosInstance.post('/projects', projectInfo);
-      setCurrentProject(projectInfo.projectName);
+      const projectInfoResponse = await axiosInstance.post('/projects', projectInfo);
+      setCurrentProject(projectInfoResponse.data);
       navigate('/app/dashboard');
     } catch (error: any) {
       axiosErrorHandler(error);
@@ -89,7 +89,8 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
   const joinProject = async () => {
     try {
       const getProjectResponse = await axiosInstance.get(`/projects/${projectCode}`);
-      setCurrentProject(getProjectResponse.data.name);
+      setCurrentProject(getProjectResponse.data);
+      console.log('#1: setCurrentProject to Project object', getProjectResponse.data);
       navigate('/app/dashboard');
     } catch (error: any) {
       axiosErrorHandler(error);

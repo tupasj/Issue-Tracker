@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { UserContext } from '@/context/UserContext';
+import { UserContext, CurrentProjectContext } from '@/context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { Project } from '@/components/Header';
 import { TooltipWrapper } from '@/components/Elements/Text';
-import { Project, AddNewProject } from '@/components/Elements/Project';
+import { AddNewProject } from '@/components/Elements/Project';
 
 const Container = styled.div`
   cursor: pointer;
@@ -56,18 +57,45 @@ export const ProjectsDropdown = () => {
   const [dropdownActive, setDropdownActive] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const userCtx = useContext(UserContext);
+  // @ts-ignore
+  const { currentProject, setCurrentProject } = useContext(CurrentProjectContext);
+  let initialProjects: any = useRef([]);
+
+  const toggleDropdown = () => {
+    if (!dropdownActive) {
+      setDropdownActive(true);
+    } else if (dropdownActive) {
+      setDropdownActive(false);
+    }
+  };
 
   const getProjects = async () => {
     try {
-      const response = await axiosInstance.get(`/user/email=${userCtx?.email}`);
-      console.log('response: ', response);
-      const projectCodes = response.data.project_codes;
-      console.log('projectCodes: ', projectCodes);
+      // Get user projects
+      const userInfoReponse: any = await axiosInstance.get(`/user/email=${userCtx?.email}`);
+      const userInfo = userInfoReponse.data;
+      const projectCodes = userInfo.project_codes;
+
+      // Display projects
+      let newProjects = [];
       for (let i = 0; i < projectCodes.length; i++) {
-        const response = await axiosInstance.get(`projects/${projectCodes[i]}`);
-        const projectCode = response.data.code;
-        console.log('projectCode: ', projectCode);
-        setProjects([...projects, projectCode]);
+        const response = await axiosInstance.get(`/projects/${projectCodes[i]}`);
+        const project = response.data;
+        newProjects.push(project);
+      }
+      initialProjects.current = newProjects;
+      setProjects(newProjects);
+
+      // Set current project
+      if (!userInfo.current_project) {
+        await axiosInstance.patch(
+          `/user/email=${userCtx?.email}/attributes?current_project=${projects[0].code}`
+        );
+        setCurrentProject(projects[0]);
+      } else if (userInfo.current_project) {
+        const response = await axiosInstance.get(`/projects/${userInfo.current_project}`);
+        const project = response.data;
+        setCurrentProject(project);
       }
     } catch (error: any) {
       axiosErrorHandler(error);
@@ -78,32 +106,38 @@ export const ProjectsDropdown = () => {
     getProjects();
   }, []);
 
-  const toggleDropdown = () => {
-    console.log('projects: ', projects);
-    if (!dropdownActive) {
-      setDropdownActive(true);
-    } else if (dropdownActive) {
-      setDropdownActive(false);
-    }
-  };
+  useEffect(() => {
+    const filteredProjects = initialProjects.current.filter(
+      (project: any) => project.code !== currentProject.code
+    );
+    setProjects(filteredProjects);
+  }, [currentProject]);
 
   return (
     <Container>
       <CurrentProject onClick={toggleDropdown}>
         <ProjectName>
-          <TooltipWrapper text="Project name">{projects && <>{projects[0]}</>}</TooltipWrapper>
+          <TooltipWrapper text={currentProject.name}>
+            {currentProject && <>{currentProject.name}</>}
+          </TooltipWrapper>
         </ProjectName>
         <FontAwesomeIcon icon={faAngleDown} />
       </CurrentProject>
       {dropdownActive && (
-        // @ts-ignore
         <DropdownContainer>
-          {projects &&
-            projects.map((project) => {
-              // @ts-ignore
-              <Project>{project}</Project>;
-            })}
-          <AddNewProject />
+          <>
+            {projects[0] &&
+              projects.map((project) => {
+                return (
+                  <Project
+                    name={project.name}
+                    code={project.code}
+                    setCurrentProject={setCurrentProject}
+                  />
+                );
+              })}
+            <AddNewProject />
+          </>
         </DropdownContainer>
       )}
     </Container>

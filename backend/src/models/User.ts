@@ -43,6 +43,9 @@ const User = db.define('user', {
     type: DataTypes.ARRAY(DataTypes.STRING),
     defaultValue: [],
   },
+  current_project: {
+    type: DataTypes.STRING,
+  },
   status: {
     type: DataTypes.STRING,
   },

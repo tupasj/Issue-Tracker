@@ -8,12 +8,17 @@ const createProject = async (req: Request, res: Response) => {
   const uid = new ShortUniqueId({ length: 8 });
   const shortID = uid();
 
+  if (projectName == '') {
+    return res.status(400).json('Error: Name cannot be empty.');
+  }
+
   try {
     const newProject = {
       name: projectName,
       code: shortID,
       user_emails: [email],
     };
+
     await Project.create(newProject);
     await db.query(
       `UPDATE users SET project_codes = project_codes || '{${shortID}}' WHERE email='${email}';

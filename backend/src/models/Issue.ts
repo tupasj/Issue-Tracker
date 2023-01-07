@@ -38,6 +38,9 @@ const Issue = db.define('issue', {
   comment_ids: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
   },
+  priority: {
+    type: DataTypes.STRING,
+  },
 });
 
 export { Issue };

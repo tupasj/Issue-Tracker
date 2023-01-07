@@ -14,7 +14,7 @@ type Props = {
   form: string;
   userEmail: string | null;
   setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
-  setCurrentProject: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentProject: React.Dispatch<React.SetStateAction<any | null>>;
 };
 
 export const SignInPage = ({ form, userEmail, setUserEmail, setCurrentProject }: Props): any => {

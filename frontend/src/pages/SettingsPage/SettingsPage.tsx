@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { Input } from '@/components/Elements/Form';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { UserContext } from '@/context';
+import { Input } from '@/components/Elements/Form';
 import { H2, H3 } from '@/components/Elements/Text';
 
 const SubmitButton = styled.button`
@@ -43,6 +44,7 @@ interface FormValues {
 export const SettingsPage = () => {
   const [validCodeText, setValidCodeText] = useState('');
   const [validNameText, setValidNameText] = useState('');
+  const userCtx = useContext(UserContext);
 
   const initialValues = {
     project_code: '',
@@ -59,7 +61,9 @@ export const SettingsPage = () => {
 
   const submitCode = async (codeValue: any) => {
     try {
-      const response = await axiosInstance.patch(`/user/attributes?project_codes=${codeValue}`);
+      const response = await axiosInstance.patch(
+        `/user/email=${userCtx?.email}/attributes?project_codes=${codeValue}`
+      );
       setValidCodeText(`Successfully joined project '${response.data.name}'.`);
       return;
     } catch (error: any) {
