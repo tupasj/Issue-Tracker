@@ -50,7 +50,7 @@ export const SignupFormContainer = ({ userEmail, setUserEmail, setCurrentProject
       ) : (
         <>
           <SignupMessage>Create a new account</SignupMessage>
-          <SignupForm setSignedUp={setSignedUp} setUserEmail={setUserEmail} />
+          <SignupForm signedUp={signedUp} setSignedUp={setSignedUp} setUserEmail={setUserEmail} />
           <SwitchFormMessage>
             Already have an account?{' '}
             <SwitchFormLink onClick={() => navigate(`/sign-in`)}>Sign in</SwitchFormLink>

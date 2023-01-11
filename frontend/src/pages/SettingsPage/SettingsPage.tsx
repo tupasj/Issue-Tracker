@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { UserContext } from '@/context';
+import { UserContext, ProjectsContext } from '@/context';
 import { Input } from '@/components/Elements/Form';
 import { H2, H3 } from '@/components/Elements/Text';
 
@@ -45,6 +45,8 @@ export const SettingsPage = () => {
   const [validCodeText, setValidCodeText] = useState('');
   const [validNameText, setValidNameText] = useState('');
   const userCtx = useContext(UserContext);
+  // @ts-ignore
+  const { projects, setProjects } = useContext(ProjectsContext);
 
   const initialValues = {
     project_code: '',
@@ -59,10 +61,14 @@ export const SettingsPage = () => {
 
   const validationSchema = Yup.object({});
 
-  const submitCode = async (codeValue: any) => {
+  const submitCode = async (code: any) => {
+    if (code == undefined) {
+      return;
+    }
+
     try {
       const response = await axiosInstance.patch(
-        `/user/email=${userCtx?.email}/attributes?project_codes=${codeValue}`
+        `/user/email=${userCtx?.email}/attributes?project_codes=${code}`
       );
       setValidCodeText(`Successfully joined project '${response.data.name}'.`);
       return;
@@ -70,6 +76,21 @@ export const SettingsPage = () => {
       axiosErrorHandler(error);
     }
     return 'Invalid code';
+  };
+
+  const submitProjectName = async (projectName: any) => {
+    try {
+      const projectToDelete = projects.filter((project: any) => project.name == projectName);
+      console.log('projectToDelete: ', projectToDelete);
+      if (projectToDelete.length === 0) {
+        return `Could not find a project named '${projectName}' to delete.`;
+      }
+      const res = await axiosInstance.delete(`/projects/${projectToDelete[0].code}`);
+      console.log('res: ', res);
+      setValidNameText(`Successfully deleted project '${projectToDelete[0].name}'.`);
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
   };
 
   const handleSubmit = (values: FormValues) => {};
@@ -102,6 +123,7 @@ export const SettingsPage = () => {
           id="project_name"
           name="project_name"
           placeholder="Enter project name.."
+          validate={submitProjectName}
           successText={validNameText}
         />
         <H2>Personalization</H2>

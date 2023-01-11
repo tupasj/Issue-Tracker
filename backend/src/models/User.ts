@@ -39,10 +39,6 @@ const User = db.define('user', {
   profile_image: {
     type: DataTypes.STRING,
   },
-  project_codes: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: [],
-  },
   current_project: {
     type: DataTypes.STRING,
   },
@@ -55,10 +51,10 @@ const User = db.define('user', {
   },
 });
 
-if (process.env.TESTING == 'false') {
-  (async () => {
-    await db.sync();
-  })();
-}
+// if (process.env.TESTING == 'false') {
+//   (async () => {
+//     await db.sync();
+//   })();
+// }
 
 export { User };

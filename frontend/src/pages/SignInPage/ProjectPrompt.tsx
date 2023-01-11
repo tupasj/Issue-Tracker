@@ -79,6 +79,7 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
     try {
       const projectInfo = { projectName: projectName, email: userEmail };
       const projectInfoResponse = await axiosInstance.post('/projects', projectInfo);
+      console.log('projectInfoResponse.data: ', projectInfoResponse.data);
       setCurrentProject(projectInfoResponse.data);
       navigate('/app/dashboard');
     } catch (error: any) {
@@ -90,7 +91,6 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
     try {
       const getProjectResponse = await axiosInstance.get(`/projects/${projectCode}`);
       setCurrentProject(getProjectResponse.data);
-      console.log('#1: setCurrentProject to Project object', getProjectResponse.data);
       navigate('/app/dashboard');
     } catch (error: any) {
       axiosErrorHandler(error);

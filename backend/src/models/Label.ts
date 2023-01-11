@@ -1,12 +1,11 @@
-import { DataTypes } from "sequelize";
-import { db } from "../config/database";
+import { DataTypes } from 'sequelize';
+import { db } from '../config/database';
 
 const Label = db.define(
-  "label",
+  'label',
   {
     name: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
     },
     description: {

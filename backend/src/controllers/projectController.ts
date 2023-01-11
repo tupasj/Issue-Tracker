@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Project } from '../models/Project';
-import { db, QueryTypes } from '../config/database';
+import { User } from '../models/User';
+import { db, QueryTypes, Op } from '../config/database';
 import ShortUniqueId from 'short-unique-id';
 
 const createProject = async (req: Request, res: Response) => {
@@ -34,7 +35,7 @@ const createProject = async (req: Request, res: Response) => {
 };
 
 const getProject = async (req: Request, res: Response) => {
-  const code = req.params.code;
+  const { code } = req.params;
 
   try {
     const retrievedProject = await Project.findOne({ where: { code } });
@@ -44,4 +45,25 @@ const getProject = async (req: Request, res: Response) => {
   }
 };
 
-export { createProject, getProject };
+const deleteProject = async (req: Request, res: Response) => {
+  const { code } = req.params;
+
+  try {
+    // const project = await Project.findOne({ where: { code } });
+    // await project?.destroy();
+    // project_codes: { [Op.contains]: [`${code}`] },
+    // const users = await User.findAll({
+    //   where: {
+    //     project_codes: { [Op.contains]: [`${code}`] },
+    //   },
+    // });
+    // users.forEach((user) => console.log('user: ', user.dataValues));
+    // console.log('users.length: ', users.length);
+    await Project.destroy({ where: { code } });
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export { createProject, getProject, deleteProject };

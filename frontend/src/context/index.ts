@@ -1,2 +1,2 @@
-export * from './CurrentProjectContext';
+export * from './ProjectsContext';
 export * from './UserContext';

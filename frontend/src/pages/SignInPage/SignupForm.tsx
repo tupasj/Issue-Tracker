@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { Input } from '@/components/Elements/Form';
+import { Input, ErrorMessageText } from '@/components/Elements/Form';
 
 const FormWrapper = styled.div`
   padding: 15px;
@@ -37,12 +38,15 @@ interface FormValues {
 
 type Props = {
   isLoading?: boolean;
+  signedUp: boolean;
   setIsloading?: React.Dispatch<React.SetStateAction<boolean>>;
   setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
   setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export const SignupForm = ({ isLoading, setIsloading, setSignedUp, setUserEmail }: Props) => {
+export const SignupForm = ({ signedUp, setSignedUp, setUserEmail }: Props) => {
+  const [signupError, setSignUpError] = useState(false);
+
   const initialValues = {
     email: '',
     password: '',
@@ -68,10 +72,12 @@ export const SignupForm = ({ isLoading, setIsloading, setSignedUp, setUserEmail 
       };
       setUserEmail(userCredentials.email);
       const response = await axiosInstance.post('/user/register', userCredentials);
-      console.log('response: ', response);
+      console.log('/user/register response ', response);
       setSignedUp(true);
     } catch (error: any) {
       axiosErrorHandler(error);
+      setSignedUp(false);
+      setSignUpError(true);
     }
   };
 
@@ -90,6 +96,7 @@ export const SignupForm = ({ isLoading, setIsloading, setSignedUp, setUserEmail 
       >
         <Form>
           <FormWrapper>
+            {signupError && <ErrorMessageText>This account already exists.</ErrorMessageText>}
             <Input stacked={true} type="email" id="email" name="email" placeholder="Email" />
             <Input
               stacked={true}

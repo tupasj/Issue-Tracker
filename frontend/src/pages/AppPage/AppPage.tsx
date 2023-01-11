@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { UserContext, UserContextInterface, CurrentProjectContext } from '@/context';
+import { UserContext, UserContextInterface, ProjectsContext } from '@/context';
 import { Header } from '@/components/Header';
 import { Sidebar } from '@/components/Sidebar';
 import { Main } from '@/components/Main';
@@ -18,9 +18,17 @@ type Props = {
   userEmail: string | null;
   currentProject: any | null;
   setCurrentProject: React.Dispatch<React.SetStateAction<any>>;
+  projects: any | null;
+  setProjects: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const AppPage = ({ userEmail, currentProject, setCurrentProject }: Props) => {
+export const AppPage = ({
+  userEmail,
+  currentProject,
+  setCurrentProject,
+  projects,
+  setProjects,
+}: Props) => {
   const definedUserContext: UserContextInterface = {
     email: userEmail,
   };
@@ -28,11 +36,13 @@ export const AppPage = ({ userEmail, currentProject, setCurrentProject }: Props)
   return (
     <Container>
       <UserContext.Provider value={definedUserContext}>
-        <CurrentProjectContext.Provider value={{ currentProject, setCurrentProject }}>
+        <ProjectsContext.Provider
+          value={{ currentProject, setCurrentProject, projects, setProjects }}
+        >
           <Header />
           <Sidebar />
           <Main />
-        </CurrentProjectContext.Provider>
+        </ProjectsContext.Provider>
       </UserContext.Provider>
     </Container>
   );

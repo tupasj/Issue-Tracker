@@ -50,7 +50,7 @@ export const UserInfo = () => {
       const email = userCtx?.email;
       try {
         const userInfoResponse = await axiosInstance.get(`/user/email=${email}`);
-        console.log('user email: ', userInfoResponse.data.email);
+        console.log('user res ', userInfoResponse.data);
       } catch (error: any) {
         axiosErrorHandler(error);
         navigate('/sign-in');

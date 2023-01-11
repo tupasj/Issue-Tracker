@@ -7,12 +7,14 @@ import userRoutes from './routes/userRoutes';
 import projectRoutes from './routes/projectRoutes';
 import { testDBConnection } from './config/database';
 import { connectToMongoDB } from './utils/mongoDbUtils';
+import { establishSequelizeAssociations } from './models/associations';
 
 const app: Application = express();
 const port = process.env.PORT || 5000;
 
 testDBConnection();
 connectToMongoDB();
+establishSequelizeAssociations();
 
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express.json());

@@ -22,22 +22,6 @@ const Issue = db.define('issue', {
     defaultValue: true,
     allowNull: false,
   },
-  assignee_ids: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
-  },
-  labels: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-  },
-  project_id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  milestone: {
-    type: DataTypes.STRING,
-  },
-  comment_ids: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
-  },
   priority: {
     type: DataTypes.STRING,
   },
