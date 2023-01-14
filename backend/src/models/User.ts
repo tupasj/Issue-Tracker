@@ -4,6 +4,7 @@ import { db } from '../config/database';
 const User = db.define('user', {
   email: {
     type: DataTypes.STRING,
+    primaryKey: true,
     unique: true,
     allowNull: false,
     validate: {
@@ -50,11 +51,5 @@ const User = db.define('user', {
     defaultValue: 'regular',
   },
 });
-
-// if (process.env.TESTING == 'false') {
-//   (async () => {
-//     await db.sync();
-//   })();
-// }
 
 export { User };

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { Project } from '../models/Project';
 import { User } from '../models/User';
-import { db, QueryTypes, Op } from '../config/database';
 import ShortUniqueId from 'short-unique-id';
 
 const createProject = async (req: Request, res: Response) => {
@@ -14,20 +13,15 @@ const createProject = async (req: Request, res: Response) => {
   }
 
   try {
-    const newProject = {
+    const newProjectData = {
       name: projectName,
       code: shortID,
-      user_emails: [email],
     };
 
-    await Project.create(newProject);
-    await db.query(
-      `UPDATE users SET project_codes = project_codes || '{${shortID}}' WHERE email='${email}';
-    `,
-      {
-        type: QueryTypes.UPDATE,
-      }
-    );
+    const newProject = await Project.create(newProjectData);
+    const user = await User.findOne({ where: { email } });
+    // @ts-ignore
+    await newProject.addUser(user); // Associate this user with the new project (should create a unique record in the junction table)
     res.status(201).json(newProject);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -45,20 +39,23 @@ const getProject = async (req: Request, res: Response) => {
   }
 };
 
+const getUserProjects = async (req: Request, res: Response) => {
+  const { email } = req.params;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+    // @ts-ignore
+    const userProjects = await user.getProjects({ joinTableAttributes: [] });
+    res.status(200).json(userProjects);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const deleteProject = async (req: Request, res: Response) => {
   const { code } = req.params;
 
   try {
-    // const project = await Project.findOne({ where: { code } });
-    // await project?.destroy();
-    // project_codes: { [Op.contains]: [`${code}`] },
-    // const users = await User.findAll({
-    //   where: {
-    //     project_codes: { [Op.contains]: [`${code}`] },
-    //   },
-    // });
-    // users.forEach((user) => console.log('user: ', user.dataValues));
-    // console.log('users.length: ', users.length);
     await Project.destroy({ where: { code } });
     res.status(200).end();
   } catch (error: any) {
@@ -66,4 +63,24 @@ const deleteProject = async (req: Request, res: Response) => {
   }
 };
 
-export { createProject, getProject, deleteProject };
+const removeUserFromProject = async (req: Request, res: Response) => {
+  const { code, email } = req.params;
+
+  try {
+    const project = await Project.findOne({ where: { code } });
+    const user = await User.findOne({ where: { email } });
+    // @ts-ignore
+    await user.removeProject(project); // Remove the user's association with the project (deletes record in junction table, but other tables' records are untouched)
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export {
+  createProject,
+  getProject,
+  deleteProject,
+  getUserProjects,
+  removeUserFromProject,
+};

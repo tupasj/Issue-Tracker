@@ -80,14 +80,19 @@ export const SettingsPage = () => {
 
   const submitProjectName = async (projectName: any) => {
     try {
-      const projectToDelete = projects.filter((project: any) => project.name == projectName);
-      console.log('projectToDelete: ', projectToDelete);
-      if (projectToDelete.length === 0) {
+      // Filter through user's projects, for the entered project name to delete
+      console.log('projects: ', projects);
+      const projectToLeave = projects.filter((project: any) => project.name == projectName);
+      console.log('projectToLeave: ', projectToLeave);
+      if (projectToLeave.length === 0) {
         return `Could not find a project named '${projectName}' to delete.`;
       }
-      const res = await axiosInstance.delete(`/projects/${projectToDelete[0].code}`);
-      console.log('res: ', res);
-      setValidNameText(`Successfully deleted project '${projectToDelete[0].name}'.`);
+      // Pass in the user info to the delete route to remove user from the project
+      const deleteRes = await axiosInstance.delete(
+        `/projects/code=${projectToLeave[0].code}/email=${userCtx?.email}`
+      );
+      console.log('deleteRes: ', deleteRes);
+      setValidNameText(`Left project '${projectToLeave[0].name}'.`);
     } catch (error: any) {
       axiosErrorHandler(error);
     }
@@ -116,7 +121,7 @@ export const SettingsPage = () => {
           validate={submitCode}
           successText={validCodeText}
         />
-        <H3>Delete a project</H3>
+        <H3>Leave a project</H3>
         <Input
           stacked={false}
           type="text"

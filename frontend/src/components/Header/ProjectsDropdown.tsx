@@ -66,84 +66,20 @@ export const ProjectsDropdown = () => {
     } else if (dropdownActive) {
       setDropdownActive(false);
     }
-    console.log('userCtx: ', userCtx);
-    console.log('projects: ', projects);
-    console.log('currentProject: ', currentProject);
   };
 
-  // const getProjects = async () => {
-  //   console.log('getProjects() ');
-  //   try {
-  //     // Get user projects
-  //     console.log('..get user projects');
-  //     const userInfoReponse = await axiosInstance.get(`/user/email=${userCtx?.email}`);
-  //     console.log('userInfoResponse: ', userInfoReponse);
-  //     const userInfo = userInfoReponse.data;
-  //     const projectCodes = userInfo.project_codes;
+  // Get user's projects
+  // If current_project, set it on the model and render it. Else render current_project.
+  // Use useRef to store the initially loaded projects to filter on every setCurrentProject update (part of the "switching"). Simply update the ref when adding or deleting a new project (the "switch" should still work)
 
-  //     // Display projects
-  //     console.log('..display projects.');
-  //     let newProjects = [];
-  //     for (let i = 0; i < projectCodes.length; i++) {
-  //       const response = await axiosInstance.get(`/projects/${projectCodes[i]}`);
-  //       console.log('projectObj response', response);
-  //       const project = response.data;
-  //       newProjects.push(project);
-  //     }
-  //     initialProjects.current = newProjects;
-  //     setProjects(newProjects);
-  //   } catch (error: any) {
-  //     axiosErrorHandler(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   console.log('INITIAL LOAD');
-  //   getProjects();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log('PROJECTS CHANGE');
-  //   const setCurrentProjectValue = async () => {
-  //     console.log('setCurrentProjectValue() ');
-  //     const userInfoReponse = await axiosInstance.get(`/user/email=${userCtx?.email}`);
-  //     console.log('');
-  //     const userInfo = userInfoReponse.data;
-  //     try {
-  //       if (!userInfo.current_project) {
-  //         console.log('current project:  false');
-  //         const res = await axiosInstance.patch(
-  //           `/user/email=${userCtx?.email}/attributes?current_project=${projects[0].code}`
-  //         );
-  //         console.log('patch user res: ', res);
-  //         // @ts-ignore
-  //         setCurrentProject(projects[0]);
-  //       } else if (userInfo.current_project) {
-  //         console.log('current project: true');
-  //         const projectsResponse = await axiosInstance.get(`/projects/${currentProject.code}`);
-  //         const projectObj = projectsResponse.data;
-  //         console.log('projectObj: ', projectObj);
-  //         // @ts-ignore
-  //         setCurrentProject(projectObj);
-  //       }
-  //     } catch (error: any) {
-  //       axiosErrorHandler(error);
-  //     }
-  //   };
-
-  //   if (!currentProject) {
-  //     console.log('projects: ', projects);
-  //     setCurrentProjectValue();
-  //   }
-  // }, [projects]);
-
-  // useEffect(() => {
-  //   console.log('CURRENT PROJECTS CHANGE');
-  //   const filteredProjects = initialProjects.current.filter(
-  //     (project: any) => project.code !== currentProject.code
-  //   );
-  //   setProjects(filteredProjects);
-  // }, [currentProject]);
+  const getUserProjects = async () => {
+    try {
+      const userInfoReponse = await axiosInstance.get(`/user/email=${userCtx?.email}`);
+      console.log('userInfoResponse: ', userInfoReponse);
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
 
   return (
     <Container>
@@ -158,16 +94,6 @@ export const ProjectsDropdown = () => {
       {dropdownActive && (
         <DropdownContainer>
           <>
-            {/* {projects[0] &&
-              projects.map((project: any) => {
-                return (
-                  <Project
-                    name={project.name}
-                    code={project.code}
-                    setCurrentProject={setCurrentProject}
-                  />
-                );
-              })} */}
             <div>Foobar</div>
             <AddNewProject />
           </>
