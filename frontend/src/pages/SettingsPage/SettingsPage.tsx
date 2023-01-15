@@ -45,8 +45,7 @@ export const SettingsPage = () => {
   const [validCodeText, setValidCodeText] = useState('');
   const [validNameText, setValidNameText] = useState('');
   const userCtx = useContext(UserContext);
-  // @ts-ignore
-  const { projects, setProjects } = useContext(ProjectsContext);
+  const { projects, setProjects } = useContext(ProjectsContext) as any;
 
   const initialValues = {
     project_code: '',
@@ -61,7 +60,7 @@ export const SettingsPage = () => {
 
   const validationSchema = Yup.object({});
 
-  const submitCode = async (code: any) => {
+  const submitCode = async (code: string) => {
     if (code == undefined) {
       return;
     }
@@ -78,20 +77,16 @@ export const SettingsPage = () => {
     return 'Invalid code';
   };
 
-  const submitProjectName = async (projectName: any) => {
+  const submitProjectName = async (projectName: string) => {
     try {
-      // Filter through user's projects, for the entered project name to delete
-      console.log('projects: ', projects);
       const projectToLeave = projects.filter((project: any) => project.name == projectName);
-      console.log('projectToLeave: ', projectToLeave);
       if (projectToLeave.length === 0) {
         return `Could not find a project named '${projectName}' to delete.`;
       }
-      // Pass in the user info to the delete route to remove user from the project
-      const deleteRes = await axiosInstance.delete(
-        `/projects/code=${projectToLeave[0].code}/email=${userCtx?.email}`
+      const updatedProjects = await axiosInstance.delete(
+        `/projects/code=${projectToLeave[0].code}/user/email=${userCtx?.email}`
       );
-      console.log('deleteRes: ', deleteRes);
+      setProjects(updatedProjects.data);
       setValidNameText(`Left project '${projectToLeave[0].name}'.`);
     } catch (error: any) {
       axiosErrorHandler(error);

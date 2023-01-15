@@ -11,15 +11,14 @@ const Container = styled.div`
 `;
 
 type Props = {
-  name: string;
-  code: string;
+  project: any;
   setCurrentProject: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const Project = ({ name, code, setCurrentProject }: Props) => {
+export const Project = ({ project, setCurrentProject }: Props) => {
   return (
-    <Container key={code} onClick={() => setCurrentProject({ name, code })}>
-      <div>{name}</div>
+    <Container key={project.code} onClick={() => setCurrentProject(project)}>
+      <div>{project.name}</div>
     </Container>
   );
 };

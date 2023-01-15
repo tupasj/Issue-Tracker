@@ -18,11 +18,12 @@ const createProject = async (req: Request, res: Response) => {
       code: shortID,
     };
 
-    const newProject = await Project.create(newProjectData);
-    const user = await User.findOne({ where: { email } });
-    // @ts-ignore
+    const newProject: any = await Project.create(newProjectData);
+    const user: any = await User.findOne({ where: { email } });
     await newProject.addUser(user); // Associate this user with the new project (should create a unique record in the junction table)
-    res.status(201).json(newProject);
+
+    const userProjects = await user.getProjects({ joinTableAttributes: [] });
+    res.status(201).json(userProjects);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -43,8 +44,7 @@ const getUserProjects = async (req: Request, res: Response) => {
   const { email } = req.params;
 
   try {
-    const user = await User.findOne({ where: { email } });
-    // @ts-ignore
+    const user: any = await User.findOne({ where: { email } });
     const userProjects = await user.getProjects({ joinTableAttributes: [] });
     res.status(200).json(userProjects);
   } catch (error: any) {
@@ -68,10 +68,11 @@ const removeUserFromProject = async (req: Request, res: Response) => {
 
   try {
     const project = await Project.findOne({ where: { code } });
-    const user = await User.findOne({ where: { email } });
-    // @ts-ignore
+    const user: any = await User.findOne({ where: { email } });
     await user.removeProject(project); // Remove the user's association with the project (deletes record in junction table, but other tables' records are untouched)
-    res.status(200).end();
+
+    const userProjects = await user.getProjects({ joinTableAttributes: [] });
+    res.status(200).json(userProjects);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }

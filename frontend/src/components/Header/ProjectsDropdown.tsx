@@ -47,12 +47,6 @@ const DropdownContainer = styled.div`
   z-index: -1;
 `;
 
-interface Project {
-  map(arg0: (project: any) => void): import('react').ReactNode;
-  name: string;
-  code: string;
-}
-
 export const ProjectsDropdown = () => {
   const [dropdownActive, setDropdownActive] = useState(false);
   const userCtx = useContext(UserContext);
@@ -68,18 +62,19 @@ export const ProjectsDropdown = () => {
     }
   };
 
-  // Get user's projects
-  // If current_project, set it on the model and render it. Else render current_project.
-  // Use useRef to store the initially loaded projects to filter on every setCurrentProject update (part of the "switching"). Simply update the ref when adding or deleting a new project (the "switch" should still work)
-
   const getUserProjects = async () => {
     try {
-      const userInfoReponse = await axiosInstance.get(`/user/email=${userCtx?.email}`);
-      console.log('userInfoResponse: ', userInfoReponse);
+      const userProjects = await axiosInstance.get(`/projects/user/email=${userCtx?.email}`);
+      setProjects(userProjects.data);
+      setCurrentProject(userProjects.data[0]);
     } catch (error: any) {
       axiosErrorHandler(error);
     }
   };
+
+  useEffect(() => {
+    getUserProjects();
+  }, []);
 
   return (
     <Container>
@@ -94,7 +89,10 @@ export const ProjectsDropdown = () => {
       {dropdownActive && (
         <DropdownContainer>
           <>
-            <div>Foobar</div>
+            {projects &&
+              projects.map((project: any) => {
+                return <Project project={project} setCurrentProject={setCurrentProject} />;
+              })}
             <AddNewProject />
           </>
         </DropdownContainer>

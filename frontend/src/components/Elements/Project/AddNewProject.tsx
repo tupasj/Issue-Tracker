@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { UserContext } from '@/context/UserContext';
+import { UserContext, ProjectsContext } from '@/context';
 
 const Container = styled.div`
   display: flex;
@@ -24,12 +24,13 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 export const AddNewProject = () => {
   const [projectName, setProjectName] = useState('');
   const userCtx = useContext(UserContext);
+  const { setProjects } = useContext(ProjectsContext) as any;
 
   const addProject = async () => {
     try {
       const projectInfo = { projectName: projectName, email: userCtx?.email };
-      const addProjectResponse = await axiosInstance.post('/projects', projectInfo);
-      console.log('addProjectResponse: ', addProjectResponse);
+      const updatedProjects = await axiosInstance.post('/projects', projectInfo);
+      setProjects(updatedProjects.data);
     } catch (error: any) {
       axiosErrorHandler(error);
     }
