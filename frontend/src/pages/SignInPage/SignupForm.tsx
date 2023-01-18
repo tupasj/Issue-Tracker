@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
@@ -71,8 +71,7 @@ export const SignupForm = ({ signedUp, setSignedUp, setUserEmail }: Props) => {
         password: values.password,
       };
       setUserEmail(userCredentials.email);
-      const response = await axiosInstance.post('/user/register', userCredentials);
-      console.log('/user/register response ', response);
+      await axiosInstance.post('/user/register', userCredentials);
       setSignedUp(true);
     } catch (error: any) {
       axiosErrorHandler(error);

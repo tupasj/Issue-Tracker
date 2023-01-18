@@ -91,7 +91,13 @@ export const ProjectsDropdown = () => {
           <>
             {projects &&
               projects.map((project: any) => {
-                return <Project project={project} setCurrentProject={setCurrentProject} />;
+                return (
+                  <Project
+                    key={project.code}
+                    project={project}
+                    setCurrentProject={setCurrentProject}
+                  />
+                );
               })}
             <AddNewProject />
           </>

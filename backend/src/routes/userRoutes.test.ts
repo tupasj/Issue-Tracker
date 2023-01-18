@@ -8,16 +8,8 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use('/user', userRoutes);
 
-describe('user routes', function () {
-  test('GET /user/:email/:attribute', async () => {
-    // const response = await request(app)
-    //   .get('/user/loremipsum@gmail.com/email')
-    //   .expect('Content-Type', /json/)
-    //   .set('Accept', 'application/json');
-    // expect(response.status).toEqual(200);
-  });
-
-  test('POST /user/register', async () => {
+describe('user auth routes', function () {
+  test('user registration route', async () => {
     const mockRequest: any = {
       email: 'foobar@gmail.com',
       first_name: 'Foo',
@@ -28,9 +20,8 @@ describe('user routes', function () {
       .post('/user/register')
       .send(mockRequest);
 
-    const mockCreateUser = jest.spyOn(userController, 'createUser');
+    const mockCreateUser: any = jest.spyOn(userController, 'createUser');
     mockCreateUser.mockReturnValueOnce(mockRequest);
-    // @ts-ignore
     const mockResponse = mockCreateUser();
 
     expect(mockCreateUser).toHaveBeenCalledTimes(1);
@@ -38,16 +29,15 @@ describe('user routes', function () {
     expect(response.statusCode).toBeDefined();
   });
 
-  test('POST /user/login', async () => {
+  test('user login route', async () => {
     const mockRequest: any = {
       email: 'foobar@gmail.com',
       password: '12341234',
     };
     const response = await request(app).post('/user/login').send(mockRequest);
 
-    const mockLoginUser = jest.spyOn(userController, 'loginUser');
+    const mockLoginUser: any = jest.spyOn(userController, 'loginUser');
     mockLoginUser.mockReturnValue(mockRequest);
-    // @ts-ignore
     const mockResponse = mockLoginUser();
 
     expect(mockLoginUser).toHaveBeenCalledTimes(1);

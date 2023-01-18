@@ -77,8 +77,10 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
 
   const addProject = async () => {
     try {
-      const projectInfoResponse = await axiosInstance.post('/projects', { projectName, userEmail });
-      console.log('projectInfoResponse.data: ', projectInfoResponse.data);
+      const projectInfoResponse = await axiosInstance.post('/projects', {
+        projectName: projectName,
+        email: userEmail,
+      });
       setCurrentProject(projectInfoResponse.data);
       navigate('/app/dashboard');
     } catch (error: any) {

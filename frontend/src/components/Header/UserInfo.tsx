@@ -52,7 +52,7 @@ export const UserInfo = () => {
         await axiosInstance.get(`/user/email=${email}`);
       } catch (error: any) {
         axiosErrorHandler(error);
-        navigate('/sign-in');
+        // navigate('/sign-in');
       }
     };
     fetchdata();

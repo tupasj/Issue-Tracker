@@ -17,7 +17,7 @@ type Props = {
 
 export const Project = ({ project, setCurrentProject }: Props) => {
   return (
-    <Container key={project.code} onClick={() => setCurrentProject(project)}>
+    <Container onClick={() => setCurrentProject(project)}>
       <div>{project.name}</div>
     </Container>
   );
