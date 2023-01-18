@@ -68,7 +68,7 @@ export const LoginForm = ({ setUserEmail }: Props) => {
     try {
       await axiosInstance.post('/user/login', userCredentials);
       setUserEmail(userCredentials.email);
-      navigate('/app');
+      navigate('/app/dashboard');
     } catch (error: any) {
       axiosErrorHandler(error);
       setNotificationText(error.response.data.message);

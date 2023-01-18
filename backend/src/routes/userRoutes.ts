@@ -6,6 +6,7 @@ import {
   logoutUser,
   editUserInfo,
   refreshUserToken,
+  deleteUser,
 } from '../controllers/userController';
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.route('/logout').delete(logoutUser);
 router.route('/refreshToken').post(refreshUserToken);
 router.route('/email=:email/attributes?').patch(editUserInfo);
 router.route('/email=:email').get(getUserInfo);
+router.route('/delete/email=:email').delete(deleteUser);
 
 export default router;

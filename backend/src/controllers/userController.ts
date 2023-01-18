@@ -133,6 +133,17 @@ const editUserInfo = async (req: Request, res: Response) => {
   }
 };
 
+const deleteUser = async (req: Request, res: Response) => {
+  const { email } = req.params;
+
+  try {
+    await User.destroy({ where: { email } });
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const logoutUser = async (req: Request, res: Response) => {
   deleteRefreshToken(req, res);
 };
@@ -148,4 +159,5 @@ export {
   logoutUser,
   editUserInfo,
   refreshUserToken,
+  deleteUser,
 };
