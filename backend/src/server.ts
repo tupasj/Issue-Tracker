@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoutes';
 import projectRoutes from './routes/projectRoutes';
+import issueRoutes from './routes/issueRoutes';
 import { testDBConnection } from './config/database';
 import { connectToMongoDB } from './utils/mongoDbUtils';
 import { establishSequelizeAssociations } from './models/associations';
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 app.use('/user', userRoutes);
 app.use('/projects', projectRoutes);
+app.use('/issues', issueRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello from the backend');

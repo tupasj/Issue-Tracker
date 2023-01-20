@@ -4,9 +4,8 @@ import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { Project } from '@/components/Header';
+import { AddNewProject, Project } from '@/components/Header';
 import { TooltipWrapper } from '@/components/Elements/Text';
-import { AddNewProject } from '@/components/Elements/Project';
 
 const Container = styled.div`
   cursor: pointer;
@@ -50,8 +49,9 @@ const DropdownContainer = styled.div`
 export const ProjectsDropdown = () => {
   const [dropdownActive, setDropdownActive] = useState(false);
   const userCtx = useContext(UserContext);
-  // @ts-ignore
-  const { currentProject, setCurrentProject, projects, setProjects } = useContext(ProjectsContext);
+  const { currentProject, setCurrentProject, projects, setProjects } = useContext(
+    ProjectsContext
+  ) as any;
   let initialProjects: any = useRef([]);
 
   const toggleDropdown = () => {

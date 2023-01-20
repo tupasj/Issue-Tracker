@@ -15,6 +15,7 @@ const SubmitButton = styled.button`
   border-radius: 4px;
   background-color: #33a83a;
   color: #fff;
+  font-weight: 600;
   border: none;
   cursor: pointer;
   transition: transform 200ms;
@@ -136,8 +137,6 @@ export const SettingsPage = () => {
         />
         <H3>Change display name</H3>
         <div>
-          <input type="radio" id="email" name="display_name" value="email" />
-          <label htmlFor="email">Email</label>
           <input type="radio" id="username" name="display_name" value="username" />
           <label htmlFor="username">Username</label>
           <input type="radio" id="name" name="display_name" value="name" />
@@ -146,21 +145,6 @@ export const SettingsPage = () => {
         <H2>Add additional info</H2>
         <H3>Username</H3>
         <Input stacked={false} type="text" id="username" name="username" placeholder="Username" />
-        <H3>First and last name</H3>
-        <Input
-          stacked={false}
-          type="text"
-          id="first_name"
-          name="first_name"
-          placeholder="First name"
-        />
-        <Input
-          stacked={false}
-          type="text"
-          id="last_name"
-          name="last_name"
-          placeholder="Last name"
-        />
         <H3>Phone number</H3>
         <Input
           stacked={false}

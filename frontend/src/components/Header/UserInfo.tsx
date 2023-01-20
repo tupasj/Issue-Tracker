@@ -37,6 +37,8 @@ const WrappedIcon = styled(FontAwesomeIcon)`
 
 type UserInfo = {
   email?: string;
+  first_name?: string;
+  last_name?: string;
   profile_picture?: string;
 };
 
@@ -49,7 +51,8 @@ export const UserInfo = () => {
     const fetchdata = async () => {
       const email = userCtx?.email;
       try {
-        await axiosInstance.get(`/user/email=${email}`);
+        const response = await axiosInstance.get(`/user/email=${email}`);
+        setUserInfo(response.data);
       } catch (error: any) {
         axiosErrorHandler(error);
         // navigate('/sign-in');
@@ -60,7 +63,11 @@ export const UserInfo = () => {
 
   return (
     <Container>
-      {userCtx && <p>{userCtx.email}</p>}
+      {userInfo && (
+        <p>
+          {userInfo.first_name} {userInfo.last_name}
+        </p>
+      )}
       {userInfo?.profile_picture ? (
         <ImgPlaceholder>
           <img src={userInfo.profile_picture} alt="profile-image" />

@@ -14,25 +14,13 @@ const getUserInfo = async (req: Request, res: Response) => {
   try {
     const user: any = await User.findOne({
       where: { email },
+      attributes: { exclude: ['password'] },
     });
     if (!user) {
       throw new Error('Invalid credentials');
     }
 
-    const userInfo = {
-      email: user.email,
-      current_project: user.current_project,
-      username: user.username,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      phone_number: user.phone_number,
-      profile_image: user.profile_image,
-      project_codes: user.project_codes,
-      status: user.status,
-      type: user.type,
-    };
-
-    res.status(200).json(userInfo);
+    res.status(200).json(user);
   } catch (error: any) {
     console.log('error: ', error);
     res.status(400).json({ message: error.message });
@@ -40,13 +28,15 @@ const getUserInfo = async (req: Request, res: Response) => {
 };
 
 const createUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, first_name, last_name } = req.body;
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await User.create({
       email,
       password: hashedPassword,
+      first_name,
+      last_name,
     });
     const tokens = generateTokens({ email: email });
     res.cookie('jwt', tokens, { httpOnly: true });

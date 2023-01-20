@@ -32,6 +32,8 @@ const SignupButton = styled.button`
 
 interface FormValues {
   email: string;
+  firstName: string;
+  lastName: string;
   password: string;
   passwordConfirmation: string;
 }
@@ -49,12 +51,20 @@ export const SignupForm = ({ signedUp, setSignedUp, setUserEmail }: Props) => {
 
   const initialValues = {
     email: '',
+    firstName: '',
+    lastName: '',
     password: '',
     passwordConfirmation: '',
   };
 
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email format.').required('This field is required.'),
+    firstName: Yup.string()
+      .required('This field is required.')
+      .max(100, 'Please enter a name of 100 characters or less'),
+    lastName: Yup.string()
+      .required('This field is required.')
+      .max(100, 'Please enter a name of 100 characters or less'),
     password: Yup.string()
       .required('This field is required.')
       .min(8, 'Passwords should be a minimum of 8 characters.')
@@ -68,6 +78,8 @@ export const SignupForm = ({ signedUp, setSignedUp, setUserEmail }: Props) => {
     try {
       const userCredentials = {
         email: values.email,
+        first_name: values.firstName,
+        last_name: values.lastName,
         password: values.password,
       };
       setUserEmail(userCredentials.email);
@@ -97,6 +109,20 @@ export const SignupForm = ({ signedUp, setSignedUp, setUserEmail }: Props) => {
           <FormWrapper>
             {signupError && <ErrorMessageText>This account already exists.</ErrorMessageText>}
             <Input stacked={true} type="email" id="email" name="email" placeholder="Email" />
+            <Input
+              stacked={true}
+              type="text"
+              id="firstName"
+              name="firstName"
+              placeholder="First name"
+            />
+            <Input
+              stacked={true}
+              type="text"
+              id="lastName"
+              name="lastName"
+              placeholder="Last name"
+            />
             <Input
               stacked={true}
               type="password"

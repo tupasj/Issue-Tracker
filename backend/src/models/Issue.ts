@@ -27,4 +27,8 @@ const Issue = db.define('issue', {
   },
 });
 
+(async () => {
+  await db.sync();
+})();
+
 export { Issue };
