@@ -1,14 +1,14 @@
 import express from 'express';
 import request from 'supertest';
-import userRoutes from './userRoutes';
-import * as userController from '../controllers/userController';
+import userRoutes from '../userRoutes';
+import * as userController from '../../controllers/userController';
 
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use('/user', userRoutes);
 
-describe('user auth routes', function () {
+describe('user auth routes', () => {
   test('user registration route', async () => {
     const mockRequest: any = {
       email: 'foobar@gmail.com',

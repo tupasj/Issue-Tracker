@@ -26,6 +26,9 @@ const User = db.define('user', {
       isAlpha: true,
     },
   },
+  display_name: {
+    type: DataTypes.STRING,
+  },
   phone_number: {
     type: DataTypes.INTEGER,
   },

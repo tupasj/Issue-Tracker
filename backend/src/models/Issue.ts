@@ -6,7 +6,10 @@ const Issue = db.define('issue', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  number: {
+  description: {
+    type: DataTypes.TEXT,
+  },
+  issue_number: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -26,9 +29,5 @@ const Issue = db.define('issue', {
     type: DataTypes.STRING,
   },
 });
-
-(async () => {
-  await db.sync();
-})();
 
 export { Issue };

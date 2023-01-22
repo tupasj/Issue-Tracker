@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import { IssueSwitch, IssueSearchbar } from '@/components/Elements/Issue';
+import { AddIssueModal } from '@/components/Elements/Issue';
 
 const Container = styled.div`
   display: flex;
@@ -18,11 +20,16 @@ const AddIssueButton = styled.button`
 `;
 
 export const IssuesOptionsBar = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <Container>
       <IssueSwitch />
       <IssueSearchbar />
-      <AddIssueButton>Add Issue</AddIssueButton>
+      <AddIssueButton onClick={handleOpen}>Add Issue</AddIssueButton>
+      <AddIssueModal open={open} handleClose={handleClose} />
     </Container>
   );
 };
