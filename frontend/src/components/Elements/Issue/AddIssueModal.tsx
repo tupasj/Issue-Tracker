@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
+import { BasicSelect } from '@/components/Elements/UI';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -60,15 +61,21 @@ type Props = {
 export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [priority, setPriority] = useState('none');
   const userCtx = useContext(UserContext);
   const email = userCtx?.email;
   const { currentProject } = useContext(ProjectsContext) as any;
 
-  const handleSubmit = async (e: any) => {
+  const createNewIssue = async (e: any) => {
     e.preventDefault();
-
     try {
-      const newIssueInfo = { code: currentProject.code, poster_email: email, title, description };
+      const newIssueInfo = {
+        code: currentProject.code,
+        poster_email: email,
+        title,
+        description,
+        priority,
+      };
       console.log('newIssueInfo: ', newIssueInfo);
       const newIssue = await axiosInstance.post('/projects/issues', newIssueInfo);
       console.log('newIssue: ', newIssue.data);
@@ -102,12 +109,18 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
               />
               <ButtonContainer>
                 <button>Upload image</button>
-                <button onClick={handleSubmit}>Submit Issue</button>
+                <button onClick={createNewIssue}>Submit Issue</button>
               </ButtonContainer>
             </IssueInfo>
             <IssueOptions>
               <div>Assignees</div>
               <div>...</div>
+              <div>Priority</div>
+              <BasicSelect
+                priority={priority}
+                setPriority={setPriority}
+                items={['high', 'medium', 'low', 'none']}
+              />
               <div>Labels</div>
               <div>...</div>
               <div>Milestone</div>

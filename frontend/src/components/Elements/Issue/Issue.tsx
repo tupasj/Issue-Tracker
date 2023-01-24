@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignsPost } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
+  display: flex;
   background-color: white;
   padding: 14px;
+  border-radius: 4px;
+  box-shadow: inset 8px 0 ${(props) => props.color};
 `;
 
 const Title = styled.div`
@@ -30,7 +33,7 @@ type Props = {
   postedBy: string;
   isOpen: boolean;
   milestone?: string;
-  priority?: string;
+  priority: string;
 };
 
 export const Issue = ({
@@ -43,6 +46,15 @@ export const Issue = ({
   milestone,
   priority,
 }: Props) => {
+  let priorityColor = '#fff';
+  if (priority === 'high') {
+    priorityColor = '#DC2626';
+  } else if (priority === 'medium') {
+    priorityColor = '#F97316';
+  } else if (priority === 'low') {
+    priorityColor = '#FBBF24';
+  }
+
   const convertTimestamp = (timestamp: string) => {
     const splitResult = timestamp.split('T');
     return splitResult[0];
@@ -51,17 +63,19 @@ export const Issue = ({
   const formattedTime = convertTimestamp(timePosted);
 
   return (
-    <Container>
-      <Title>{title}</Title>
-      <Info>
-        #{number} added {formattedTime} by {postedBy}{' '}
-        {milestone && (
-          <>
-            <StyledFontAwesomeIcon icon={faSignsPost} />
-            {milestone}
-          </>
-        )}
-      </Info>
+    <Container color={priorityColor}>
+      <div>
+        <Title>{title}</Title>
+        <Info>
+          #{number} posted on {formattedTime} by {postedBy}
+          {milestone && (
+            <>
+              <StyledFontAwesomeIcon icon={faSignsPost} />
+              {milestone}
+            </>
+          )}
+        </Info>
+      </div>
     </Container>
   );
 };

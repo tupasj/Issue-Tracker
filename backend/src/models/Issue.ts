@@ -27,6 +27,7 @@ const Issue = db.define('issue', {
   },
   priority: {
     type: DataTypes.STRING,
+    defaultValue: 'none',
   },
 });
 

@@ -51,6 +51,7 @@ export const IssuesContainer = () => {
             timePosted={issue.createdAt}
             postedBy={issue.posted_by}
             isOpen={issue.is_open}
+            priority={issue.priority}
           />
         ))}
       </IssuesList>
