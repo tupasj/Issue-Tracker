@@ -1,8 +1,8 @@
 import express from 'express';
-import { createIssue, getIssue } from '../controllers/issueController';
+import { createIssue } from '../controllers/issueController';
 
 const router = express.Router();
 
-router.route('/').post(createIssue).get(getIssue);
+router.route('/').post(createIssue);
 
 export default router;

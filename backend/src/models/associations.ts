@@ -10,6 +10,9 @@ const establishSequelizeAssociations = async () => {
   // Project & Issue. Association: One to many.
   Project.hasMany(Issue);
   Issue.belongsTo(Project);
+  // User & Issue. Association: Many to many.
+  User.belongsToMany(Issue, { through: 'UserIssues' });
+  Issue.belongsToMany(User, { through: 'UserIssues' });
 
   await db.sync();
 };

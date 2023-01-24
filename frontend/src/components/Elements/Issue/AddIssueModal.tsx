@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { UserContext, ProjectsContext } from '@/context';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -52,16 +53,29 @@ const ButtonContainer = styled.div`
 type Props = {
   open: any;
   handleClose: () => void;
+  issues: any[];
+  setIssues: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const AddIssueModal = ({ open, handleClose }: Props) => {
-  const [title, setTitle] = useState<string | null>('');
-  const [description, setDescription] = useState<string | null>('');
+export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const userCtx = useContext(UserContext);
+  const email = userCtx?.email;
+  const { currentProject } = useContext(ProjectsContext) as any;
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log('title: ', title);
-    console.log('description: ', description);
+
+    try {
+      const newIssueInfo = { code: currentProject.code, poster_email: email, title, description };
+      console.log('newIssueInfo: ', newIssueInfo);
+      const newIssue = await axiosInstance.post('/projects/issues', newIssueInfo);
+      console.log('newIssue: ', newIssue.data);
+      setIssues([...issues, newIssue.data]);
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
   };
 
   return (

@@ -22,14 +22,45 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
 `;
 
-// title, number, timePosted, postedBy, isOpen, milestone.
+type Props = {
+  title: string;
+  description?: string;
+  number: number;
+  timePosted: string;
+  postedBy: string;
+  isOpen: boolean;
+  milestone?: string;
+  priority?: string;
+};
 
-export const Issue = () => {
+export const Issue = ({
+  title,
+  description,
+  number,
+  timePosted,
+  postedBy,
+  isOpen,
+  milestone,
+  priority,
+}: Props) => {
+  const convertTimestamp = (timestamp: string) => {
+    const splitResult = timestamp.split('T');
+    return splitResult[0];
+  };
+
+  const formattedTime = convertTimestamp(timePosted);
+
   return (
     <Container>
-      <Title>Issue title</Title>
+      <Title>{title}</Title>
       <Info>
-        #2 added 4 days ago by username <StyledFontAwesomeIcon icon={faSignsPost} /> milestone name
+        #{number} added {formattedTime} by {postedBy}{' '}
+        {milestone && (
+          <>
+            <StyledFontAwesomeIcon icon={faSignsPost} />
+            {milestone}
+          </>
+        )}
       </Info>
     </Container>
   );

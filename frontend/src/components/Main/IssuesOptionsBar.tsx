@@ -19,7 +19,12 @@ const AddIssueButton = styled.button`
   cursor: pointer;
 `;
 
-export const IssuesOptionsBar = () => {
+type Props = {
+  issues: any[];
+  setIssues: React.Dispatch<React.SetStateAction<any>>;
+};
+
+export const IssuesOptionsBar = ({ issues, setIssues }: Props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -29,7 +34,7 @@ export const IssuesOptionsBar = () => {
       <IssueSwitch />
       <IssueSearchbar />
       <AddIssueButton onClick={handleOpen}>Add Issue</AddIssueButton>
-      <AddIssueModal open={open} handleClose={handleClose} />
+      <AddIssueModal issues={issues} open={open} handleClose={handleClose} setIssues={setIssues} />
     </Container>
   );
 };
