@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext } from '@/context/UserContext';
-import { UserInfoDropDown } from '@/components/Header';
+import { UserInfoDropDown } from '@/pages/AppPage/Header';
 
 const Container = styled.div`
   position: absolute;

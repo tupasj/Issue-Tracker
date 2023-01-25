@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { UserContext, UserContextInterface, ProjectsContext } from '@/context';
-import { Header } from '@/components/Header';
-import { Sidebar } from '@/components/Sidebar';
-import { Main } from '@/components/Main';
+import { Header } from '@/pages/AppPage/Header';
+import { Sidebar } from '@/pages/AppPage/Sidebar';
+import { Main } from '@/pages/AppPage';
 
 const Container = styled.div`
   display: grid;

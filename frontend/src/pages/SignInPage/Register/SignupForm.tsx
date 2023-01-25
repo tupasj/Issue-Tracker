@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { Input, ErrorMessageText } from '@/components/Elements/Form';
+import { Input, ErrorMessageText } from '@/elements/Form';
 
 const FormWrapper = styled.div`
   padding: 15px;

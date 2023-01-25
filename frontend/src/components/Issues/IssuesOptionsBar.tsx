@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { IssueSwitch, IssueSearchbar } from '@/components/Elements/Issue';
-import { AddIssueModal } from '@/components/Elements/Issue';
+import { IssueSwitch, IssueSearchbar } from '@/elements/Issue';
+import { AddIssueModal } from '@/elements/Issue';
 
 const Container = styled.div`
   display: flex;

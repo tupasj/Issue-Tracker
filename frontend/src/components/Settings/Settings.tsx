@@ -4,8 +4,8 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
-import { Input } from '@/components/Elements/Form';
-import { H2, H3 } from '@/components/Elements/Text';
+import { Input } from '@/elements/Form';
+import { H2, H3 } from '@/elements/Text';
 
 const SubmitButton = styled.button`
   display: block;
@@ -42,7 +42,7 @@ interface FormValues {
   phone_number?: number | null;
 }
 
-export const SettingsPage = () => {
+export const Settings = () => {
   const [validCodeText, setValidCodeText] = useState('');
   const [validNameText, setValidNameText] = useState('');
   const userCtx = useContext(UserContext);

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
-import { BasicSelect } from '@/components/Elements/UI';
+import { BasicSelect } from '@/elements/UI';
 
 const style = {
   position: 'absolute' as 'absolute',

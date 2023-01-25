@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { useState, useEffect, useContext } from 'react';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { ProjectsContext } from '@/context';
-import { IssuesOptionsBar } from '@/components/Main';
-import { Issue } from '@/components/Elements/Issue';
+import { IssuesOptionsBar } from '@/components/Issues';
+import { Issue } from '@/elements/Issue';
 
 const Container = styled.div`
   height: 100%;

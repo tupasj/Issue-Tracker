@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { Input } from '@/components/Elements/Form';
+import { Input } from '@/elements/Form';
 
 const FormWrapper = styled.div`
   display: flex;

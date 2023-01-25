@@ -4,8 +4,8 @@ import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { AddNewProject, Project } from '@/components/Header';
-import { TooltipWrapper } from '@/components/Elements/Text';
+import { AddNewProject, Project } from '@/pages/AppPage/Header';
+import { TooltipWrapper } from '@/elements/Text';
 
 const Container = styled.div`
   cursor: pointer;

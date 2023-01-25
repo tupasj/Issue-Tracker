@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Routes, Route } from 'react-router-dom';
-import { IssuesContainer } from '@/components/Main';
-import { SettingsPage } from '@/pages';
+import { IssuesContainer } from '@/components/Issues';
+import { Settings } from '@/components/Settings';
 
 const Container = styled.main`
   grid-area: main;
@@ -13,7 +13,7 @@ export const Main = () => {
     <Container>
       <Routes>
         <Route path="/issues" element={<IssuesContainer />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Container>
   );
