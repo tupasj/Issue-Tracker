@@ -57,6 +57,11 @@ const Styles = createGlobalStyle`
     --cadet-blue: #58A4B0;
     --charcoal: #373F51;
     --eerie-black: #1B1B1E;
+	--white: #ffffff;
+	--black: #000000;
+	--green: #16A34A;
+	--light-gray: #e5e5e5;
+	--medium-gray: #737373;
 }
 html {
 	box-sizing: border-box;
