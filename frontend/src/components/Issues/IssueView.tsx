@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faForward } from '@fortawesome/free-solid-svg-icons';
+import { faForward, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { convertTimestamp } from '@/utils/issueUtils';
+import { IssueComments } from '@/components/Issues';
 import { IssuePriority } from '@/elements/Issue';
 
 const Container = styled.div``;
@@ -26,13 +27,15 @@ const TitleSecondaryContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  line-height: 1.25;
 `;
 
-const IssueOpenStatus = styled.div`
+const IssueOpenStatus = styled.div<any>`
   padding: 6px;
   border-radius: 18px;
+  text-align: center;
   color: var(--white);
-  background-color: var(--green);
+  background-color: ${(props) => (props.closed ? 'var(--medium-gray)' : 'var(--green)')};
 `;
 
 const AdditionalInfo = styled.div`
@@ -74,15 +77,26 @@ export const IssueView = ({ issues }: Props) => {
         <SecondaryText>#{currentIssue.issue_number}</SecondaryText>
       </TitleContainer>
       <TitleSecondaryContainer>
-        <IssueOpenStatus>
-          <FontAwesomeIcon icon={faForward} /> Open
-        </IssueOpenStatus>
+        {currentIssue.is_open ? (
+          <IssueOpenStatus>
+            <FontAwesomeIcon icon={faForward} /> Open
+          </IssueOpenStatus>
+        ) : (
+          <IssueOpenStatus closed>
+            <FontAwesomeIcon icon={faCircleCheck} /> Closed
+          </IssueOpenStatus>
+        )}
         <AdditionalInfo>
           Priority: <IssuePriority priority={currentIssue.priority} /> | Posted by{' '}
           <Username>{currentIssue.posted_by}</Username> on {formattedTime}
         </AdditionalInfo>
       </TitleSecondaryContainer>
       <Divider />
+      <IssueComments
+        originalPoster={currentIssue.posted_by}
+        postedTime={formattedTime}
+        description={currentIssue.description}
+      />
     </Container>
   );
 };

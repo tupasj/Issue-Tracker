@@ -34,7 +34,7 @@ const StyledForm = styled(Form)`
 interface FormValues {
   project_code?: string;
   project_name?: string;
-  profile_picture?: string;
+  profile_image?: string;
   display_name?: string;
   username?: string;
   first_name?: string;
@@ -51,7 +51,7 @@ export const Settings = () => {
   const initialValues = {
     project_code: '',
     project_name: '',
-    profile_picture: '',
+    profile_image: '',
     display_name: '',
     username: '',
     first_name: '',
@@ -129,12 +129,7 @@ export const Settings = () => {
         />
         <H2>Personalization</H2>
         <H3>Change profile picture</H3>
-        <input
-          type="file"
-          id="profile_picture"
-          name="profile_picture"
-          accept="image/png, image/jpeg"
-        />
+        <input type="file" id="profile_image" name="profile_image" accept="image/png, image/jpeg" />
         <H3>Change display name</H3>
         <div>
           <input type="radio" id="username" name="display_name" value="username" />

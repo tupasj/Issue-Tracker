@@ -34,7 +34,9 @@ export const BasicSelect = ({ priority, setPriority, items }: Props) => {
         onChange={handleChange}
       >
         {items.map((item) => (
-          <MenuItem value={item}>{item}</MenuItem>
+          <MenuItem key={item} value={item}>
+            {item}
+          </MenuItem>
         ))}
       </Select>
     </StyledFormControl>

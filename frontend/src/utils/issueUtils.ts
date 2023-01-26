@@ -1,12 +1,12 @@
 export const getPriorityColor = (priority: string) => {
   if (priority === 'high') {
-    return '#DC2626';
+    return 'var(--red)';
   } else if (priority === 'medium') {
-    return '#F97316';
+    return 'var(--orange)';
   } else if (priority === 'low') {
-    return '#FBBF24';
+    return 'var(--yellow)';
   } else {
-    return '#ffffff';
+    return 'var(--white)';
   }
 };
 

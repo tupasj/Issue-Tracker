@@ -19,7 +19,7 @@ export const Main = () => {
   useEffect(() => {
     const getIssues = async () => {
       try {
-        const issues = await axiosInstance.get(`projects/code=${currentProject.code}/issues`);
+        const issues = await axiosInstance.get(`/projects/code=${currentProject.code}/issues`);
         setIssues(issues.data);
       } catch (error: any) {
         axiosErrorHandler(error);

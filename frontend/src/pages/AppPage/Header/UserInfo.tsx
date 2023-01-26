@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext } from '@/context/UserContext';
 import { UserInfoDropDown } from '@/pages/AppPage/Header';
@@ -14,32 +12,29 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const ImgPlaceholder = styled.div`
-  background-color: black;
-  border-radius: 50%;
+const ImageContainer = styled.div`
+  padding: 4px;
   align-self: center;
-  height: 46px;
-  width: 46px;
   margin-left: 10px;
   margin-right: 4px;
+  height: 36px;
+  width: 36px;
+  text-align: center;
+  border: 1px solid var(--light-gray);
+  border-radius: 50%;
+  background-color: var(--white);
   cursor: pointer;
 `;
 
-const IconWrapper = styled.div`
-  padding-right: 6px;
-  padding-left: 12px;
-  height: 38px;
-`;
-
-const WrappedIcon = styled(FontAwesomeIcon)`
-  height: 100%;
+const Image = styled.img`
+  width: 36px;
 `;
 
 type UserInfo = {
   email?: string;
   first_name?: string;
   last_name?: string;
-  profile_picture?: string;
+  profile_image?: string;
 };
 
 export const UserInfo = () => {
@@ -48,7 +43,7 @@ export const UserInfo = () => {
   const userCtx = useContext(UserContext);
 
   useEffect(() => {
-    const fetchdata = async () => {
+    const getUserInfo = async () => {
       const email = userCtx?.email;
       try {
         const response = await axiosInstance.get(`/user/email=${email}`);
@@ -58,7 +53,7 @@ export const UserInfo = () => {
         // navigate('/sign-in');
       }
     };
-    fetchdata();
+    getUserInfo();
   }, []);
 
   return (
@@ -68,15 +63,9 @@ export const UserInfo = () => {
           {userInfo.first_name} {userInfo.last_name}
         </p>
       )}
-      {userInfo?.profile_picture ? (
-        <ImgPlaceholder>
-          <img src={userInfo.profile_picture} alt="profile-image" />
-        </ImgPlaceholder>
-      ) : (
-        <IconWrapper>
-          <WrappedIcon icon={faCircleUser} />
-        </IconWrapper>
-      )}
+      <ImageContainer>
+        <Image src={userInfo?.profile_image} />
+      </ImageContainer>
       <UserInfoDropDown />
     </Container>
   );

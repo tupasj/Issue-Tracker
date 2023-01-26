@@ -9,13 +9,13 @@ type Props = {
 };
 
 export const IssuePriority = ({ priority }: Props) => {
-  let priorityColor = '#fff';
+  let priorityColor = 'var(--black)';
   if (priority === 'high') {
-    priorityColor = '#DC2626';
+    priorityColor = 'var(--red)';
   } else if (priority === 'medium') {
-    priorityColor = '#F97316';
+    priorityColor = 'var(--orange)';
   } else if (priority === 'low') {
-    priorityColor = '#FBBF24';
+    priorityColor = 'var(--yellow)';
   }
 
   return <Container color={priorityColor}>{priority}</Container>;

@@ -43,6 +43,8 @@ const User = db.define('user', {
   },
   profile_image: {
     type: DataTypes.STRING,
+    defaultValue:
+      'https://res.cloudinary.com/doje91kts/image/upload/v1674677491/Web%20Development%20Projects/Issue%20Tracker/anonymous-user_fum7lh.png',
   },
   current_project: {
     type: DataTypes.STRING,
