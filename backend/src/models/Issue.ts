@@ -2,6 +2,11 @@ import { DataTypes } from 'sequelize';
 import { db } from '../config/database';
 
 const Issue = db.define('issue', {
+  uuid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
   title: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -12,9 +17,6 @@ const Issue = db.define('issue', {
   },
   issue_number: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    unique: true,
     allowNull: false,
   },
   posted_by: {

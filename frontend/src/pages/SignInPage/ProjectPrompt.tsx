@@ -81,7 +81,7 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
         projectName: projectName,
         email: userEmail,
       });
-      setCurrentProject(projectInfoResponse.data);
+      setCurrentProject(projectInfoResponse.data[0]);
       navigate('/app/dashboard');
     } catch (error: any) {
       axiosErrorHandler(error);

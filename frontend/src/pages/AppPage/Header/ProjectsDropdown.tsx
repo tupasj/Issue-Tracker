@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -52,7 +52,6 @@ export const ProjectsDropdown = () => {
   const { currentProject, setCurrentProject, projects, setProjects } = useContext(
     ProjectsContext
   ) as any;
-  let initialProjects: any = useRef([]);
 
   const toggleDropdown = () => {
     if (!dropdownActive) {

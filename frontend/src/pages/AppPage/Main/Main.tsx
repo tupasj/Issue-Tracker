@@ -16,20 +16,26 @@ export const Main = () => {
   const [issues, setIssues] = useState<any[]>([]);
   const { currentProject } = useContext(ProjectsContext) as any;
 
-  useEffect(() => {
-    const getIssues = async () => {
-      try {
-        const issues = await axiosInstance.get(`/projects/code=${currentProject.code}/issues`);
-        setIssues(issues.data);
-      } catch (error: any) {
-        axiosErrorHandler(error);
-      }
-    };
-    getIssues();
-  }, []);
+  const getIssues = async () => {
+    try {
+      const issues = await axiosInstance.get(`/projects/code=${currentProject.code}/issues`);
+      setIssues(issues.data);
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
 
   useEffect(() => {
-    console.log('issues: ', issues);
+    if (currentProject) {
+      getIssues();
+    }
+    console.log('currentProject: ', currentProject);
+  }, [currentProject]);
+
+  useEffect(() => {
+    if (issues) {
+      console.log('issues: ', issues);
+    }
   }, [issues]);
 
   return (

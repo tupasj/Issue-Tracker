@@ -8,6 +8,7 @@ const createIssue = async (req: Request, res: Response) => {
 
   try {
     const project: any = await Project.findOne({ where: { code } });
+    const projectIssues = await project.getIssues();
     const user: any = await User.findOne({ where: { email: poster_email } });
 
     let userDisplayName;
@@ -17,14 +18,17 @@ const createIssue = async (req: Request, res: Response) => {
       userDisplayName = user.username;
     }
 
-    const newIssue = await Issue.create({
+    const newIssue: any = await Issue.create({
       title,
       description,
       priority,
       posted_by: userDisplayName,
+      issue_number: projectIssues.length + 1,
     });
+
     await project.addIssue(newIssue);
     await user.addIssue(newIssue);
+
     res.status(201).json(newIssue);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
