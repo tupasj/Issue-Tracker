@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { IssueSwitch, IssueSearchbar } from '@/elements/Issue';
 import { AddIssueModal } from '@/elements/Issue';
+import { Button } from '@/elements';
 
 const Container = styled.div`
   display: flex;
@@ -12,11 +15,8 @@ const Container = styled.div`
   padding-bottom: 14px;
 `;
 
-const AddIssueButton = styled.button`
-  color: white;
-  background-color: black;
-  border-radius: 4px;
-  cursor: pointer;
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  padding-left: 4px;
 `;
 
 type Props = {
@@ -33,7 +33,9 @@ export const IssuesOptionsBar = ({ issues, setIssues }: Props) => {
     <Container>
       <IssueSwitch />
       <IssueSearchbar />
-      <AddIssueButton onClick={handleOpen}>Add Issue</AddIssueButton>
+      <Button onClick={handleOpen}>
+        Add Issue <StyledFontAwesomeIcon icon={faPlus} />
+      </Button>
       <AddIssueModal issues={issues} open={open} handleClose={handleClose} setIssues={setIssues} />
     </Container>
   );

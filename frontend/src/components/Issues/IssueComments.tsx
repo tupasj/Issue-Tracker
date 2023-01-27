@@ -10,8 +10,6 @@ const CommentContainer = styled.div`
   gap: 8px;
 `;
 
-const UserBlock = styled.div``;
-
 const Comment = styled.div`
   width: 100%;
   border-radius: 8px;
@@ -53,12 +51,13 @@ const Gray = styled.span`
 `;
 
 type Props = {
+  comments: any;
   originalPoster: string;
   postedTime: string;
   description: string;
 };
 
-export const IssueComments = ({ originalPoster, postedTime, description }: Props) => {
+export const IssueComments = ({ comments, originalPoster, postedTime, description }: Props) => {
   const [userInfo, setUserInfo] = useState<any>();
   const userCtx = useContext(UserContext);
   const email = userCtx?.email;
@@ -74,7 +73,6 @@ export const IssueComments = ({ originalPoster, postedTime, description }: Props
     };
     getUserInfo();
   }, []);
-
   return (
     <Container>
       <CommentContainer>
@@ -89,6 +87,23 @@ export const IssueComments = ({ originalPoster, postedTime, description }: Props
           <CommentBottom>{description}</CommentBottom>
         </Comment>
       </CommentContainer>
+      {comments[0] &&
+        comments.map((comment: any) => {
+          return (
+            <CommentContainer>
+              <ImageContainer>
+                <Image src={userInfo?.profile_image} alt="user profile image" />
+              </ImageContainer>
+              <Comment>
+                <CommentTop>
+                  <Bold>{originalPoster}</Bold>
+                  <Gray> commented on {postedTime}</Gray>
+                </CommentTop>
+                <CommentBottom>{description}</CommentBottom>
+              </Comment>
+            </CommentContainer>
+          );
+        })}
     </Container>
   );
 };

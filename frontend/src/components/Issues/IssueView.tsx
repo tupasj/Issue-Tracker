@@ -1,10 +1,14 @@
 import styled from 'styled-components';
+import { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faForward, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { UserContext } from '@/context/UserContext';
 import { convertTimestamp } from '@/utils/issueUtils';
-import { IssueComments } from '@/components/Issues';
+import { IssueComments, IssueOptions } from '@/components/Issues';
 import { IssuePriority } from '@/elements/Issue';
+import { Button } from '@/elements/UI';
 
 const Container = styled.div``;
 
@@ -57,18 +61,53 @@ const Divider = styled.div`
   margin-bottom: 14px;
 `;
 
+const NewCommentTextarea = styled.textarea`
+  margin-bottom: 8px;
+  border-radius: 4px;
+  width: 100%;
+  border: 1px solid var(--medium-gray);
+  resize: none;
+`;
+
+const CommentsAndOptionsFlexContainer = styled.div`
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+`;
+
+const CommentsFlexWrapper = styled.div`
+  flex-grow: 1;
+`;
+
+const OptionsWrapper = styled.div`
+  width: 200px;
+`;
+
 type Props = {
   issues: any[];
 };
 
 export const IssueView = ({ issues }: Props) => {
+  const [comments, setComments] = useState<any[]>([]);
+  const [commentText, setCommentText] = useState('');
   let { issueNumber } = useParams();
-
+  const userCtx = useContext(UserContext);
+  const email = userCtx?.email;
   const filterResult = issues.filter((issue) => issue.issue_number == issueNumber);
   const currentIssue = filterResult[0];
-  console.log('currentIssue: ', currentIssue);
-
   const formattedTime = convertTimestamp(currentIssue.createdAt);
+
+  const addComment = async () => {
+    try {
+      const newComment = await axiosInstance.post(
+        `/issues/issueNumber=${currentIssue.issue_number}/user/email=${email}/comment`,
+        { text_content: commentText }
+      );
+      setComments([...comments, newComment]);
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
 
   return (
     <Container>
@@ -92,11 +131,24 @@ export const IssueView = ({ issues }: Props) => {
         </AdditionalInfo>
       </TitleSecondaryContainer>
       <Divider />
-      <IssueComments
-        originalPoster={currentIssue.posted_by}
-        postedTime={formattedTime}
-        description={currentIssue.description}
-      />
+      <CommentsAndOptionsFlexContainer>
+        <CommentsFlexWrapper>
+          <IssueComments
+            comments={comments}
+            originalPoster={currentIssue.posted_by}
+            postedTime={formattedTime}
+            description={currentIssue.description}
+          />
+          <Divider />
+          <NewCommentTextarea onChange={(e) => setCommentText(e.target.value)} />
+          <Button right onClick={addComment}>
+            Add comment
+          </Button>
+        </CommentsFlexWrapper>
+        <OptionsWrapper>
+          <IssueOptions />
+        </OptionsWrapper>
+      </CommentsAndOptionsFlexContainer>
     </Container>
   );
 };

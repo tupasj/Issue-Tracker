@@ -6,16 +6,6 @@ const Comment = db.define('comment', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  posted_by: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
 });
-
-if (process.env.TESTING == 'false') {
-  (async () => {
-    await db.sync();
-  })();
-}
 
 export { Comment };
