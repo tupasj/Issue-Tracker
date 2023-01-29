@@ -38,25 +38,14 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 
 type Props = {
   title: string;
-  description?: string;
   number: number;
   timePosted: string;
-  postedBy: string;
-  isOpen: boolean;
   milestone?: string;
   priority: string;
+  postedBy: string;
 };
 
-export const IssueCard = ({
-  title,
-  description,
-  number,
-  timePosted,
-  postedBy,
-  isOpen,
-  milestone,
-  priority,
-}: Props) => {
+export const IssueCard = ({ title, number, timePosted, milestone, priority, postedBy }: Props) => {
   const navigate = useNavigate();
   const priorityColor = getPriorityColor(priority);
   const formattedTime = convertTimestamp(timePosted);

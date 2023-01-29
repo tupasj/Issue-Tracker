@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { convertTimestamp } from '@/utils/issueUtils';
 
@@ -72,10 +72,6 @@ export const IssueComments = ({ comments, setComments, currentIssueNumber }: Pro
     };
     getComments();
   }, []);
-
-  useEffect(() => {
-    console.log('comments: ', comments);
-  }, [comments]);
 
   return (
     <Container>

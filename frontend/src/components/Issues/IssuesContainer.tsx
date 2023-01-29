@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { IssuesOptionsBar } from '@/components/Issues';
 import { IssueCard } from '@/elements/Issue';
+import { useEffect } from 'react';
 
 const Container = styled.div`
   height: 100%;
@@ -17,10 +18,16 @@ const IssuesList = styled.div`
 
 type Props = {
   issues: any[];
+  getIssues: () => void;
   setIssues: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssuesContainer = ({ issues, setIssues }: Props) => {
+export const IssuesContainer = ({ issues, getIssues, setIssues }: Props) => {
+  useEffect(() => {
+    getIssues();
+    console.log('issues: ', issues);
+  }, []);
+
   return (
     <Container>
       <IssuesOptionsBar issues={issues} setIssues={setIssues} />
@@ -29,12 +36,10 @@ export const IssuesContainer = ({ issues, setIssues }: Props) => {
           <IssueCard
             key={issue.issue_number}
             title={issue.title}
-            description={issue.description}
             number={issue.issue_number}
             timePosted={issue.createdAt}
-            postedBy={issue.posted_by}
-            isOpen={issue.is_open}
             priority={issue.priority}
+            postedBy={issue.postedBy}
           />
         ))}
       </IssuesList>

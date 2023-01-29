@@ -25,23 +25,13 @@ export const Main = () => {
     }
   };
 
-  useEffect(() => {
-    if (currentProject) {
-      getIssues();
-    }
-    console.log('currentProject: ', currentProject);
-  }, [currentProject]);
-
-  useEffect(() => {
-    if (issues) {
-      console.log('issues: ', issues);
-    }
-  }, [issues]);
-
   return (
     <Container>
       <Routes>
-        <Route path="/issues" element={<IssuesContainer issues={issues} setIssues={setIssues} />} />
+        <Route
+          path="/issues"
+          element={<IssuesContainer issues={issues} getIssues={getIssues} setIssues={setIssues} />}
+        />
         <Route path="/issues/:issueNumber" element={<IssueView issues={issues} />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
