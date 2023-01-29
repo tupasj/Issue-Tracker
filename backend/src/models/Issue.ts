@@ -11,16 +11,9 @@ const Issue = db.define('issue', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
   issue_number: {
     type: DataTypes.INTEGER,
     allowNull: false,
-  },
-  posted_by: {
-    type: DataTypes.STRING,
   },
   is_open: {
     type: DataTypes.BOOLEAN,

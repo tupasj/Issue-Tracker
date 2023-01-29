@@ -60,26 +60,37 @@ type Props = {
 
 export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) => {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [commentTextContent, setCommentTextContent] = useState('');
   const [priority, setPriority] = useState('none');
   const userCtx = useContext(UserContext);
   const email = userCtx?.email;
   const { currentProject } = useContext(ProjectsContext) as any;
+
+  const addComment = async (issueNumber: number) => {
+    try {
+      await axiosInstance.post(`/issues/issueNumber=${issueNumber}/user/email=${email}/comment`, {
+        text_content: commentTextContent,
+      });
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
 
   const createNewIssue = async (e: any) => {
     e.preventDefault();
     try {
       const newIssueInfo = {
         code: currentProject.code,
-        poster_email: email,
+        email,
         title,
-        description,
         priority,
       };
-      console.log('newIssueInfo: ', newIssueInfo);
-      const newIssue = await axiosInstance.post('/projects/issues', newIssueInfo);
-      console.log('newIssue: ', newIssue.data);
+      const newIssue: any = await axiosInstance.post('/projects/issues', newIssueInfo);
       setIssues([...issues, newIssue.data]);
+      console.log('issueNumber: ', newIssue.data.issue_number);
+      if (commentTextContent !== '') {
+        addComment(newIssue.data.issue_number);
+      }
     } catch (error: any) {
       axiosErrorHandler(error);
     }
@@ -105,7 +116,7 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
                 id="description"
                 name="description"
                 placeholder="Description"
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => setCommentTextContent(e.target.value)}
               />
               <ButtonContainer>
                 <button>Upload image</button>

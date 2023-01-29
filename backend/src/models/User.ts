@@ -26,10 +26,6 @@ const User = db.define('user', {
       isAlpha: true,
     },
   },
-  display_name: {
-    type: DataTypes.STRING,
-    defaultValue: 'full name',
-  },
   phone_number: {
     type: DataTypes.INTEGER,
   },

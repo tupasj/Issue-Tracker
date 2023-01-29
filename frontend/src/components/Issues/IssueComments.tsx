@@ -1,19 +1,21 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { UserContext } from '@/context';
+import { convertTimestamp } from '@/utils/issueUtils';
 
 const Container = styled.div``;
 
 const CommentContainer = styled.div`
   display: flex;
   gap: 8px;
+  padding-top: 14px;
+  padding-bottom: 14px;
 `;
 
-const Comment = styled.div`
+const Comment = styled.div<any>`
   width: 100%;
   border-radius: 8px;
-  border: 1px solid var(--extra-light-blue);
+  border: ${(props) => (props.loading ? 'none' : '1px solid var(--extra-light-blue)')};
 `;
 
 const CommentTop = styled.div`
@@ -52,54 +54,46 @@ const Gray = styled.span`
 
 type Props = {
   comments: any;
-  originalPoster: string;
-  postedTime: string;
-  description: string;
+  setComments: React.Dispatch<React.SetStateAction<any>>;
+  currentIssueNumber: number;
 };
 
-export const IssueComments = ({ comments, originalPoster, postedTime, description }: Props) => {
-  const [userInfo, setUserInfo] = useState<any>();
-  const userCtx = useContext(UserContext);
-  const email = userCtx?.email;
-
+export const IssueComments = ({ comments, setComments, currentIssueNumber }: Props) => {
   useEffect(() => {
-    const getUserInfo = async () => {
+    const getComments = async () => {
       try {
-        const response = await axiosInstance.get(`/user/email=${email}`);
-        setUserInfo(response.data);
+        const commentsResponse: any = await axiosInstance.get(
+          `/issues/issueNumber=${currentIssueNumber}/comments`
+        );
+        setComments(commentsResponse.data);
       } catch (error: any) {
         axiosErrorHandler(error);
       }
     };
-    getUserInfo();
+    getComments();
   }, []);
+
+  useEffect(() => {
+    console.log('comments: ', comments);
+  }, [comments]);
+
   return (
     <Container>
-      <CommentContainer>
-        <ImageContainer>
-          <Image src={userInfo?.profile_image} alt="user profile image" />
-        </ImageContainer>
-        <Comment>
-          <CommentTop>
-            <Bold>{originalPoster}</Bold>
-            <Gray> commented on {postedTime}</Gray>
-          </CommentTop>
-          <CommentBottom>{description}</CommentBottom>
-        </Comment>
-      </CommentContainer>
       {comments[0] &&
         comments.map((comment: any) => {
           return (
-            <CommentContainer>
+            <CommentContainer key={comment.id}>
               <ImageContainer>
-                <Image src={userInfo?.profile_image} alt="user profile image" />
+                {comment.profile_image && (
+                  <Image src={comment.profile_image} alt="user profile image" />
+                )}
               </ImageContainer>
               <Comment>
                 <CommentTop>
-                  <Bold>{originalPoster}</Bold>
-                  <Gray> commented on {postedTime}</Gray>
+                  <Bold>{comment.display_name}</Bold>
+                  <Gray> commented on {convertTimestamp(comment.createdAt)}</Gray>
                 </CommentTop>
-                <CommentBottom>{description}</CommentBottom>
+                <CommentBottom>{comment.text_content}</CommentBottom>
               </Comment>
             </CommentContainer>
           );

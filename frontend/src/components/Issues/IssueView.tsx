@@ -62,6 +62,7 @@ const Divider = styled.div`
 `;
 
 const NewCommentTextarea = styled.textarea`
+  padding: 0;
   margin-bottom: 8px;
   border-radius: 4px;
   width: 100%;
@@ -103,7 +104,8 @@ export const IssueView = ({ issues }: Props) => {
         `/issues/issueNumber=${currentIssue.issue_number}/user/email=${email}/comment`,
         { text_content: commentText }
       );
-      setComments([...comments, newComment]);
+      setComments([...comments, newComment.data]);
+      setCommentText('');
     } catch (error: any) {
       axiosErrorHandler(error);
     }
@@ -135,12 +137,14 @@ export const IssueView = ({ issues }: Props) => {
         <CommentsFlexWrapper>
           <IssueComments
             comments={comments}
-            originalPoster={currentIssue.posted_by}
-            postedTime={formattedTime}
-            description={currentIssue.description}
+            setComments={setComments}
+            currentIssueNumber={currentIssue.issue_number}
           />
           <Divider />
-          <NewCommentTextarea onChange={(e) => setCommentText(e.target.value)} />
+          <NewCommentTextarea
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+          />
           <Button right onClick={addComment}>
             Add comment
           </Button>

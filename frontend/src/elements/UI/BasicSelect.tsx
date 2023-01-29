@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import * as React from 'react';
-import { useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -19,10 +18,6 @@ export const BasicSelect = ({ priority, setPriority, items }: Props) => {
   const handleChange = (event: SelectChangeEvent) => {
     setPriority(event.target.value);
   };
-
-  useEffect(() => {
-    console.log('priority: ', priority);
-  }, [priority]);
 
   return (
     <StyledFormControl sx={{ m: 1, minWidth: 120 }} size="small">

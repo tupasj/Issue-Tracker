@@ -3,10 +3,10 @@ import {
   getUserInfo,
   createUser,
   loginUser,
+  deleteUser,
   logoutUser,
   editUserInfo,
   refreshUserToken,
-  deleteUser,
 } from '../controllers/userController';
 
 const router = express.Router();

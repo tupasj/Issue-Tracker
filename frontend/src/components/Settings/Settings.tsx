@@ -123,7 +123,7 @@ export const Settings = () => {
           type="text"
           id="project_name"
           name="project_name"
-          placeholder="Enter project name.."
+          placeholder="Enter project name..."
           validate={submitProjectName}
           successText={validNameText}
         />

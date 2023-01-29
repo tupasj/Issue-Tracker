@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { db, QueryTypes } from '../config/database';
 import { User } from '../models/User';
+import { UserDisplayName } from '../models/UserDisplayName';
 import bcrypt from 'bcrypt';
 import {
   generateTokens,
@@ -30,14 +31,24 @@ const getUserInfo = async (req: Request, res: Response) => {
 const createUser = async (req: Request, res: Response) => {
   const { email, password, first_name, last_name } = req.body;
 
+  let userDisplayName;
+  try {
+    userDisplayName = await UserDisplayName.create({
+      display_name: `${first_name} ${last_name}`,
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({
+    const user: any = await User.create({
       email,
       password: hashedPassword,
       first_name,
       last_name,
     });
+    user.setUserDisplayName(userDisplayName);
     const tokens = generateTokens({ email: email });
     res.cookie('jwt', tokens, { httpOnly: true });
     res.status(201);
@@ -146,8 +157,8 @@ export {
   getUserInfo,
   createUser,
   loginUser,
+  deleteUser,
   logoutUser,
   editUserInfo,
   refreshUserToken,
-  deleteUser,
 };

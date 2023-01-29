@@ -4,25 +4,16 @@ import { User } from '../models/User';
 import { Project } from '../models/Project';
 
 const createIssue = async (req: Request, res: Response) => {
-  const { code, poster_email, title, description, priority } = req.body;
+  const { code, email, title, priority } = req.body;
 
   try {
     const project: any = await Project.findOne({ where: { code } });
     const projectIssues = await project.getIssues();
-    const user: any = await User.findOne({ where: { email: poster_email } });
-
-    let userDisplayName;
-    if (user.display_name === 'full name') {
-      userDisplayName = `${user.first_name} ${user.last_name}`;
-    } else if (user.display_name === 'username') {
-      userDisplayName = user.username;
-    }
+    const user: any = await User.findOne({ where: { email } });
 
     const newIssue: any = await Issue.create({
       title,
-      description,
       priority,
-      posted_by: userDisplayName,
       issue_number: projectIssues.length + 1,
     });
 
