@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faForward, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faForward, faCircleCheck, faPlus, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext } from '@/context/UserContext';
 import { convertTimestamp } from '@/utils/issueUtils';
@@ -84,11 +84,34 @@ const OptionsWrapper = styled.div`
   width: 200px;
 `;
 
+const CloseIssueButton = styled.button`
+  padding: 6px;
+  width: 150px;
+  border-radius: 4px;
+  background-color: var(--light-gray);
+  color: var(--black);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 200ms;
+  &:hover {
+    background-color: var(--light-medium-gray);
+  }
+`;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+`;
+
 type Props = {
   issues: any[];
+  setIssues: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssueView = ({ issues }: Props) => {
+export const IssueView = ({ issues, setIssues }: Props) => {
   const [comments, setComments] = useState<any[]>([]);
   const [commentText, setCommentText] = useState('');
   let { issueNumber } = useParams();
@@ -106,6 +129,34 @@ export const IssueView = ({ issues }: Props) => {
       );
       setComments([...comments, newComment.data]);
       setCommentText('');
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
+
+  const toggleIssueOpenStatus = async () => {
+    try {
+      let updatedIssueOpenStatus;
+      if (currentIssue.is_open === true) {
+        updatedIssueOpenStatus = false;
+      } else if (currentIssue.is_open === false) {
+        updatedIssueOpenStatus = true;
+      }
+      const updatedIssueResponse: any = await axiosInstance.patch(
+        `/projects/code=${currentIssue.projectCode}/issue/issueNumber=${currentIssue.issue_number}`,
+        { is_open: updatedIssueOpenStatus }
+      );
+      const updatedIssue = updatedIssueResponse.data;
+      const updatedIssues = issues.map((issue) => {
+        if (issue.issue_number === updatedIssue.issue_number) {
+          return {
+            ...updatedIssue,
+          };
+        } else {
+          return issue;
+        }
+      });
+      setIssues(updatedIssues);
     } catch (error: any) {
       axiosErrorHandler(error);
     }
@@ -129,7 +180,7 @@ export const IssueView = ({ issues }: Props) => {
         )}
         <AdditionalInfo>
           Priority: <IssuePriority priority={currentIssue.priority} /> | Posted by{' '}
-          <Username>{currentIssue.posted_by}</Username> on {formattedTime}
+          <Username>{currentIssue.postedBy}</Username> on {formattedTime}
         </AdditionalInfo>
       </TitleSecondaryContainer>
       <Divider />
@@ -145,9 +196,22 @@ export const IssueView = ({ issues }: Props) => {
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
           />
-          <Button right onClick={addComment}>
-            Add comment
-          </Button>
+          <ButtonsWrapper>
+            <CloseIssueButton onClick={toggleIssueOpenStatus}>
+              {currentIssue.is_open ? (
+                <>
+                  Close Issue <FontAwesomeIcon icon={faCircleCheck} />
+                </>
+              ) : (
+                <>
+                  Reopen Issue <FontAwesomeIcon icon={faFolderOpen} />
+                </>
+              )}
+            </CloseIssueButton>
+            <Button right onClick={addComment}>
+              Add comment <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          </ButtonsWrapper>
         </CommentsFlexWrapper>
         <OptionsWrapper>
           <IssueOptions />

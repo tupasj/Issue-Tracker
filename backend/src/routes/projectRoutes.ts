@@ -6,6 +6,7 @@ import {
   deleteProject,
   getUserProjects,
   removeUserFromProject,
+  updateProjectIssue,
 } from '../controllers/projectController';
 
 const router = express.Router();
@@ -16,5 +17,8 @@ router.route('/code=:code/user/email=:email').delete(removeUserFromProject);
 router.route('/user/email=:email').get(getUserProjects);
 router.route('/issues').post(createIssue);
 router.route('/code=:code/issues').get(getProjectIssues);
+router
+  .route('/code=:code/issue/issueNumber=:issueNumber')
+  .patch(updateProjectIssue);
 
 export default router;

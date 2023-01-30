@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Project } from '../models/Project';
 import { User } from '../models/User';
+import { Issue } from '../models/Issue';
 import ShortUniqueId from 'short-unique-id';
 
 const createProject = async (req: Request, res: Response) => {
@@ -78,10 +79,37 @@ const removeUserFromProject = async (req: Request, res: Response) => {
   }
 };
 
+const updateProjectIssue = async (req: Request, res: Response) => {
+  const { code, issueNumber } = req.params;
+  const { is_open } = req.body;
+
+  try {
+    await Issue.update(
+      { is_open },
+      {
+        where: {
+          projectCode: code,
+          issue_number: issueNumber,
+        },
+      }
+    );
+    const updatedIssue = await Issue.findOne({
+      where: {
+        projectCode: code,
+        issue_number: issueNumber,
+      },
+    });
+    res.status(200).json(updatedIssue);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export {
   createProject,
   getProject,
   deleteProject,
   getUserProjects,
   removeUserFromProject,
+  updateProjectIssue,
 };

@@ -31,6 +31,11 @@ const StyledForm = styled(Form)`
   align-items: start;
 `;
 
+const ProjectCode = styled.div`
+  font-size: 0.75rem;
+  color: var(--medium-gray);
+`;
+
 interface FormValues {
   project_code?: string;
   project_name?: string;
@@ -46,7 +51,7 @@ export const Settings = () => {
   const [validCodeText, setValidCodeText] = useState('');
   const [validNameText, setValidNameText] = useState('');
   const userCtx = useContext(UserContext);
-  const { projects, setProjects } = useContext(ProjectsContext) as any;
+  const { projects, setProjects, currentProject } = useContext(ProjectsContext) as any;
 
   const initialValues = {
     project_code: '',
@@ -107,6 +112,7 @@ export const Settings = () => {
     >
       <StyledForm>
         <H2>Projects</H2>
+        <ProjectCode>Current project code: {currentProject.code}</ProjectCode>
         <H3>Join a project</H3>
         <Input
           stacked={false}

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { ProjectsContext } from '@/context';
@@ -30,9 +30,12 @@ export const Main = () => {
       <Routes>
         <Route
           path="/issues"
-          element={<IssuesContainer issues={issues} getIssues={getIssues} setIssues={setIssues} />}
+          element={<IssuesContainer issues={issues} setIssues={setIssues} getIssues={getIssues} />}
         />
-        <Route path="/issues/:issueNumber" element={<IssueView issues={issues} />} />
+        <Route
+          path="/issues/:issueNumber"
+          element={<IssueView issues={issues} setIssues={setIssues} />}
+        />
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </Container>

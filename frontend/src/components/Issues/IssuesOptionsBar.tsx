@@ -22,16 +22,38 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 type Props = {
   issues: any[];
   setIssues: React.Dispatch<React.SetStateAction<any>>;
+  openIssues: any[];
+  closedIssues: any[];
+  openActive: boolean;
+  closedActive: boolean;
+  setOpenActive: React.Dispatch<React.SetStateAction<any>>;
+  setClosedActive: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssuesOptionsBar = ({ issues, setIssues }: Props) => {
+export const IssuesOptionsBar = ({
+  issues,
+  setIssues,
+  openIssues,
+  closedIssues,
+  openActive,
+  closedActive,
+  setOpenActive,
+  setClosedActive,
+}: Props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <Container>
-      <IssueSwitch />
+      <IssueSwitch
+        openIssues={openIssues}
+        closedIssues={closedIssues}
+        openActive={openActive}
+        closedActive={closedActive}
+        setOpenActive={setOpenActive}
+        setClosedActive={setClosedActive}
+      />
       <IssueSearchbar />
       <Button onClick={handleOpen}>
         Add Issue <StyledFontAwesomeIcon icon={faPlus} />

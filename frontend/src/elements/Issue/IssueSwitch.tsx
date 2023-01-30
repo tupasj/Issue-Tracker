@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 
 const Container = styled.div`
   display: flex;
@@ -6,8 +7,8 @@ const Container = styled.div`
   border-radius: 4px;
 `;
 
-const SwitchLeft = styled.span`
-  background-color: #e6e6e6;
+const SwitchLeft = styled.span<any>`
+  background-color: ${(props) => (props.openActive ? 'var(--light-gray)' : 'var(--white)')};
   border: 2px solid rgba(0, 0, 0, 0.25);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -17,8 +18,8 @@ const SwitchLeft = styled.span`
   cursor: pointer;
 `;
 
-const SwitchRight = styled.span`
-  background-color: #fff;
+const SwitchRight = styled.span<any>`
+  background-color: ${(props) => (props.closedActive ? 'var(--light-gray)' : 'var(--white)')};
   border: 2px solid rgba(0, 0, 0, 0.25);
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
@@ -28,11 +29,41 @@ const SwitchRight = styled.span`
   cursor: pointer;
 `;
 
-export const IssueSwitch = () => {
+type Props = {
+  openIssues: any[];
+  closedIssues: any[];
+  openActive: boolean;
+  closedActive: boolean;
+  setOpenActive: React.Dispatch<React.SetStateAction<any>>;
+  setClosedActive: React.Dispatch<React.SetStateAction<any>>;
+};
+
+export const IssueSwitch = ({
+  openIssues,
+  closedIssues,
+  openActive,
+  closedActive,
+  setOpenActive,
+  setClosedActive,
+}: Props) => {
+  const toggleSwitch = () => {
+    if (openActive) {
+      setOpenActive(false);
+      setClosedActive(true);
+    } else if (closedActive) {
+      setOpenActive(true);
+      setClosedActive(false);
+    }
+  };
+
   return (
     <Container>
-      <SwitchLeft>Open (18)</SwitchLeft>
-      <SwitchRight>Closed (4)</SwitchRight>
+      <SwitchLeft openActive={openActive} onClick={toggleSwitch}>
+        Open ({openIssues.length})
+      </SwitchLeft>
+      <SwitchRight closedActive={closedActive} onClick={toggleSwitch}>
+        Closed ({closedIssues.length})
+      </SwitchRight>
     </Container>
   );
 };
