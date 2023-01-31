@@ -43,15 +43,27 @@ type Props = {
   milestone?: string;
   priority: string;
   postedBy: string;
+  routeOpenStatus: string;
 };
 
-export const IssueCard = ({ title, number, timePosted, milestone, priority, postedBy }: Props) => {
+export const IssueCard = ({
+  title,
+  number,
+  timePosted,
+  milestone,
+  priority,
+  postedBy,
+  routeOpenStatus,
+}: Props) => {
   const navigate = useNavigate();
   const priorityColor = getPriorityColor(priority);
   const formattedTime = convertTimestamp(timePosted);
 
   return (
-    <Container color={priorityColor} onClick={() => navigate(`/app/issues/${number}`)}>
+    <Container
+      color={priorityColor}
+      onClick={() => navigate(`/app/issues/${routeOpenStatus}/${number}`)}
+    >
       <div>
         <Title>{title}</Title>
         <Info>

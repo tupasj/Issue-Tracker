@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -16,6 +16,9 @@ const SwitchLeft = styled.span<any>`
   padding: 4px;
   font-size: 0.75rem;
   cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const SwitchRight = styled.span<any>`
@@ -27,6 +30,9 @@ const SwitchRight = styled.span<any>`
   padding: 4px;
   font-size: 0.75rem;
   cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 type Props = {
@@ -46,13 +52,16 @@ export const IssueSwitch = ({
   setOpenActive,
   setClosedActive,
 }: Props) => {
+  const navigate = useNavigate();
   const toggleSwitch = () => {
     if (openActive) {
       setOpenActive(false);
       setClosedActive(true);
+      navigate('/app/issues/closed');
     } else if (closedActive) {
       setOpenActive(true);
       setClosedActive(false);
+      navigate('/app/issues/open');
     }
   };
 
