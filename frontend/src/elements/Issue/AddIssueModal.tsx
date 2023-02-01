@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
-import { BasicSelect } from '@/elements/UI';
+import { BasicSelect, MultiSelect } from '@/elements/UI';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -62,6 +62,7 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
   const [title, setTitle] = useState('');
   const [commentTextContent, setCommentTextContent] = useState('');
   const [priority, setPriority] = useState('none');
+  const [labels, setLabels] = useState<string[]>([]);
   const userCtx = useContext(UserContext);
   const email = userCtx?.email;
   const { currentProject } = useContext(ProjectsContext) as any;
@@ -70,6 +71,7 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
     try {
       await axiosInstance.post(`/issues/issueNumber=${issueNumber}/user/email=${email}/comment`, {
         text_content: commentTextContent,
+        code: currentProject.code,
       });
     } catch (error: any) {
       axiosErrorHandler(error);
@@ -127,12 +129,26 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
               <div>...</div>
               <div>Priority</div>
               <BasicSelect
-                priority={priority}
-                setPriority={setPriority}
+                label="priority"
                 items={['high', 'medium', 'low', 'none']}
+                defaultState={priority}
+                setState={setPriority}
               />
               <div>Labels</div>
-              <div>...</div>
+              <MultiSelect
+                label="labels"
+                items={[
+                  'bug',
+                  'duplicate',
+                  'help wanted',
+                  'new feature',
+                  'question',
+                  'refactoring',
+                  "won't fix",
+                ]}
+                defaultState={labels}
+                setState={setLabels}
+              />
               <div>Milestone</div>
               <div>...</div>
             </IssueOptions>

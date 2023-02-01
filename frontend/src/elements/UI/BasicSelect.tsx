@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import * as React from 'react';
+import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -9,25 +10,21 @@ const StyledFormControl = styled(FormControl)`
 `;
 
 type Props = {
-  priority: string;
-  setPriority: React.Dispatch<React.SetStateAction<string>>;
+  label: string;
   items: string[];
+  defaultState: string;
+  setState: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const BasicSelect = ({ priority, setPriority, items }: Props) => {
+export const BasicSelect = ({ label, items, defaultState, setState }: Props) => {
   const handleChange = (event: SelectChangeEvent) => {
-    setPriority(event.target.value);
+    setState(event.target.value);
   };
 
   return (
-    <StyledFormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <Select
-        labelId="priority"
-        id="priority"
-        value={priority}
-        label="priority"
-        onChange={handleChange}
-      >
+    <StyledFormControl sx={{ m: 1, width: 120 }} size="small">
+      <InputLabel id={label}>...</InputLabel>
+      <Select labelId={label} id={label} value={defaultState} label={label} onChange={handleChange}>
         {items.map((item) => (
           <MenuItem key={item} value={item}>
             {item}
