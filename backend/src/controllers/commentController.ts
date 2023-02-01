@@ -5,14 +5,14 @@ import { User } from '../models/User';
 import { UserDisplayName } from '../models/UserDisplayName';
 
 const createComment = async (req: Request, res: Response) => {
-  const { text_content } = req.body;
+  const { text_content, code } = req.body;
   const { issueNumber, email } = req.params;
 
   try {
     const newComment: any = await Comment.create({ text_content });
 
     const issue: any = await Issue.findOne({
-      where: { issue_number: issueNumber },
+      where: { issue_number: issueNumber, projectCode: code },
     });
     const user: any = await User.findOne({ where: { email } });
     await issue.addComment(newComment);
@@ -36,11 +36,11 @@ const createComment = async (req: Request, res: Response) => {
 };
 
 const getUserComments = async (req: Request, res: Response) => {
-  const { issueNumber } = req.params;
+  const { issueNumber, projectCode } = req.params;
 
   try {
     const issue: any = await Issue.findOne({
-      where: { issue_number: issueNumber },
+      where: { issue_number: issueNumber, projectCode: projectCode },
     });
     const comments = await issue.getComments();
 

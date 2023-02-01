@@ -30,6 +30,21 @@ const createProject = async (req: Request, res: Response) => {
   }
 };
 
+const joinProject = async (req: Request, res: Response) => {
+  const { code } = req.params;
+  const { email } = req.body;
+
+  try {
+    const projectToJoin: any = await Project.findOne({ where: { code } });
+    const user: any = await User.findOne({ where: { email } });
+    await projectToJoin.addUser(user);
+
+    res.status(200).json(projectToJoin);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const getProject = async (req: Request, res: Response) => {
   const { code } = req.params;
 
@@ -107,6 +122,7 @@ const updateProjectIssue = async (req: Request, res: Response) => {
 
 export {
   createProject,
+  joinProject,
   getProject,
   deleteProject,
   getUserProjects,

@@ -56,17 +56,23 @@ export const IssuesView = ({ issues, setIssues, getIssues, openActive, setOpenAc
         setOpenActive={setOpenActive}
       />
       <IssuesList>
-        {issues.map((issue: any) => (
-          <IssueCard
-            key={issue.issue_number}
-            title={issue.title}
-            number={issue.issue_number}
-            timePosted={issue.createdAt}
-            priority={issue.priority}
-            postedBy={issue.postedBy}
-            routeOpenStatus={routeOpenStatus}
-          />
-        ))}
+        {issues[0] ? (
+          <>
+            {issues.map((issue: any) => (
+              <IssueCard
+                key={issue.issue_number}
+                title={issue.title}
+                number={issue.issue_number}
+                timePosted={issue.createdAt}
+                priority={issue.priority}
+                postedBy={issue.postedBy}
+                routeOpenStatus={routeOpenStatus}
+              />
+            ))}
+          </>
+        ) : (
+          <p>No issues</p>
+        )}
       </IssuesList>
     </Container>
   );

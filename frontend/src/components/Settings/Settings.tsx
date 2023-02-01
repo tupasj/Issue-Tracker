@@ -13,14 +13,14 @@ const SubmitButton = styled.button`
   padding: 6px;
   width: 150px;
   border-radius: 4px;
-  background-color: #33a83a;
-  color: #fff;
+  background-color: var(--green);
+  color: var(--white);
   font-weight: 600;
   border: none;
   cursor: pointer;
   transition: transform 200ms;
   &:hover {
-    background-color: #238629;
+    background-color: var(--dark-green);
   }
 `;
 
@@ -51,7 +51,10 @@ export const Settings = () => {
   const [validCodeText, setValidCodeText] = useState('');
   const [validNameText, setValidNameText] = useState('');
   const userCtx = useContext(UserContext);
-  const { projects, setProjects, currentProject } = useContext(ProjectsContext) as any;
+  const { projects, setProjects, currentProject, setCurrentProject } = useContext(
+    ProjectsContext
+  ) as any;
+  const email = userCtx?.email;
 
   const initialValues = {
     project_code: '',
@@ -66,27 +69,27 @@ export const Settings = () => {
 
   const validationSchema = Yup.object({});
 
-  const submitCode = async (code: string) => {
+  const submitProjectCode = async (code: string) => {
     if (code == undefined) {
       return;
     }
 
     try {
-      const response = await axiosInstance.patch(
-        `/user/email=${userCtx?.email}/attributes?project_codes=${code}`
-      );
-      setValidCodeText(`Successfully joined project '${response.data.name}'.`);
-      return;
+      const joinProjectResponse = await axiosInstance.put(`/projects/code=${code}`, { email });
+      setValidCodeText(`Successfully joined project '${joinProjectResponse.data.name}'.`);
+      setCurrentProject(joinProjectResponse.data[0]);
     } catch (error: any) {
       axiosErrorHandler(error);
+      if (code !== '') {
+        return 'Invalid code';
+      }
     }
-    return 'Invalid code';
   };
 
   const submitProjectName = async (projectName: string) => {
     try {
       const projectToLeave = projects.filter((project: any) => project.name == projectName);
-      if (projectToLeave.length === 0) {
+      if (projectName !== '' && projectToLeave.length === 0) {
         return `Could not find a project named '${projectName}' to delete.`;
       }
       const updatedProjects = await axiosInstance.delete(
@@ -112,7 +115,7 @@ export const Settings = () => {
     >
       <StyledForm>
         <H2>Projects</H2>
-        <ProjectCode>Current project code: {currentProject.code}</ProjectCode>
+        <ProjectCode>Current project code: {currentProject && currentProject.code}</ProjectCode>
         <H3>Join a project</H3>
         <Input
           stacked={false}
@@ -120,7 +123,7 @@ export const Settings = () => {
           id="code"
           name="code"
           placeholder="Enter project code..."
-          validate={submitCode}
+          validate={submitProjectCode}
           successText={validCodeText}
         />
         <H3>Leave a project</H3>

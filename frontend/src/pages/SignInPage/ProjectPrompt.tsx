@@ -85,13 +85,16 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
       navigate('/app/dashboard');
     } catch (error: any) {
       axiosErrorHandler(error);
+      setNotificationText('Could not create project');
     }
   };
 
   const joinProject = async () => {
     try {
-      const getProjectResponse = await axiosInstance.get(`/projects/${projectCode}`);
-      setCurrentProject(getProjectResponse.data);
+      const getProjectResponse = await axiosInstance.put(`/projects/code=${projectCode}`, {
+        email: userEmail,
+      });
+      setCurrentProject(getProjectResponse.data[0]);
       navigate('/app/dashboard');
     } catch (error: any) {
       axiosErrorHandler(error);

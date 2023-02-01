@@ -9,6 +9,8 @@ const router = express.Router();
 router
   .route('/issueNumber=:issueNumber/user/email=:email/comment')
   .post(createComment);
-router.route('/issueNumber=:issueNumber/comments').get(getUserComments);
+router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode/comments')
+  .get(getUserComments);
 
 export default router;

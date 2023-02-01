@@ -15,7 +15,9 @@ const establishSequelizeAssociations = async () => {
   });
   Issue.belongsTo(Project);
   // User & UserDisplayName. Association: One to one.
-  User.hasOne(UserDisplayName);
+  User.hasOne(UserDisplayName, {
+    onDelete: 'CASCADE',
+  });
   UserDisplayName.belongsTo(User);
   // User & Issue. Association: Many to many.
   User.belongsToMany(Issue, { through: 'UserIssues' });

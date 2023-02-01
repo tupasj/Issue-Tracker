@@ -56,14 +56,20 @@ type Props = {
   comments: any;
   setComments: React.Dispatch<React.SetStateAction<any>>;
   currentIssueNumber: number;
+  currentProjectCode: string;
 };
 
-export const IssueComments = ({ comments, setComments, currentIssueNumber }: Props) => {
+export const IssueComments = ({
+  comments,
+  setComments,
+  currentIssueNumber,
+  currentProjectCode,
+}: Props) => {
   useEffect(() => {
     const getComments = async () => {
       try {
         const commentsResponse: any = await axiosInstance.get(
-          `/issues/issueNumber=${currentIssueNumber}/comments`
+          `/issues/issueNumber=${currentIssueNumber}/projectCode=${currentProjectCode}/comments`
         );
         setComments(commentsResponse.data);
       } catch (error: any) {
