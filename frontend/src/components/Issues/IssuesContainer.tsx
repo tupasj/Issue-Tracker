@@ -7,21 +7,28 @@ import { IssuesView, IssueView } from '@/components/Issues';
 export const IssuesContainer = () => {
   const [issues, setIssues] = useState<any[]>([]);
   const [openActive, setOpenActive] = useState(true);
-  const [closedActive, setClosedActive] = useState(false);
   const { currentProject } = useContext(ProjectsContext) as any;
   const navigate = useNavigate();
 
   const getIssues = async () => {
     try {
-      const issues = await axiosInstance.get(`/projects/code=${currentProject.code}/issues`);
-      setIssues(issues.data);
+      const issuesResponse = await axiosInstance.get(
+        `/projects/code=${currentProject.code}/issues`
+      );
+      return issuesResponse.data;
     } catch (error: any) {
       axiosErrorHandler(error);
     }
   };
 
   useEffect(() => {
+    const filterOpenIssues = async () => {
+      const issues = await getIssues();
+      const openIssues = issues.filter((issue: any) => issue.is_open === true);
+      setIssues(openIssues);
+    };
     getIssues();
+    filterOpenIssues();
     navigate('/app/issues/open');
   }, []);
 
@@ -33,10 +40,9 @@ export const IssuesContainer = () => {
           <IssuesView
             issues={issues}
             setIssues={setIssues}
+            getIssues={getIssues}
             openActive={openActive}
-            closedActive={closedActive}
             setOpenActive={setOpenActive}
-            setClosedActive={setClosedActive}
           />
         }
       />

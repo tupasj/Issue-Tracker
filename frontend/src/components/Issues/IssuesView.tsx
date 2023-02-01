@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { IssuesOptionsBar } from './IssuesOptionsBar';
 import { IssueCard } from '@/elements/Issue';
+import { useEffect } from 'react';
 
 const Container = styled.div`
   height: 100%;
@@ -19,49 +20,43 @@ const IssuesList = styled.div`
 type Props = {
   issues: any;
   setIssues: React.Dispatch<React.SetStateAction<any>>;
+  getIssues: () => any;
   openActive: boolean;
-  closedActive: boolean;
   setOpenActive: React.Dispatch<React.SetStateAction<any>>;
-  setClosedActive: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssuesView = ({
-  issues,
-  setIssues,
-  openActive,
-  closedActive,
-  setOpenActive,
-  setClosedActive,
-}: Props) => {
+export const IssuesView = ({ issues, setIssues, getIssues, openActive, setOpenActive }: Props) => {
   let { openStatus }: any = useParams();
-  const openIssues = issues.filter((issue: any) => issue.is_open === true);
-  const closedIssues = issues.filter((issue: any) => issue.is_open === false);
-  let currentIssues: any;
-  let routeOpenStatus: any;
+  let routeOpenStatus = openStatus;
+  let location = useLocation();
 
-  if (openActive) {
-    currentIssues = openIssues;
-    routeOpenStatus = 'open';
-  } else {
-    currentIssues = closedIssues;
-    routeOpenStatus = 'closed';
-  }
+  useEffect(() => {
+    const filterIssues = async () => {
+      if (openStatus == 'open') {
+        const allIssues = await getIssues();
+        const openIssues = allIssues.filter((issue: any) => issue.is_open === true);
+        setIssues(openIssues);
+      } else {
+        const allIssues = await getIssues();
+        const closedIssues = allIssues.filter((issue: any) => issue.is_open === false);
+        setIssues(closedIssues);
+      }
+    };
+
+    filterIssues();
+  }, [location]);
 
   return (
     <Container>
-      <p>IssuesView.. openStatus: {openStatus}</p>
       <IssuesOptionsBar
         issues={issues}
         setIssues={setIssues}
-        openIssues={openIssues}
-        closedIssues={closedIssues}
+        getIssues={getIssues}
         openActive={openActive}
-        closedActive={closedActive}
         setOpenActive={setOpenActive}
-        setClosedActive={setClosedActive}
       />
       <IssuesList>
-        {currentIssues.map((issue: any) => (
+        {issues.map((issue: any) => (
           <IssueCard
             key={issue.issue_number}
             title={issue.title}

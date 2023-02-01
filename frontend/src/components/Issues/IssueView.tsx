@@ -164,7 +164,6 @@ export const IssueView = ({ issues, setIssues }: Props) => {
 
   return (
     <Container>
-      {/* <p>IssueView</p> */}
       <TitleContainer>
         <Title>{currentIssue.title}</Title>
         <SecondaryText>#{currentIssue.issue_number}</SecondaryText>

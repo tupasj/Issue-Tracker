@@ -6,7 +6,7 @@ const Container = styled.div`
   overflow: hidden;
   white-space: nowrap;
   &:hover {
-    box-shadow: 0px 0px 1px 2px #59b1e6;
+    text-decoration: underline;
   }
 `;
 

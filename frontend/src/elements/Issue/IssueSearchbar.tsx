@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,7 +10,7 @@ const Container = styled.div`
   padding-left: 4px;
   border: 2px solid rgba(0, 0, 0, 0.25);
   border-radius: 4px;
-  background-color: #fff;
+  background-color: var(--white);
   width: 25%;
 `;
 
@@ -25,11 +26,35 @@ const Input = styled.input`
   width: 100%;
 `;
 
-export const IssueSearchbar = () => {
+type Props = {
+  issues: any;
+  setIssues: React.Dispatch<React.SetStateAction<any>>;
+};
+
+export const IssueSearchbar = ({ issues, setIssues }: Props) => {
+  const [inputText, setInputText] = useState('');
+
+  const handleSubmit = () => {
+    setIssues(issues.filter((issue: any) => issue.title.includes(inputText)));
+    console.log('new issues: ', issues);
+  };
+
+  const handleKeydownSubmit = (e: any) => {
+    if (e.keyCode === 13) {
+      setIssues(issues.filter((issue: any) => issue.title.includes(inputText)));
+      console.log('new issues: ', issues);
+    }
+  };
+
   return (
     <Container>
-      <StyledFontAwesomeIcon icon={faMagnifyingGlass} />
-      <Input type="text" placeholder="Search Issues..." />
+      <StyledFontAwesomeIcon icon={faMagnifyingGlass} onClick={handleSubmit} />
+      <Input
+        type="text"
+        placeholder="Search Issues..."
+        onChange={(e) => setInputText(e.target.value)}
+        onKeyDown={(e) => handleKeydownSubmit(e)}
+      />
     </Container>
   );
 };

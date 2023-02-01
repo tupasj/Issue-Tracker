@@ -11,9 +11,8 @@ const Container = styled.div`
 
 const NewProjectInput = styled.input`
   flex-grow: 1;
-  border-bottom-left-radius: 2px;
   border-width: 1px;
-  border-top-right-radius: 2px;
+  border-radius: 4px;
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
