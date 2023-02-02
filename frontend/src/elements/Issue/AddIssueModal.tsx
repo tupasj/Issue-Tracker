@@ -86,8 +86,11 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
         email,
         title,
         priority,
+        labels,
       };
+      console.log('newIssueInfo: ', newIssueInfo);
       const newIssue: any = await axiosInstance.post('/projects/issues', newIssueInfo);
+      console.log('newIssue: ', newIssue);
       setIssues([...issues, newIssue.data]);
       if (commentTextContent !== '') {
         addComment(newIssue.data.issue_number);

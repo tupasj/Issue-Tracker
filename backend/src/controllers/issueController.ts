@@ -1,27 +1,50 @@
 import { Request, Response } from 'express';
+import { db, QueryTypes } from '../config/database';
 import { Issue } from '../models/Issue';
 import { User } from '../models/User';
 import { Project } from '../models/Project';
 import { UserDisplayName } from '../models/UserDisplayName';
+import { Label } from '../models/Label';
 
 const createIssue = async (req: Request, res: Response) => {
-  const { code, email, title, priority } = req.body;
+  const { code, email, title, priority, labels } = req.body;
 
   try {
     const project: any = await Project.findOne({ where: { code } });
-    const projectIssues = await project.getIssues();
     const user: any = await User.findOne({ where: { email } });
+    const queryResult: any = await db.query(
+      `SELECT MAX(issue_number) FROM issues WHERE "projectCode"='${code}';`,
+      { type: QueryTypes.SELECT }
+    );
+    const latestIssueNumber: number = queryResult[0].max;
 
     const newIssue: any = await Issue.create({
       title,
       priority,
-      issue_number: projectIssues.length + 1,
+      issue_number: latestIssueNumber + 1,
     });
 
     await project.addIssue(newIssue);
     await user.addIssue(newIssue);
 
-    res.status(201).json(newIssue);
+    const labelObjects: any[] = [];
+    for (let i = 0; i < labels.length; i++) {
+      const label = await Label.findOne({
+        where: {
+          name: labels[i],
+        },
+      });
+      labelObjects.push(label);
+    }
+    const issue: any = await Issue.findOne({
+      where: {
+        projectCode: code,
+        issue_number: latestIssueNumber + 1,
+      },
+    });
+    issue.setDataValue('labels', labelObjects);
+
+    res.status(201).json(issue);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
