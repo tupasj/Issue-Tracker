@@ -3,16 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignsPost } from '@fortawesome/free-solid-svg-icons';
 import { getPriorityColor, convertTimestamp } from '@/utils/issueUtils';
+import { Label } from '@/elements/Label';
 
 const Container = styled.div`
   display: flex;
-  background-color: #fff;
+  gap: 8px;
   padding: 14px;
   border-radius: 4px;
+  background-color: var(--white);
   box-shadow: inset 8px 0 ${(props) => props.color};
   cursor: pointer;
   &:hover {
-    background-color: #fafafa;
+    background-color: var(--extra-light-gray);
   }
 `;
 
@@ -21,7 +23,7 @@ const Title = styled.div`
   line-height: 1.5;
   cursor: pointer;
   &:hover {
-    color: #1d4ed8;
+    color: var(--blue);
   }
 `;
 
@@ -36,6 +38,12 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
 `;
 
+const LabelsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+`;
+
 type Props = {
   title: string;
   number: number;
@@ -44,6 +52,7 @@ type Props = {
   priority: string;
   postedBy: string;
   routeOpenStatus: string;
+  labels: any[];
 };
 
 export const IssueCard = ({
@@ -54,6 +63,7 @@ export const IssueCard = ({
   priority,
   postedBy,
   routeOpenStatus,
+  labels,
 }: Props) => {
   const navigate = useNavigate();
   const priorityColor = getPriorityColor(priority);
@@ -76,6 +86,11 @@ export const IssueCard = ({
           )}
         </Info>
       </div>
+      <LabelsContainer>
+        {labels.map((label) => (
+          <Label key={label.name} name={label.name} color={label.color} />
+        ))}
+      </LabelsContainer>
     </Container>
   );
 };

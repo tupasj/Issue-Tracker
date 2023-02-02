@@ -217,7 +217,7 @@ export const IssueView = ({ issues, setIssues }: Props) => {
           </ButtonsWrapper>
         </CommentsFlexWrapper>
         <OptionsWrapper>
-          <IssueOptions />
+          <IssueOptions labels={currentIssue.labels} />
         </OptionsWrapper>
       </CommentsAndOptionsFlexContainer>
     </Container>

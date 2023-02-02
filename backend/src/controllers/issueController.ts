@@ -27,6 +27,15 @@ const createIssue = async (req: Request, res: Response) => {
     await project.addIssue(newIssue);
     await user.addIssue(newIssue);
 
+    // Add labels to issue
+    // for each label in labels<string[]>, create an association between current label and issue, should make records in junction table
+    const issue: any = await Issue.findOne({
+      where: {
+        projectCode: code,
+        issue_number: latestIssueNumber + 1,
+      },
+    });
+
     const labelObjects: any[] = [];
     for (let i = 0; i < labels.length; i++) {
       const label = await Label.findOne({
@@ -35,14 +44,15 @@ const createIssue = async (req: Request, res: Response) => {
         },
       });
       labelObjects.push(label);
+      // await issue.addLabel(label);
     }
-    const issue: any = await Issue.findOne({
-      where: {
-        projectCode: code,
-        issue_number: latestIssueNumber + 1,
-      },
-    });
+    await issue.addLabels(labelObjects);
     issue.setDataValue('labels', labelObjects);
+
+    const userDisplayName: any = await UserDisplayName.findOne({
+      where: { userEmail: email },
+    });
+    issue.setDataValue('postedBy', userDisplayName.display_name);
 
     res.status(201).json(issue);
   } catch (error: any) {
@@ -57,13 +67,15 @@ const getProjectIssues = async (req: Request, res: Response) => {
     const project: any = await Project.findOne({ where: { code } });
     const projectIssues = await project.getIssues();
 
-    // add display_name property to each element in projectIssues array
+    // Add postedBy and labels properties to each element in projectIssues array
     for (let i = 0; i < projectIssues.length; i++) {
       const user = await projectIssues[i].getUsers();
       const userDisplayName: any = await UserDisplayName.findOne({
         where: { userEmail: user[0].email },
       });
       projectIssues[i].setDataValue('postedBy', userDisplayName.display_name);
+      const issueLabels = await projectIssues[i].getLabels();
+      projectIssues[i].setDataValue('labels', issueLabels);
     }
 
     res.status(200).json(projectIssues);

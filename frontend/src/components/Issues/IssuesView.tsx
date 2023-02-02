@@ -46,6 +46,10 @@ export const IssuesView = ({ issues, setIssues, getIssues, openActive, setOpenAc
     filterIssues();
   }, [location]);
 
+  useEffect(() => {
+    console.log('issues: ', issues);
+  }, [issues]);
+
   return (
     <Container>
       <IssuesOptionsBar
@@ -67,6 +71,7 @@ export const IssuesView = ({ issues, setIssues, getIssues, openActive, setOpenAc
                 priority={issue.priority}
                 postedBy={issue.postedBy}
                 routeOpenStatus={routeOpenStatus}
+                labels={issue.labels}
               />
             ))}
           </>
