@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 const Container = styled.div`
@@ -9,7 +9,8 @@ const Container = styled.div`
 `;
 
 const SwitchLeft = styled.span<any>`
-  background-color: ${(props) => (props.openActive ? 'var(--light-gray)' : 'var(--white)')};
+  background-color: ${(props) =>
+    props.openStatus === 'open' ? 'var(--light-gray)' : 'var(--white)'};
   border: 2px solid rgba(0, 0, 0, 0.25);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -23,7 +24,8 @@ const SwitchLeft = styled.span<any>`
 `;
 
 const SwitchRight = styled.span<any>`
-  background-color: ${(props) => (props.openActive ? 'var(--white)' : 'var(--light-gray)')};
+  background-color: ${(props) =>
+    props.openStatus === 'open' ? 'var(--white)' : 'var(--light-gray)'};
   border: 2px solid rgba(0, 0, 0, 0.25);
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
@@ -39,21 +41,18 @@ const SwitchRight = styled.span<any>`
 type Props = {
   issues: any;
   getIssues: () => any;
-  openActive: boolean;
-  setOpenActive: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssueSwitch = ({ issues, getIssues, openActive, setOpenActive }: Props) => {
+export const IssueSwitch = ({ issues, getIssues }: Props) => {
+  let { openStatus }: any = useParams();
   const navigate = useNavigate();
   let location = useLocation();
   const [allIssues, setAllIssues] = useState<any[]>(issues);
 
   const toggleSwitch = () => {
-    if (openActive) {
-      setOpenActive(false);
+    if (openStatus === 'open') {
       navigate('/app/issues/closed');
     } else {
-      setOpenActive(true);
       navigate('/app/issues/open');
     }
   };
@@ -68,10 +67,10 @@ export const IssueSwitch = ({ issues, getIssues, openActive, setOpenActive }: Pr
 
   return (
     <Container>
-      <SwitchLeft openActive={openActive} onClick={toggleSwitch}>
+      <SwitchLeft openStatus={openStatus} onClick={toggleSwitch}>
         Open ({allIssues.filter((issue: any) => issue.is_open === true).length})
       </SwitchLeft>
-      <SwitchRight openActive={openActive} onClick={toggleSwitch}>
+      <SwitchRight openStatus={openStatus} onClick={toggleSwitch}>
         Closed ({allIssues.filter((issue: any) => issue.is_open === false).length})
       </SwitchRight>
     </Container>

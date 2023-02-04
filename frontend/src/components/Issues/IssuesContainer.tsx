@@ -6,7 +6,6 @@ import { IssuesView, IssueView } from '@/components/Issues';
 
 export const IssuesContainer = () => {
   const [issues, setIssues] = useState<any[]>([]);
-  const [openActive, setOpenActive] = useState(true);
   const { currentProject } = useContext(ProjectsContext) as any;
   const navigate = useNavigate();
 
@@ -36,15 +35,7 @@ export const IssuesContainer = () => {
     <Routes>
       <Route
         path="/:openStatus"
-        element={
-          <IssuesView
-            issues={issues}
-            setIssues={setIssues}
-            getIssues={getIssues}
-            openActive={openActive}
-            setOpenActive={setOpenActive}
-          />
-        }
+        element={<IssuesView issues={issues} setIssues={setIssues} getIssues={getIssues} />}
       />
       <Route
         path="/:openStatus/:issueNumber"

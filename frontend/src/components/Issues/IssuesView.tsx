@@ -21,11 +21,9 @@ type Props = {
   issues: any;
   setIssues: React.Dispatch<React.SetStateAction<any>>;
   getIssues: () => any;
-  openActive: boolean;
-  setOpenActive: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssuesView = ({ issues, setIssues, getIssues, openActive, setOpenActive }: Props) => {
+export const IssuesView = ({ issues, setIssues, getIssues }: Props) => {
   let { openStatus }: any = useParams();
   let routeOpenStatus = openStatus;
   let location = useLocation();
@@ -50,13 +48,7 @@ export const IssuesView = ({ issues, setIssues, getIssues, openActive, setOpenAc
 
   return (
     <Container>
-      <IssuesOptionsBar
-        issues={issues}
-        setIssues={setIssues}
-        getIssues={getIssues}
-        openActive={openActive}
-        setOpenActive={setOpenActive}
-      />
+      <IssuesOptionsBar issues={issues} setIssues={setIssues} getIssues={getIssues} />
       <IssuesList>
         {issues[0] ? (
           <>

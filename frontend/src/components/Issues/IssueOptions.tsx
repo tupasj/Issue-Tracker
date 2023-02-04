@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { UserContext, ProjectsContext } from '@/context';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { getCurrentIssue, makeUpdatedIssues } from '@/utils/issueUtils';
+import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { IssueOptionBlock } from '@/components/Issues';
 
 const Container = styled.div``;
@@ -15,8 +15,7 @@ type Props = {
 };
 
 export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) => {
-  const labelNames = labels.map((item: any) => item.name);
-  const [labelNamesState, setLabelNamesState] = useState<string[]>(labelNames);
+  const [labelNamesState, setLabelNamesState] = useState<string[]>([]);
   const labelItems = [
     'bug',
     'duplicate',
@@ -41,6 +40,11 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
       axiosErrorHandler(error);
     }
   };
+
+  useEffect(() => {
+    const labelNames = labels.map((item: any) => item.name);
+    setLabelNamesState(labelNames);
+  }, []);
 
   return (
     <Container>
