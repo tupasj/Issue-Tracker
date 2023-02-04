@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { useParams, useLocation } from 'react-router-dom';
-import { IssuesOptionsBar } from './IssuesOptionsBar';
-import { IssueCard } from '@/elements/Issue';
 import { useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import { IssuesOptionsBar } from '@/components/Issues';
+import { IssueCard } from '@/elements/Issue';
 
 const Container = styled.div`
   height: 100%;
@@ -34,21 +34,19 @@ export const IssuesView = ({ issues, setIssues, getIssues, openActive, setOpenAc
     const filterIssues = async () => {
       if (openStatus == 'open') {
         const allIssues = await getIssues();
-        const openIssues = allIssues.filter((issue: any) => issue.is_open === true);
+        let openIssues = allIssues.filter((issue: any) => issue.is_open === true);
+        openIssues = openIssues.sort((a: any, b: any) => b.issue_number - a.issue_number);
         setIssues(openIssues);
       } else {
         const allIssues = await getIssues();
-        const closedIssues = allIssues.filter((issue: any) => issue.is_open === false);
+        let closedIssues = allIssues.filter((issue: any) => issue.is_open === false);
+        closedIssues = closedIssues.sort((a: any, b: any) => b.issue_number - a.issue_number);
         setIssues(closedIssues);
       }
     };
 
     filterIssues();
   }, [location]);
-
-  useEffect(() => {
-    console.log('issues: ', issues);
-  }, [issues]);
 
   return (
     <Container>

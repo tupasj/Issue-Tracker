@@ -1,39 +1,62 @@
 import styled from 'styled-components';
-import { Label } from '@/elements/Label';
+import { useState, useContext } from 'react';
+import { UserContext, ProjectsContext } from '@/context';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { getCurrentIssue, makeUpdatedIssues } from '@/utils/issueUtils';
+import { IssueOptionBlock } from '@/components/Issues';
+
 const Container = styled.div``;
-
-const Option = styled.div`
-  padding-bottom: 8px;
-  color: var(--medium-gray);
-`;
-
-const OptionContent = styled.div`
-  padding-bottom: 22px;
-`;
 
 type Props = {
   labels: any[];
+  issueNumber: number;
+  issues: any[];
+  setIssues: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssueOptions = ({ labels }: Props) => {
+export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) => {
+  const labelNames = labels.map((item: any) => item.name);
+  const [labelNamesState, setLabelNamesState] = useState<string[]>(labelNames);
+  const labelItems = [
+    'bug',
+    'duplicate',
+    'help wanted',
+    'new feature',
+    'question',
+    'refactoring',
+    "won't fix",
+  ];
+  const userCtx = useContext(UserContext);
+  const { currentProject } = useContext(ProjectsContext) as any;
+
+  const handleLabelSubmit = async (labelNames: string[]) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/labels`,
+        { labelNames, email: userCtx?.email }
+      );
+      const updatedIssues = makeUpdatedIssues(issues, response.data);
+      setIssues(updatedIssues);
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
+
   return (
     <Container>
-      <Option>Milestone</Option>
-      <OptionContent>No milestone assigned</OptionContent>
-      <Option>Labels</Option>
-      <OptionContent>
-        {labels.length > 0 ? (
-          <div>
-            {labels.map((label) => (
-              <Label key={label.name} name={label.name} color={label.color} />
-            ))}
-          </div>
-        ) : (
-          <p>No labels added</p>
-        )}
-      </OptionContent>
-      <Option>Assignees</Option>
-      <OptionContent>No users assigned to this Issue</OptionContent>
+      <IssueOptionBlock title="Milestone" emptyTextPlaceholder="No milestone assigned" />
+      <IssueOptionBlock
+        title="Labels"
+        emptyTextPlaceholder="No labels added"
+        handleSubmit={handleLabelSubmit}
+        multi={true}
+        label="labels"
+        items={labels}
+        itemNames={labelItems}
+        defaultState={labelNamesState}
+        setState={setLabelNamesState}
+      />
+      <IssueOptionBlock title="Assignees" emptyTextPlaceholder="No users assigned to this Issue" />
     </Container>
   );
 };

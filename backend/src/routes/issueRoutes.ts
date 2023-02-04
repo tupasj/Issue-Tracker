@@ -4,6 +4,7 @@ import {
   getUserComments,
 } from '../controllers/commentController';
 import { addLabels, getDefaultLabels } from '../controllers/labelController';
+import { updateIssueLabels } from '../controllers/issueController';
 
 const router = express.Router();
 
@@ -17,5 +18,8 @@ router
   .route('/issueNumber=:issueNumber/labels')
   .post(addLabels)
   .get(getDefaultLabels);
+router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode/labels')
+  .patch(updateIssueLabels);
 
 export default router;

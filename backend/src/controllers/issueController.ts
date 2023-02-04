@@ -6,6 +6,23 @@ import { Project } from '../models/Project';
 import { UserDisplayName } from '../models/UserDisplayName';
 import { Label } from '../models/Label';
 
+const getLabelObjects = async (labelNames: string[]) => {
+  const labelObjects: any[] = [];
+  for (let i = 0; i < labelNames.length; i++) {
+    try {
+      const label = await Label.findOne({
+        where: {
+          name: labelNames[i],
+        },
+      });
+      labelObjects.push(label);
+    } catch (error: any) {
+      return error;
+    }
+  }
+  return labelObjects;
+};
+
 const createIssue = async (req: Request, res: Response) => {
   const { code, email, title, priority, labels } = req.body;
 
@@ -27,8 +44,6 @@ const createIssue = async (req: Request, res: Response) => {
     await project.addIssue(newIssue);
     await user.addIssue(newIssue);
 
-    // Add labels to issue
-    // for each label in labels<string[]>, create an association between current label and issue, should make records in junction table
     const issue: any = await Issue.findOne({
       where: {
         projectCode: code,
@@ -36,6 +51,7 @@ const createIssue = async (req: Request, res: Response) => {
       },
     });
 
+    // For each string element in labels array, get the corresponding label object from database
     const labelObjects: any[] = [];
     for (let i = 0; i < labels.length; i++) {
       const label = await Label.findOne({
@@ -44,11 +60,12 @@ const createIssue = async (req: Request, res: Response) => {
         },
       });
       labelObjects.push(label);
-      // await issue.addLabel(label);
     }
+    // Make Issues and Label association and attach labels property to response object
     await issue.addLabels(labelObjects);
     issue.setDataValue('labels', labelObjects);
 
+    // Attach display_name property to response object
     const userDisplayName: any = await UserDisplayName.findOne({
       where: { userEmail: email },
     });
@@ -84,4 +101,30 @@ const getProjectIssues = async (req: Request, res: Response) => {
   }
 };
 
-export { createIssue, getProjectIssues };
+const updateIssueLabels = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+  const { email, labelNames } = req.body;
+
+  try {
+    const issue: any = await Issue.findOne({
+      where: {
+        issue_number: issueNumber,
+        projectCode: projectCode,
+      },
+    });
+    const issueLabelObjects = await getLabelObjects(labelNames);
+    await issue.setLabels(issueLabelObjects);
+    issue.setDataValue('labels', issueLabelObjects);
+
+    const userDisplayName: any = await UserDisplayName.findOne({
+      where: { userEmail: email },
+    });
+    issue.setDataValue('postedBy', userDisplayName.display_name);
+
+    res.status(200).json(issue);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export { createIssue, getProjectIssues, updateIssueLabels };

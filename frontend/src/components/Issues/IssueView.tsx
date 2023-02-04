@@ -2,10 +2,16 @@ import styled from 'styled-components';
 import { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faForward, faCircleCheck, faPlus, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import {
+  faForward,
+  faCircleCheck,
+  faPlus,
+  faFolderOpen,
+  faGears,
+} from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
-import { convertTimestamp } from '@/utils/issueUtils';
+import { getCurrentIssue, convertTimestamp } from '@/utils/issueUtils';
 import { IssueComments, IssueOptions } from '@/components/Issues';
 import { IssuePriority } from '@/elements/Issue';
 import { Button } from '@/elements/UI';
@@ -13,6 +19,8 @@ import { Button } from '@/elements/UI';
 const Container = styled.div``;
 
 const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
   font-size: 2rem;
   margin-bottom: 8px;
 `;
@@ -106,6 +114,16 @@ const ButtonsWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  color: var(--medium-gray);
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    color: var(--black);
+  }
+`;
+
 type Props = {
   issues: any[];
   setIssues: React.Dispatch<React.SetStateAction<any>>;
@@ -116,18 +134,15 @@ export const IssueView = ({ issues, setIssues }: Props) => {
   const [commentText, setCommentText] = useState('');
   let { issueNumber } = useParams();
   const userCtx = useContext(UserContext);
-  const email = userCtx?.email;
-  const filterResult = issues.filter((issue) => issue.issue_number == issueNumber);
-  const currentIssue = filterResult[0];
-  const formattedTime = convertTimestamp(currentIssue.createdAt);
   const { currentProject } = useContext(ProjectsContext) as any;
-  const currentProjectCode = currentProject.code;
+  const currentIssue = getCurrentIssue(issues, issueNumber);
+  const formattedTime = convertTimestamp(currentIssue.createdAt);
 
   const addComment = async () => {
     try {
       const newComment = await axiosInstance.post(
-        `/issues/issueNumber=${currentIssue.issue_number}/user/email=${email}/comment`,
-        { text_content: commentText, code: currentProjectCode }
+        `/issues/issueNumber=${currentIssue.issue_number}/user/email=${userCtx?.email}/comment`,
+        { text_content: commentText, code: currentProject.code }
       );
       setComments([...comments, newComment.data]);
       setCommentText('');
@@ -167,8 +182,11 @@ export const IssueView = ({ issues, setIssues }: Props) => {
   return (
     <Container>
       <TitleContainer>
-        <Title>{currentIssue.title}</Title>
-        <SecondaryText>#{currentIssue.issue_number}</SecondaryText>
+        <div>
+          <Title>{currentIssue.title}</Title>
+          <SecondaryText>#{currentIssue.issue_number}</SecondaryText>
+        </div>
+        <StyledFontAwesomeIcon icon={faGears} />
       </TitleContainer>
       <TitleSecondaryContainer>
         {currentIssue.is_open ? (
@@ -192,7 +210,7 @@ export const IssueView = ({ issues, setIssues }: Props) => {
             comments={comments}
             setComments={setComments}
             currentIssueNumber={currentIssue.issue_number}
-            currentProjectCode={currentProjectCode}
+            currentProjectCode={currentProject.code}
           />
           <Divider />
           <NewCommentTextarea
@@ -217,7 +235,12 @@ export const IssueView = ({ issues, setIssues }: Props) => {
           </ButtonsWrapper>
         </CommentsFlexWrapper>
         <OptionsWrapper>
-          <IssueOptions labels={currentIssue.labels} />
+          <IssueOptions
+            labels={currentIssue.labels}
+            issueNumber={currentIssue.issue_number}
+            issues={issues}
+            setIssues={setIssues}
+          />
         </OptionsWrapper>
       </CommentsAndOptionsFlexContainer>
     </Container>

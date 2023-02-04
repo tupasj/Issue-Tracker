@@ -87,9 +87,8 @@ export const IssueCard = ({
         </Info>
       </div>
       <LabelsContainer>
-        {labels.map((label) => (
-          <Label key={label.name} name={label.name} color={label.color} />
-        ))}
+        {labels &&
+          labels.map((label) => <Label key={label.name} name={label.name} color={label.color} />)}
       </LabelsContainer>
     </Container>
   );
