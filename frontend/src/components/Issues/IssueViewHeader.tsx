@@ -1,10 +1,13 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faForward, faCircleCheck, faGears } from '@fortawesome/free-solid-svg-icons';
+import { IssueViewModalContent } from '@/components/Issues';
 import { convertTimestamp } from '@/utils/issueUtils';
 import { IssuePriority } from '@/elements/Issue';
+import { BasicModal } from '@/elements/UI';
 
-const Container = styled.div``;
+const Container = styled.span``;
 
 const TitleContainer = styled.div`
   display: flex;
@@ -61,10 +64,13 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 `;
 
 type Props = {
+  issues: any[];
+  setIssues: React.Dispatch<React.SetStateAction<any>>;
   currentIssue: any;
 };
 
-export const IssueViewHeader = ({ currentIssue }: Props) => {
+export const IssueViewHeader = ({ issues, setIssues, currentIssue }: Props) => {
+  const [modalOpen, setModalOpen] = useState(false);
   const formattedTime = convertTimestamp(currentIssue.createdAt);
 
   return (
@@ -74,7 +80,7 @@ export const IssueViewHeader = ({ currentIssue }: Props) => {
           <Title>{currentIssue.title}</Title>
           <SecondaryText>#{currentIssue.issue_number}</SecondaryText>
         </div>
-        <StyledFontAwesomeIcon icon={faGears} />
+        <StyledFontAwesomeIcon icon={faGears} onClick={() => setModalOpen(true)} />
       </TitleContainer>
       <TitleSecondaryContainer>
         {currentIssue.is_open ? (
@@ -91,6 +97,9 @@ export const IssueViewHeader = ({ currentIssue }: Props) => {
           <Username>{currentIssue.postedBy}</Username> on {formattedTime}
         </AdditionalInfo>
       </TitleSecondaryContainer>
+      <BasicModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
+        <IssueViewModalContent issues={issues} setIssues={setIssues} />
+      </BasicModal>
     </Container>
   );
 };

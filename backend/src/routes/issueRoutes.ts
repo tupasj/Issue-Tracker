@@ -4,7 +4,10 @@ import {
   getUserComments,
 } from '../controllers/commentController';
 import { addLabels, getDefaultLabels } from '../controllers/labelController';
-import { updateIssueLabels } from '../controllers/issueController';
+import {
+  updateIssueLabels,
+  updateIssuePriority,
+} from '../controllers/issueController';
 
 const router = express.Router();
 
@@ -21,5 +24,8 @@ router
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/labels')
   .patch(updateIssueLabels);
+router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode/priority')
+  .patch(updateIssuePriority);
 
 export default router;

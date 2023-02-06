@@ -34,7 +34,7 @@ export const IssueView = ({ issues, setIssues }: Props) => {
 
   return (
     <Container>
-      <IssueViewHeader currentIssue={currentIssue} />
+      <IssueViewHeader issues={issues} setIssues={setIssues} currentIssue={currentIssue} />
       <Divider />
       <CommentsAndOptionsFlexContainer>
         <IssueViewMain issues={issues} setIssues={setIssues} currentIssue={currentIssue} />

@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
 import { Input } from '@/elements/Form';
-import { H2, H3 } from '@/elements/Text';
 
 const SubmitButton = styled.button`
   display: block;
@@ -22,6 +21,15 @@ const SubmitButton = styled.button`
   &:hover {
     background-color: var(--dark-green);
   }
+`;
+
+const H2 = styled.h2`
+  padding-top: 22px;
+  font-weight: 600;
+`;
+
+const H3 = styled.h3`
+  font-style: italic;
 `;
 
 const StyledForm = styled(Form)`

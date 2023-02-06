@@ -7,3 +7,4 @@ export * from './IssuesView';
 export * from './IssueView';
 export * from './IssueViewHeader';
 export * from './IssueViewMain';
+export * from './IssueViewModalContent';

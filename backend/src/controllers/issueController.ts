@@ -127,4 +127,35 @@ const updateIssueLabels = async (req: Request, res: Response) => {
   }
 };
 
-export { createIssue, getProjectIssues, updateIssueLabels };
+const updateIssuePriority = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+  const { priority } = req.body;
+
+  try {
+    await Issue.update(
+      { priority },
+      {
+        where: {
+          issue_number: issueNumber,
+          projectCode: projectCode,
+        },
+      }
+    );
+    const updatedIssue = await Issue.findOne({
+      where: {
+        issue_number: issueNumber,
+        projectCode: projectCode,
+      },
+    });
+    res.status(200).json(updatedIssue);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export {
+  createIssue,
+  getProjectIssues,
+  updateIssueLabels,
+  updateIssuePriority,
+};
