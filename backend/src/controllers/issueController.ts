@@ -153,9 +153,26 @@ const updateIssuePriority = async (req: Request, res: Response) => {
   }
 };
 
+const deleteIssue = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+
+  try {
+    await Issue.destroy({
+      where: {
+        issue_number: issueNumber,
+        projectCode: projectCode,
+      },
+    });
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export {
   createIssue,
   getProjectIssues,
   updateIssueLabels,
   updateIssuePriority,
+  deleteIssue,
 };

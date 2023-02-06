@@ -7,6 +7,7 @@ import { addLabels, getDefaultLabels } from '../controllers/labelController';
 import {
   updateIssueLabels,
   updateIssuePriority,
+  deleteIssue,
 } from '../controllers/issueController';
 
 const router = express.Router();
@@ -27,5 +28,8 @@ router
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/priority')
   .patch(updateIssuePriority);
+router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode')
+  .delete(deleteIssue);
 
 export default router;

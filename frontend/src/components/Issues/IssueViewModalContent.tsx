@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
@@ -51,6 +51,8 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
   const items = ['none', 'high', 'medium', 'low'];
   const { currentProject } = useContext(ProjectsContext) as any;
   let { issueNumber } = useParams() as any;
+  const issueNumberInt = parseInt(issueNumber);
+  const navigate = useNavigate();
 
   const submitTitle = async () => {
     console.log('title: ', title);
@@ -58,7 +60,6 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
 
   const submitPriority = async () => {
     try {
-      const issueNumberInt = parseInt(issueNumber);
       const updatedIssue = await axiosInstance.patch(
         `/issues/issueNumber=${issueNumberInt}/projectCode=${currentProject.code}/priority`,
         { priority }
@@ -71,7 +72,16 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
   };
 
   const deleteIssue = async () => {
-    console.log('delete issue');
+    try {
+      const deleteResponse = await axiosInstance.delete(
+        `/issues/issueNumber=${issueNumberInt}/projectCode=${currentProject.code}`
+      );
+      if (deleteResponse.status === 200) {
+        navigate('/app/issues/open');
+      }
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
   };
 
   return (
