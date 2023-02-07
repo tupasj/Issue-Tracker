@@ -5,7 +5,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: start;
+  gap: 4px;
 `;
 
 const FlexContainer = styled.div`
@@ -54,9 +55,9 @@ export const Key = ({ data, colors }: Props) => {
         <>
           {keyData.map((item: any) => {
             return (
-              <FlexContainer>
-                <ColoredCircle key={item.color} color={item.color} />
-                <span key={item.name}>{item.name}</span>
+              <FlexContainer key={item.name}>
+                <ColoredCircle color={item.color} />
+                <span>{item.name}</span>
               </FlexContainer>
             );
           })}

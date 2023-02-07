@@ -1,24 +1,11 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { ProjectsContext } from '@/context';
+import { issuesContext } from '@/context';
 import { IssuesView, IssueView } from '@/components/Issues';
 
 export const IssuesContainer = () => {
-  const [issues, setIssues] = useState<any[]>([]);
-  const { currentProject } = useContext(ProjectsContext) as any;
   const navigate = useNavigate();
-
-  const getIssues = async () => {
-    try {
-      const issuesResponse = await axiosInstance.get(
-        `/projects/code=${currentProject.code}/issues`
-      );
-      return issuesResponse.data;
-    } catch (error: any) {
-      axiosErrorHandler(error);
-    }
-  };
+  const { issues, setIssues, getIssues } = issuesContext();
 
   useEffect(() => {
     const filterOpenIssues = async () => {
