@@ -24,6 +24,7 @@
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-router-dom": "^6.7.0",
+    "recharts": "^2.3.2",
     "styled-components": "^5.3.6",
     "yup": "^0.32.11"
   },
