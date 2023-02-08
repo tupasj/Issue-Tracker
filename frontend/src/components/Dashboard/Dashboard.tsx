@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import { usePriorityChartData } from '@/hooks';
-import { issuesContext } from '@/context';
+import { useState, useEffect, useContext } from 'react';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { usePriorityChartData, useLabelChartData } from '@/hooks';
+import { ProjectsContext } from '@/context';
 import { Chart } from '@/components/Dashboard';
 
 const Container = styled.div`
@@ -12,35 +13,44 @@ const Container = styled.div`
 
 export const Dashboard = () => {
   const [allIssues, setAllIssues] = useState<any[]>([]);
-  const { getIssues } = issuesContext();
   const priorityChartData = usePriorityChartData(allIssues);
-
-  const data = [
-    { name: 'Group A', value: 33 },
-    { name: 'Group B', value: 25 },
-    { name: 'Group C', value: 25 },
-    { name: 'Group D', value: 17 },
-  ];
-  const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const labelChartData = useLabelChartData(allIssues);
+  const { currentProject } = useContext(ProjectsContext) as any;
 
   useEffect(() => {
-    const getAllIssues = async () => {
-      const allIssues = await getIssues();
-      setAllIssues(allIssues);
-    };
-    getAllIssues();
-  }, []);
+    if (currentProject) {
+      const getIssues = async () => {
+        try {
+          const issuesResponse = await axiosInstance.get(
+            `/projects/code=${currentProject.code}/issues`
+          );
+          setAllIssues(issuesResponse.data);
+        } catch (error: any) {
+          axiosErrorHandler(error);
+        }
+      };
+      getIssues();
+    }
+  }, [currentProject]);
 
   return (
     <Container>
-      <Chart
-        title="Issues by priority"
-        data={priorityChartData.labels}
-        colors={priorityChartData.colors}
-      />
-      <Chart title="Issues by label" data={data} colors={colors} />
-      <Chart title="Issues by status" data={data} colors={colors} />
-      <Chart title="Personal progress" data={data} colors={colors} />
+      {priorityChartData.labels[0] && priorityChartData.colors[0] && (
+        <Chart
+          title="Issues by priority"
+          data={priorityChartData.labels}
+          colors={priorityChartData.colors}
+        />
+      )}
+      {labelChartData.labels[0] && labelChartData.colors[0] && (
+        <Chart
+          title="Issues by label"
+          data={labelChartData.labels}
+          colors={labelChartData.colors}
+        />
+      )}
+      {/* <Chart title="Issues by status" data={data} colors={colors} />
+      <Chart title="Personal progress" data={data} colors={colors} /> */}
     </Container>
   );
 };

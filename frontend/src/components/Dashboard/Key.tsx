@@ -30,10 +30,11 @@ type Props = {
 };
 
 export const Key = ({ data, colors }: Props) => {
-  const [loading, setLoading] = useState(true);
   const [keyData, setKeyData] = useState<any[]>(data);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Add color property to each element in the keyData array
     const updatedKeyData = data;
     for (let i = 0; i < keyData.length; i++) {
       updatedKeyData[i].color = colors[i];
@@ -42,27 +43,22 @@ export const Key = ({ data, colors }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (keyData[0].color) {
+    if (keyData[0].name && keyData[0].color) {
       setLoading(false);
     }
-  }, []);
+  }, [keyData]);
 
   return (
     <Container>
-      {loading ? (
-        <></>
-      ) : (
-        <>
-          {keyData.map((item: any) => {
-            return (
-              <FlexContainer key={item.name}>
-                <ColoredCircle color={item.color} />
-                <span>{item.name}</span>
-              </FlexContainer>
-            );
-          })}
-        </>
-      )}
+      {loading === false &&
+        keyData.map((item: any) => {
+          return (
+            <FlexContainer key={item.name}>
+              <ColoredCircle color={item.color} />
+              <span>{item.name}</span>
+            </FlexContainer>
+          );
+        })}
     </Container>
   );
 };

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { PieChart, Pie, Cell } from 'recharts';
 import { Key } from '@/components/Dashboard';
+import { useEffect, useState } from 'react';
+import { LoadingPlaceholder } from '@/elements/UI';
 
 const Container = styled.div``;
 
@@ -40,28 +42,40 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 };
 
 export const Chart = ({ title, data, colors }: Props) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (data[0] && colors[0]) {
+      setLoading(false);
+    }
+  }, [data, colors]);
+
   return (
     <Container>
       <Title>{title}</Title>
-      <FlexContainer>
-        <PieChart width={400} height={400}>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-            ))}
-          </Pie>
-        </PieChart>
-        <Key data={data} colors={colors} />
-      </FlexContainer>
+      {loading ? (
+        <LoadingPlaceholder />
+      ) : (
+        <FlexContainer>
+          <PieChart width={400} height={400}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={renderCustomizedLabel}
+              outerRadius={80}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+              ))}
+            </Pie>
+          </PieChart>
+          <Key data={data} colors={colors} />
+        </FlexContainer>
+      )}
     </Container>
   );
 };
