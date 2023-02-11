@@ -24,7 +24,7 @@ const getLabelObjects = async (labelNames: string[]) => {
 };
 
 const createIssue = async (req: Request, res: Response) => {
-  const { code, email, title, priority, labels } = req.body;
+  const { code, email, title, assignees, priority, labels } = req.body;
 
   try {
     const project: any = await Project.findOne({ where: { code } });
@@ -70,6 +70,16 @@ const createIssue = async (req: Request, res: Response) => {
       where: { userEmail: email },
     });
     issue.setDataValue('postedBy', userDisplayName.display_name);
+
+    // Add assignees to issue
+    for (let i = 0; i < assignees.length; i++) {
+      const user = await User.findOne({
+        where: {
+          email: assignees[i].email,
+        },
+      });
+      await issue.addUser(user);
+    }
 
     res.status(201).json(issue);
   } catch (error: any) {
@@ -169,10 +179,61 @@ const deleteIssue = async (req: Request, res: Response) => {
   }
 };
 
+const assignIssueUsers = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+  const { assignees } = req.body;
+
+  try {
+    const issue: any = await Issue.findOne({
+      where: {
+        issue_number: issueNumber,
+        projectCode: projectCode,
+      },
+    });
+
+    for (let i = 0; i < assignees.length; i++) {
+      const user = await User.findOne({
+        where: {
+          email: assignees[i].email,
+        },
+      });
+      await issue.addUser(user);
+    }
+
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const getIssueUsers = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+
+  try {
+    const issue: any = await Issue.findOne({
+      where: {
+        issue_number: issueNumber,
+        projectCode: projectCode,
+      },
+    });
+    const issueUsers: any[] = await issue.getUsers({
+      attributes: {
+        exclude: ['password'],
+      },
+    });
+
+    res.status(200).json(issueUsers);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export {
   createIssue,
   getProjectIssues,
   updateIssueLabels,
   updateIssuePriority,
   deleteIssue,
+  assignIssueUsers,
+  getIssueUsers,
 };

@@ -1,10 +1,10 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { UserContext, ProjectsContext } from '@/context';
-import { BasicSelect, MultiSelect } from '@/elements/UI';
+import { BasicSelect, MultiSelect, MultiSelectObjects } from '@/elements/UI';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -63,6 +63,8 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
   const [commentTextContent, setCommentTextContent] = useState('');
   const [priority, setPriority] = useState('none');
   const [labels, setLabels] = useState<string[]>([]);
+  const [assignees, setAssignees] = useState<string[]>([]);
+  const [projectUsers, setProjectUsers] = useState<any[]>([]);
   const userCtx = useContext(UserContext);
   const email = userCtx?.email;
   const { currentProject } = useContext(ProjectsContext) as any;
@@ -78,6 +80,15 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
     }
   };
 
+  const addAssignees = async () => {
+    try {
+      // await axiosInstance.put(`/issues/issueNumber=:issueNumber/projectCode=:projectCode/users`);
+      console.log('assignees: ', assignees);
+    } catch (error: any) {
+      axiosErrorHandler(error);
+    }
+  };
+
   const createNewIssue = async (e: any) => {
     e.preventDefault();
     try {
@@ -85,12 +96,11 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
         code: currentProject.code,
         email,
         title,
+        assignees,
         priority,
         labels,
       };
-      console.log('newIssueInfo: ', newIssueInfo);
       const newIssue: any = await axiosInstance.post('/projects/issues', newIssueInfo);
-      console.log('newIssue: ', newIssue);
       setIssues([...issues, newIssue.data]);
       if (commentTextContent !== '') {
         addComment(newIssue.data.issue_number);
@@ -99,6 +109,24 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
       axiosErrorHandler(error);
     }
   };
+
+  useEffect(() => {
+    if (open) {
+      const getProjectUsers = async () => {
+        try {
+          const projectUsers = await axiosInstance.get(
+            `/projects/code=${currentProject.code}/users`
+          );
+          setProjectUsers(projectUsers.data);
+        } catch (error: any) {
+          axiosErrorHandler(error);
+        }
+      };
+      getProjectUsers();
+    } else if (!open) {
+      setAssignees([]);
+    }
+  }, [open]);
 
   return (
     <>
@@ -129,7 +157,12 @@ export const AddIssueModal = ({ open, handleClose, issues, setIssues }: Props) =
             </IssueInfo>
             <IssueOptions>
               <div>Assignees</div>
-              <div>...</div>
+              <MultiSelectObjects
+                label="assignees"
+                items={projectUsers}
+                defaultState={assignees}
+                setState={setAssignees}
+              />
               <div>Priority</div>
               <BasicSelect
                 label="priority"

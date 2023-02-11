@@ -8,9 +8,18 @@ import {
   updateIssueLabels,
   updateIssuePriority,
   deleteIssue,
+  getIssueUsers,
+  assignIssueUsers,
 } from '../controllers/issueController';
 
 const router = express.Router();
+
+router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode')
+  .delete(deleteIssue);
+router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode/priority')
+  .patch(updateIssuePriority);
 
 router
   .route('/issueNumber=:issueNumber/user/email=:email/comment')
@@ -18,6 +27,7 @@ router
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/comments')
   .get(getUserComments);
+
 router
   .route('/issueNumber=:issueNumber/labels')
   .post(addLabels)
@@ -25,11 +35,10 @@ router
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/labels')
   .patch(updateIssueLabels);
+
 router
-  .route('/issueNumber=:issueNumber/projectCode=:projectCode/priority')
-  .patch(updateIssuePriority);
-router
-  .route('/issueNumber=:issueNumber/projectCode=:projectCode')
-  .delete(deleteIssue);
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode/users')
+  .put(assignIssueUsers)
+  .get(getIssueUsers);
 
 export default router;

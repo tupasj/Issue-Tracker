@@ -97,14 +97,16 @@ export const Settings = () => {
   const submitProjectName = async (projectName: string) => {
     try {
       const projectToLeave = projects.filter((project: any) => project.name == projectName);
-      if (projectName !== '' && projectToLeave.length === 0) {
+      if (projectName !== '') {
+        const updatedProjects = await axiosInstance.delete(
+          `/projects/code=${projectToLeave[0].code}/user/email=${userCtx?.email}`
+        );
+        setProjects(updatedProjects.data);
+        setValidNameText(`Left project '${projectToLeave[0].name}'.`);
+      }
+      if (projectToLeave.length === 0) {
         return `Could not find a project named '${projectName}' to delete.`;
       }
-      const updatedProjects = await axiosInstance.delete(
-        `/projects/code=${projectToLeave[0].code}/user/email=${userCtx?.email}`
-      );
-      setProjects(updatedProjects.data);
-      setValidNameText(`Left project '${projectToLeave[0].name}'.`);
     } catch (error: any) {
       axiosErrorHandler(error);
     }

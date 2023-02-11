@@ -44,6 +44,17 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
   useEffect(() => {
     const labelNames = labels.map((item: any) => item.name);
     setLabelNamesState(labelNames);
+
+    const getIssueUsers = async () => {
+      try {
+        const getIssueUsers = await axiosInstance.get(
+          `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/users`
+        );
+      } catch (error: any) {
+        axiosErrorHandler(error);
+      }
+    };
+    getIssueUsers();
   }, []);
 
   return (

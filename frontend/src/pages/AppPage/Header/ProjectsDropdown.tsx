@@ -75,6 +75,8 @@ export const ProjectsDropdown = () => {
     getUserProjects();
   }, []);
 
+  useEffect(() => {}, [currentProject]);
+
   return (
     <Container>
       <CurrentProject onClick={toggleDropdown}>

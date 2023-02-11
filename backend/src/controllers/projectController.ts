@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Project } from '../models/Project';
 import { User } from '../models/User';
 import { Issue } from '../models/Issue';
+import { UserDisplayName } from '../models/UserDisplayName';
 import ShortUniqueId from 'short-unique-id';
 
 const createProject = async (req: Request, res: Response) => {
@@ -120,6 +121,31 @@ const updateProjectIssue = async (req: Request, res: Response) => {
   }
 };
 
+const getProjectUsers = async (req: Request, res: Response) => {
+  const { code } = req.params;
+
+  try {
+    const project: any = await Project.findOne({
+      where: { code },
+    });
+
+    const projectUsers = await project.getUsers();
+    for (let i = 0; i < projectUsers.length; i++) {
+      const userDisplayName: any = await UserDisplayName.findOne({
+        where: { userEmail: projectUsers[i].email },
+      });
+      projectUsers[i].setDataValue(
+        'display_name',
+        userDisplayName.display_name
+      );
+    }
+
+    res.status(200).json(projectUsers);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export {
   createProject,
   joinProject,
@@ -128,4 +154,5 @@ export {
   getUserProjects,
   removeUserFromProject,
   updateProjectIssue,
+  getProjectUsers,
 };
