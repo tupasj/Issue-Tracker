@@ -1,29 +1,27 @@
 import { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { issuesContext } from '@/context';
+import { issuesContext, projectsContext } from '@/context';
 import { IssuesView, IssueView } from '@/components/Issues';
+import { getIssues } from '@/features/issues';
 
 export const IssuesContainer = () => {
   const navigate = useNavigate();
-  const { issues, setIssues, getIssues } = issuesContext();
+  const { currentProject } = projectsContext();
+  const { issues, setIssues } = issuesContext();
 
   useEffect(() => {
     const filterOpenIssues = async () => {
-      const issues = await getIssues();
+      const issues = await getIssues(currentProject);
       const openIssues = issues.filter((issue: any) => issue.is_open === true);
       setIssues(openIssues);
     };
-    getIssues();
     filterOpenIssues();
     navigate('/app/issues/open');
   }, []);
 
   return (
     <Routes>
-      <Route
-        path="/:openStatus"
-        element={<IssuesView issues={issues} setIssues={setIssues} getIssues={getIssues} />}
-      />
+      <Route path="/:openStatus" element={<IssuesView issues={issues} setIssues={setIssues} />} />
       <Route
         path="/:openStatus/:issueNumber"
         element={<IssueView issues={issues} setIssues={setIssues} />}

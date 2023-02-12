@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { useState, useEffect } from 'react';
 import { usePriorityChartData, useLabelChartData } from '@/hooks';
-import { ProjectsContext } from '@/context';
+import { projectsContext } from '@/context';
 import { Chart } from '@/components/Dashboard';
+import { getIssues } from '@/features/issues';
 
 const Container = styled.div`
   display: grid;
@@ -15,21 +15,16 @@ export const Dashboard = () => {
   const [allIssues, setAllIssues] = useState<any[]>([]);
   const priorityChartData = usePriorityChartData(allIssues);
   const labelChartData = useLabelChartData(allIssues);
-  const { currentProject } = useContext(ProjectsContext) as any;
+  const { currentProject } = projectsContext();
 
   useEffect(() => {
+    const fetchIssues = async () => {
+      const issues = await getIssues(currentProject);
+      setAllIssues(issues);
+    };
+
     if (currentProject) {
-      const getIssues = async () => {
-        try {
-          const issuesResponse = await axiosInstance.get(
-            `/projects/code=${currentProject.code}/issues`
-          );
-          setAllIssues(issuesResponse.data);
-        } catch (error: any) {
-          axiosErrorHandler(error);
-        }
-      };
-      getIssues();
+      fetchIssues();
     }
   }, [currentProject]);
 

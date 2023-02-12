@@ -21,18 +21,17 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 
 type Props = {
   issues: any[];
-  getIssues: () => any;
   setIssues: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssuesOptionsBar = ({ issues, setIssues, getIssues }: Props) => {
+export const IssuesOptionsBar = ({ issues, setIssues }: Props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <Container>
-      <IssueSwitch issues={issues} getIssues={getIssues} />
+      <IssueSwitch issues={issues} />
       <IssueSearchbar issues={issues} setIssues={setIssues} />
       <Button onClick={handleOpen}>
         Add Issue <StyledFontAwesomeIcon icon={faPlus} />

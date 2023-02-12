@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { UserContext } from '@/context/UserContext';
+import { useState, useEffect } from 'react';
+import { userContext } from '@/context/UserContext';
 import { UserInfoDropDown } from '@/pages/AppPage/Header';
+import { getUserInfo } from '@/features/users';
 
 const Container = styled.div`
   position: absolute;
@@ -30,43 +29,32 @@ const Image = styled.img`
   width: 36px;
 `;
 
-type UserInfo = {
-  email?: string;
-  first_name?: string;
-  last_name?: string;
-  profile_image?: string;
-};
-
 export const UserInfo = () => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const navigate = useNavigate();
-  const userCtx = useContext(UserContext);
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const { email } = userContext();
 
   useEffect(() => {
-    const getUserInfo = async () => {
-      const email = userCtx?.email;
-      try {
-        const response = await axiosInstance.get(`/user/email=${email}`);
-        setUserInfo(response.data);
-      } catch (error: any) {
-        axiosErrorHandler(error);
-        // navigate('/sign-in');
-      }
+    const fetchUserInfo = async () => {
+      const userInfo = await getUserInfo(email);
+      setUserInfo(userInfo);
     };
-    getUserInfo();
+
+    fetchUserInfo();
   }, []);
 
   return (
     <Container>
       {userInfo && (
-        <p>
-          {userInfo.first_name} {userInfo.last_name}
-        </p>
+        <>
+          <p>
+            {userInfo.first_name} {userInfo.last_name}
+          </p>
+          <ImageContainer>
+            <Image src={userInfo.profile_image} />
+          </ImageContainer>
+          <UserInfoDropDown />
+        </>
       )}
-      <ImageContainer>
-        <Image src={userInfo?.profile_image} />
-      </ImageContainer>
-      <UserInfoDropDown />
     </Container>
   );
 };

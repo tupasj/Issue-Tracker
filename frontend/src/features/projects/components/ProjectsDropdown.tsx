@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { UserContext, ProjectsContext } from '@/context';
+import { useState, useEffect } from 'react';
+import { userContext, projectsContext } from '@/context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { AddNewProject, Project } from '@/pages/AppPage/Header';
 import { TooltipWrapper } from '@/elements/Text';
+import { getProjects, AddNewProject, Project } from '@/features/projects';
 
 const Container = styled.div`
   cursor: pointer;
@@ -48,10 +47,8 @@ const DropdownContainer = styled.div`
 
 export const ProjectsDropdown = () => {
   const [dropdownActive, setDropdownActive] = useState(false);
-  const userCtx = useContext(UserContext);
-  const { currentProject, setCurrentProject, projects, setProjects } = useContext(
-    ProjectsContext
-  ) as any;
+  const { email } = userContext();
+  const { currentProject, setCurrentProject, projects, setProjects } = projectsContext();
 
   const toggleDropdown = () => {
     if (!dropdownActive) {
@@ -61,18 +58,14 @@ export const ProjectsDropdown = () => {
     }
   };
 
-  const getUserProjects = async () => {
-    try {
-      const userProjects = await axiosInstance.get(`/projects/user/email=${userCtx?.email}`);
-      setProjects(userProjects.data);
-      setCurrentProject(userProjects.data[0]);
-    } catch (error: any) {
-      axiosErrorHandler(error);
-    }
-  };
-
   useEffect(() => {
-    getUserProjects();
+    const fetchProjects = async () => {
+      const projects = await getProjects(email);
+      setProjects(projects);
+      setCurrentProject(projects[0]);
+    };
+
+    fetchProjects();
   }, []);
 
   useEffect(() => {}, [currentProject]);

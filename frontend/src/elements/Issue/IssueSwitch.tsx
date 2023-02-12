@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { projectsContext } from '@/context';
+import { getIssues } from '@/features/issues';
 
 const Container = styled.div`
   display: flex;
@@ -40,14 +42,14 @@ const SwitchRight = styled.span<any>`
 
 type Props = {
   issues: any;
-  getIssues: () => any;
 };
 
-export const IssueSwitch = ({ issues, getIssues }: Props) => {
+export const IssueSwitch = ({ issues }: Props) => {
   let { openStatus }: any = useParams();
   const navigate = useNavigate();
   let location = useLocation();
   const [allIssues, setAllIssues] = useState<any[]>(issues);
+  const { currentProject } = projectsContext();
 
   const toggleSwitch = () => {
     if (openStatus === 'open') {
@@ -59,7 +61,7 @@ export const IssueSwitch = ({ issues, getIssues }: Props) => {
 
   useEffect(() => {
     const getAllIssues = async () => {
-      const allIssues = await getIssues();
+      const allIssues = await getIssues(currentProject);
       setAllIssues(allIssues);
     };
     getAllIssues();

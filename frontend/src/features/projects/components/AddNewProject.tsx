@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useState, useContext } from 'react';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { UserContext, ProjectsContext } from '@/context';
+import { userContext, ProjectsContext } from '@/context';
+import { createProject } from '../api';
 
 const Container = styled.div`
   display: flex;
@@ -21,18 +21,13 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 `;
 
 export const AddNewProject = () => {
-  const [projectName, setProjectName] = useState('');
-  const userCtx = useContext(UserContext);
+  const [projectNameInput, setProjectNameInput] = useState('');
+  const { email } = userContext();
   const { setProjects } = useContext(ProjectsContext) as any;
 
-  const addProject = async () => {
-    try {
-      const projectInfo = { projectName: projectName, email: userCtx?.email };
-      const updatedProjects = await axiosInstance.post('/projects', projectInfo);
-      setProjects(updatedProjects.data);
-    } catch (error: any) {
-      axiosErrorHandler(error);
-    }
+  const handleCreateProject = async () => {
+    const updatedProjects = await createProject(projectNameInput, email);
+    setProjects(updatedProjects);
   };
 
   return (
@@ -40,9 +35,9 @@ export const AddNewProject = () => {
       <NewProjectInput
         type="text"
         placeholder="Create new project..."
-        onChange={(e) => setProjectName(e.target.value)}
+        onChange={(e) => setProjectNameInput(e.target.value)}
       />
-      <StyledFontAwesomeIcon icon={faPlus} onClick={addProject} />
+      <StyledFontAwesomeIcon icon={faPlus} onClick={handleCreateProject} />
     </Container>
   );
 };

@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBinoculars } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { ProjectsDropdown, UserInfo } from '@/pages/AppPage/Header';
+import { UserInfo } from '@/pages/AppPage/Header';
+import { ProjectsDropdown } from '@/features/projects';
 
 const Container = styled.header`
   grid-area: header;
@@ -20,7 +21,7 @@ const StyledLink = styled(Link)`
   &:link,
   :visited,
   :active {
-    color: black;
+    color: var(--black);
   }
 `;
 
