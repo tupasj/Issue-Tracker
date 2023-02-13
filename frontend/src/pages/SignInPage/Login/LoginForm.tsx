@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { login } from '@/features/auth';
 import { Input } from '@/elements/Form';
 
 const FormWrapper = styled.div`
@@ -65,13 +65,13 @@ export const LoginForm = ({ setUserEmail }: Props) => {
       email: values.email,
       password: values.password,
     };
-    try {
-      await axiosInstance.post('/user/login', userCredentials);
+    const loginResponse = await login(userCredentials);
+
+    if (loginResponse.tokens) {
       setUserEmail(userCredentials.email);
       navigate('/app/dashboard');
-    } catch (error: any) {
-      axiosErrorHandler(error);
-      setNotificationText(error.response.data.message);
+    } else {
+      setNotificationText(loginResponse.response.data.message);
     }
   };
 

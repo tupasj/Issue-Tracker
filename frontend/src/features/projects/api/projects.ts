@@ -19,4 +19,15 @@ const getProjects = async (email: string) => {
   }
 };
 
-export { createProject, getProjects };
+const joinProject = async (projectCode: string, email: string) => {
+  try {
+    const projectJoined = await axiosInstance.put(`/projects/code=${projectCode}`, {
+      email,
+    });
+    return projectJoined.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+export { createProject, getProjects, joinProject };

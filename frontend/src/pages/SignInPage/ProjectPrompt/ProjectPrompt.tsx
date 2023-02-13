@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { createProject, joinProject } from '@/features/projects';
 
 const FormContainer = styled.div`
   display: flex;
@@ -13,7 +13,7 @@ const FormContainer = styled.div`
   width: 550px;
   height: 500px;
   border-radius: 12px;
-  background-color: white;
+  background-color: var(--white);
 `;
 
 const ProjectPromptContainer = styled.div`
@@ -65,7 +65,7 @@ const NotificationBox = styled.div`
 `;
 
 type Props = {
-  userEmail: string | null;
+  userEmail: any;
   setCurrentProject: React.Dispatch<React.SetStateAction<any | null>>;
 };
 
@@ -75,29 +75,24 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
   const [notificationText, setNotificationText] = useState('');
   const navigate = useNavigate();
 
-  const addProject = async () => {
-    try {
-      const projectInfoResponse = await axiosInstance.post('/projects', {
-        projectName: projectName,
-        email: userEmail,
-      });
-      setCurrentProject(projectInfoResponse.data[0]);
+  const handleAddProject = async () => {
+    const updatedProjects = await createProject(projectName, userEmail);
+
+    if (updatedProjects) {
+      setCurrentProject(updatedProjects[0]);
       navigate('/app/dashboard');
-    } catch (error: any) {
-      axiosErrorHandler(error);
+    } else if (!updatedProjects) {
       setNotificationText('Could not create project');
     }
   };
 
-  const joinProject = async () => {
-    try {
-      const getProjectResponse = await axiosInstance.put(`/projects/code=${projectCode}`, {
-        email: userEmail,
-      });
-      setCurrentProject(getProjectResponse.data[0]);
+  const handleJoinProject = async () => {
+    const joinedProject = await joinProject(projectCode, userEmail);
+
+    if (joinedProject) {
+      setCurrentProject(joinedProject[0]);
       navigate('/app/dashboard');
-    } catch (error: any) {
-      axiosErrorHandler(error);
+    } else if (!joinedProject) {
       setNotificationText('Invalid code');
     }
   };
@@ -114,7 +109,7 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
             placeholder="Enter a project name"
             onChange={(e) => setProjectName(e.target.value)}
           />
-          <StyledFontAwesomeIcon icon={faArrowRight} onClick={addProject} />
+          <StyledFontAwesomeIcon icon={faArrowRight} onClick={handleAddProject} />
         </InputGroup>
         <Bold>or</Bold>
         <Text>Join an ongoing project</Text>
@@ -124,7 +119,7 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
             placeholder="Enter project code"
             onChange={(e) => setProjectCode(e.target.value)}
           />
-          <StyledFontAwesomeIcon icon={faArrowRight} onClick={joinProject} />
+          <StyledFontAwesomeIcon icon={faArrowRight} onClick={handleJoinProject} />
         </InputGroup>
       </ProjectPromptContainer>
     </FormContainer>

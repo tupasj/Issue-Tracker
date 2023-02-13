@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { register } from '@/features/auth';
 import { Input, ErrorMessageText } from '@/elements/Form';
 
 const FormWrapper = styled.div`
@@ -75,18 +75,18 @@ export const SignupForm = ({ signedUp, setSignedUp, setUserEmail }: Props) => {
   });
 
   const onSubmit = async (values: FormValues) => {
-    try {
-      const userCredentials = {
-        email: values.email,
-        first_name: values.firstName,
-        last_name: values.lastName,
-        password: values.password,
-      };
-      setUserEmail(userCredentials.email);
-      await axiosInstance.post('/user/register', userCredentials);
+    const userCredentials = {
+      email: values.email,
+      first_name: values.firstName,
+      last_name: values.lastName,
+      password: values.password,
+    };
+    setUserEmail(userCredentials.email);
+    const registerResponse: any = await register(userCredentials);
+
+    if (registerResponse.status === 200) {
       setSignedUp(true);
-    } catch (error: any) {
-      axiosErrorHandler(error);
+    } else {
       setSignedUp(false);
       setSignUpError(true);
     }

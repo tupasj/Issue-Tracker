@@ -29,7 +29,7 @@ const FormContainer = styled.div`
   width: 550px;
   height: 500px;
   border-radius: 12px;
-  background-color: white;
+  background-color: var(--white);
 `;
 
 const SwitchFormMessage = styled.div`
