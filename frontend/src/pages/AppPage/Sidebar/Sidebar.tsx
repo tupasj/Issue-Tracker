@@ -12,7 +12,7 @@ const StyledLink = styled(Link)`
   margin-bottom: 18px;
   border-radius: 2px;
   text-decoration: none;
-  color: black;
+  color: var(--black);
   &:hover {
     background-color: #cecece;
   }

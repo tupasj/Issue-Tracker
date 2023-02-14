@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { useState, useContext } from 'react';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faPlus, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
-import { UserContext, ProjectsContext } from '@/context';
+import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
-import { IssueComments } from '@/components/Issues';
+import { createComment } from '@/features/comments';
+import { updateIssueOpenStatus } from '@/features/issues';
+import { IssueComments } from '@/pages/AppPage/Main/Issues';
 import { Button } from '@/elements/UI';
 
 const Container = styled.div`
@@ -59,38 +60,22 @@ type Props = {
 export const IssueViewMain = ({ issues, setIssues, currentIssue }: Props) => {
   const [comments, setComments] = useState<any[]>([]);
   const [commentText, setCommentText] = useState('');
-  const userCtx = useContext(UserContext);
-  const { currentProject } = useContext(ProjectsContext) as any;
+  const { email } = userContext();
+  const { currentProject } = projectsContext();
 
   const addComment = async () => {
-    try {
-      const newComment = await axiosInstance.post(
-        `/issues/issueNumber=${currentIssue.issue_number}/user/email=${userCtx?.email}/comment`,
-        { text_content: commentText, code: currentProject.code }
-      );
-      setComments([...comments, newComment.data]);
-      setCommentText('');
-    } catch (error: any) {
-      axiosErrorHandler(error);
-    }
+    const payload = { text_content: commentText, code: currentProject.code };
+    const newComment = await createComment(currentIssue, email, payload);
+    setComments([...comments, newComment]);
+    setCommentText('');
   };
 
   const toggleIssueOpenStatus = async () => {
-    try {
-      let updatedIssueOpenStatus;
-      if (currentIssue.is_open === true) {
-        updatedIssueOpenStatus = false;
-      } else if (currentIssue.is_open === false) {
-        updatedIssueOpenStatus = true;
-      }
-      const updatedIssue: any = await axiosInstance.patch(
-        `/projects/code=${currentIssue.projectCode}/issue/issueNumber=${currentIssue.issue_number}`,
-        { is_open: updatedIssueOpenStatus }
-      );
-      const updatedIssues = makeUpdatedIssues(issues, updatedIssue.data);
+    const newStatus = currentIssue.is_open ? false : true;
+    const updatedIssue = await updateIssueOpenStatus(currentIssue, newStatus);
+    if (updatedIssue) {
+      const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
       setIssues(updatedIssues);
-    } catch (error: any) {
-      axiosErrorHandler(error);
     }
   };
 

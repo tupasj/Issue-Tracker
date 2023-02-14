@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
-import { ProjectsContext } from '@/context';
+import { projectsContext } from '@/context';
+import { updateIssuePriority, deleteIssue } from '@/features/issues';
 import { BasicSelect, Button } from '@/elements/UI';
 
 const Container = styled.div`
@@ -49,38 +49,25 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('');
   const items = ['none', 'high', 'medium', 'low'];
-  const { currentProject } = useContext(ProjectsContext) as any;
+  const { currentProject } = projectsContext();
   let { issueNumber } = useParams() as any;
   const issueNumberInt = parseInt(issueNumber);
   const navigate = useNavigate();
 
-  const submitTitle = async () => {
+  const handleSubmitTitle = async () => {
     console.log('title: ', title);
   };
 
-  const submitPriority = async () => {
-    try {
-      const updatedIssue = await axiosInstance.patch(
-        `/issues/issueNumber=${issueNumberInt}/projectCode=${currentProject.code}/priority`,
-        { priority }
-      );
-      const updatedIssues = makeUpdatedIssues(issues, updatedIssue.data);
-      setIssues(updatedIssues);
-    } catch (error: any) {
-      axiosErrorHandler(error);
-    }
+  const handleSubmitPriority = async () => {
+    const updatedIssue = await updateIssuePriority(issueNumberInt, currentProject, priority);
+    const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
+    setIssues(updatedIssues);
   };
 
-  const deleteIssue = async () => {
-    try {
-      const deleteResponse = await axiosInstance.delete(
-        `/issues/issueNumber=${issueNumberInt}/projectCode=${currentProject.code}`
-      );
-      if (deleteResponse.status === 200) {
-        navigate('/app/issues/open');
-      }
-    } catch (error: any) {
-      axiosErrorHandler(error);
+  const handleDeleteIssue = async () => {
+    const deleteResponse: any = await deleteIssue(issueNumber, currentProject);
+    if (deleteResponse.status === 200) {
+      navigate('/app/issues/open');
     }
   };
 
@@ -90,7 +77,7 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
       <H3>Edit title</H3>
       <InputWrapper>
         <Input onChange={(e) => setTitle(e.target.value)} />
-        <button onClick={submitTitle}>Confirm</button>
+        <button onClick={handleSubmitTitle}>Confirm</button>
       </InputWrapper>
       <H3>Change priority</H3>
       <InputWrapper>
@@ -100,10 +87,10 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
           defaultState={priority}
           setState={setPriority}
         />
-        <button onClick={submitPriority}>Confirm</button>
+        <button onClick={handleSubmitPriority}>Confirm</button>
       </InputWrapper>
       <H3>Delete Issue</H3>
-      <Button onClick={deleteIssue} color="var(--red)" hoverColor="var(--dark-red)">
+      <Button onClick={handleDeleteIssue} color="var(--red)" hoverColor="var(--dark-red)">
         Delete Issue <FontAwesomeIcon icon={faTrash} />
       </Button>
     </Container>

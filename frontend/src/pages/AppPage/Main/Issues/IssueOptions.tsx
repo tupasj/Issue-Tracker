@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
-import { UserContext, ProjectsContext } from '@/context';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { useState, useEffect } from 'react';
+import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
-import { IssueOptionBlock } from '@/components/Issues';
+import { updateIssueLabels } from '@/features/issues';
+import { IssueOptionBlock } from '@/pages/AppPage/Main/Issues';
 
 const Container = styled.div``;
 
@@ -25,36 +25,29 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
     'refactoring',
     "won't fix",
   ];
-  const userCtx = useContext(UserContext);
-  const { currentProject } = useContext(ProjectsContext) as any;
+  const { email } = userContext();
+  const { currentProject } = projectsContext();
 
   const handleLabelSubmit = async (labelNames: string[]) => {
-    try {
-      const response = await axiosInstance.patch(
-        `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/labels`,
-        { labelNames, email: userCtx?.email }
-      );
-      const updatedIssues = makeUpdatedIssues(issues, response.data);
-      setIssues(updatedIssues);
-    } catch (error: any) {
-      axiosErrorHandler(error);
-    }
+    const updatedIssue = await updateIssueLabels(issueNumber, currentProject, labelNames, email);
+    const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
+    setIssues(updatedIssues);
   };
 
   useEffect(() => {
     const labelNames = labels.map((item: any) => item.name);
     setLabelNamesState(labelNames);
 
-    const getIssueUsers = async () => {
-      try {
-        const getIssueUsers = await axiosInstance.get(
-          `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/users`
-        );
-      } catch (error: any) {
-        axiosErrorHandler(error);
-      }
-    };
-    getIssueUsers();
+    // const getIssueUsers = async () => {
+    //   try {
+    //     const getIssueUsers = await axiosInstance.get(
+    //       `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/users`
+    //     );
+    //   } catch (error: any) {
+    //     axiosErrorHandler(error);
+    //   }
+    // };
+    // getIssueUsers();
   }, []);
 
   return (

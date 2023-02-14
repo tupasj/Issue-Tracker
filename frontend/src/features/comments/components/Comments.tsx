@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { convertTimestamp } from '@/utils/issueUtils';
 
 const Container = styled.div``;
@@ -54,31 +52,9 @@ const Gray = styled.span`
 
 type Props = {
   comments: any;
-  setComments: React.Dispatch<React.SetStateAction<any>>;
-  currentIssueNumber: number;
-  currentProjectCode: string;
 };
 
-export const IssueComments = ({
-  comments,
-  setComments,
-  currentIssueNumber,
-  currentProjectCode,
-}: Props) => {
-  useEffect(() => {
-    const getComments = async () => {
-      try {
-        const commentsResponse: any = await axiosInstance.get(
-          `/issues/issueNumber=${currentIssueNumber}/projectCode=${currentProjectCode}/comments`
-        );
-        setComments(commentsResponse.data);
-      } catch (error: any) {
-        axiosErrorHandler(error);
-      }
-    };
-    getComments();
-  }, []);
-
+export const Comments = ({ comments }: Props) => {
   return (
     <Container>
       {comments[0] &&

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IssuesContext } from '@/context';
 import { Dashboard } from '@/components/Dashboard';
-import { IssuesContainer } from '@/components/Issues';
+import { IssuesContainer } from '@/pages/AppPage/Main/Issues/index';
 import { Settings } from '@/components/Settings';
 
 const Container = styled.main`

@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
 import { userContext } from '@/context/UserContext';
 import { UserInfoDropDown } from '@/pages/AppPage/Header';
-import { getUserInfo } from '@/features/users';
+import { useUserInfo } from '@/hooks';
 
 const Container = styled.div`
   position: absolute;
@@ -30,17 +29,8 @@ const Image = styled.img`
 `;
 
 export const UserInfo = () => {
-  const [userInfo, setUserInfo] = useState<any>(null);
   const { email } = userContext();
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const userInfo = await getUserInfo(email);
-      setUserInfo(userInfo);
-    };
-
-    fetchUserInfo();
-  }, []);
+  const userInfo = useUserInfo(email);
 
   return (
     <Container>
