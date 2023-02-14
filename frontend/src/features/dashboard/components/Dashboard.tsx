@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { usePriorityChartData, useLabelChartData } from '@/hooks';
 import { projectsContext } from '@/context';
-import { Chart } from '@/components/Dashboard';
+import { Chart } from './Chart';
 import { getIssues } from '@/features/issues';
 
 const Container = styled.div`

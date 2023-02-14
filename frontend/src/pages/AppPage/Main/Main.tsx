@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IssuesContext } from '@/context';
-import { Dashboard } from '@/components/Dashboard';
-import { IssuesContainer } from '@/pages/AppPage/Main/Issues/index';
-import { Settings } from '@/components/Settings';
+import { Issues } from '@/features/issues';
+import { Dashboard } from '@/features/dashboard';
+import { Settings } from './Settings';
 
 const Container = styled.main`
   grid-area: main;
@@ -19,7 +19,7 @@ export const Main = () => {
       <IssuesContext.Provider value={{ issues, setIssues }}>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/issues/*" element={<IssuesContainer />} />
+          <Route path="/issues/*" element={<Issues />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </IssuesContext.Provider>

@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { issuesContext, projectsContext } from '@/context';
-import { IssuesView, IssueView } from '@/pages/AppPage/Main/Issues';
+import { IssuesView } from './IssuesView';
+import { IssueView } from './IssueView';
 import { useIssues } from '@/hooks';
 
-export const IssuesContainer = () => {
+export const Issues = () => {
   const navigate = useNavigate();
   const { currentProject } = projectsContext();
   const { issues, setIssues } = issuesContext();

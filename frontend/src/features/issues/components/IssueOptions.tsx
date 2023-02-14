@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { updateIssueLabels } from '@/features/issues';
-import { IssueOptionBlock } from '@/pages/AppPage/Main/Issues';
+import { IssueOptionBlock } from './IssueOptionBlock';
 
 const Container = styled.div``;
 

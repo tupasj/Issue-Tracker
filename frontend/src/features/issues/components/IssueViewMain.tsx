@@ -6,7 +6,7 @@ import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { createComment } from '@/features/comments';
 import { updateIssueOpenStatus } from '@/features/issues';
-import { IssueComments } from '@/pages/AppPage/Main/Issues';
+import { IssueComments } from './IssueComments';
 import { Button } from '@/elements/UI';
 
 const Container = styled.div`

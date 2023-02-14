@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { getCurrentIssue } from '@/utils/issueUtils';
-import { IssueOptions, IssueViewHeader, IssueViewMain } from '@/pages/AppPage/Main/Issues';
+import { IssueOptions } from './IssueOptions';
+import { IssueViewHeader } from './IssueViewHeader';
+import { IssueViewMain } from './IssueViewMain';
 
 const Container = styled.div``;
 

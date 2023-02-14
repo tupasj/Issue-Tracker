@@ -1,2 +1,2 @@
-export * from './Issues';
 export * from './Main';
+export * from './Settings';

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { projectsContext } from '@/context';
 import { getIssues } from '@/features/issues';
-import { IssuesOptionsBar } from '@/pages/AppPage/Main/Issues';
+import { IssuesOptionsBar } from './IssuesOptionsBar';
 import { IssueCard } from '@/elements/Issue';
 
 const Container = styled.div`
