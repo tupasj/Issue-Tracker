@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { userContext, projectsContext } from '@/context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { TooltipWrapper } from '@/elements/Text';
+import { TooltipWrapper } from '@/elements';
 import { getProjects, AddNewProject, Project } from '@/features/projects';
 
 const Container = styled.div`

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { register } from '@/features/auth';
-import { Input, ErrorMessageText } from '@/elements/Form';
+import { Input, ErrorMessageText } from '@/components/Form';
 
 const FormWrapper = styled.div`
   padding: 15px;

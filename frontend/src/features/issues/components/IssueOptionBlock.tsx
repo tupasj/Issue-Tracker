@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { MultiSelect } from '@/elements/UI';
+import { MultiSelect } from '@/components/UI';
 import { Label } from '@/elements/Label';
 
 const Option = styled.div`

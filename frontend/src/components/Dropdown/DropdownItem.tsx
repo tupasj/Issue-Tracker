@@ -16,7 +16,7 @@ type DropDownItemProps = {
   onClickHandler?: () => void;
 };
 
-export const DropDownItem = ({ children, clickable, onClickHandler }: DropDownItemProps) => {
+export const DropdownItem = ({ children, clickable, onClickHandler }: DropDownItemProps) => {
   return (
     <DropDownItemContainer clickable={clickable} onClick={onClickHandler}>
       {children}

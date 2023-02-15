@@ -30,4 +30,15 @@ const joinProject = async (projectCode: string, email: string) => {
   }
 };
 
-export { createProject, getProjects, joinProject };
+const deleteProject = async (projectToLeave: any, email: string) => {
+  try {
+    const updatedProjects = await axiosInstance.delete(
+      `/projects/code=${projectToLeave[0].code}/user/email=${email}`
+    );
+    return updatedProjects.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+export { createProject, getProjects, joinProject, deleteProject };

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Field, ErrorMessage } from 'formik';
-import { ErrorMessageText } from '@/elements/Form';
+import { ErrorMessageText } from '@/components/Form';
 
 const InputContainer = styled.div`
   display: flex;

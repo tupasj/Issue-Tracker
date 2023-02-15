@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { IssueSwitch, IssueSearchbar } from '@/elements/Issue';
-import { AddIssueModal } from '@/elements/Issue';
 import { Button } from '@/elements';
+import { IssueAddModal } from './IssueAddModal';
+import { IssueSwitch } from './IssueSwitch';
+import { IssueSearchbar } from './IssueSearchbar';
 
 const Container = styled.div`
   display: flex;
@@ -36,7 +37,7 @@ export const IssuesOptionsBar = ({ issues, setIssues }: Props) => {
       <Button onClick={handleOpen}>
         Add Issue <StyledFontAwesomeIcon icon={faPlus} />
       </Button>
-      <AddIssueModal issues={issues} open={open} handleClose={handleClose} setIssues={setIssues} />
+      <IssueAddModal issues={issues} open={open} handleClose={handleClose} setIssues={setIssues} />
     </Container>
   );
 };

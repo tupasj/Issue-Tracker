@@ -1,5 +1,14 @@
 import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 
+const createIssue = async (payload: any) => {
+  try {
+    const newIssue = await axiosInstance.post('/projects/issues', payload);
+    return newIssue.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const getIssues = async (currentProject: any) => {
   try {
     const issuesResponse = await axiosInstance.get(`/projects/code=${currentProject.code}/issues`);
@@ -61,4 +70,11 @@ const deleteIssue = async (issueNumber: number, currentProject: any) => {
   }
 };
 
-export { getIssues, updateIssueLabels, updateIssueOpenStatus, updateIssuePriority, deleteIssue };
+export {
+  createIssue,
+  getIssues,
+  updateIssueLabels,
+  updateIssueOpenStatus,
+  updateIssuePriority,
+  deleteIssue,
+};

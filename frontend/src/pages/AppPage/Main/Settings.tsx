@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
-import { UserContext, ProjectsContext } from '@/context';
-import { Input } from '@/elements/Form';
+import { userContext, projectsContext } from '@/context';
+import { joinProject, deleteProject } from '@/features/projects';
+import { Input } from '@/components/Form';
 
 const SubmitButton = styled.button`
   display: block;
@@ -58,11 +58,8 @@ interface FormValues {
 export const Settings = () => {
   const [validCodeText, setValidCodeText] = useState('');
   const [validNameText, setValidNameText] = useState('');
-  const userCtx = useContext(UserContext);
-  const { projects, setProjects, currentProject, setCurrentProject } = useContext(
-    ProjectsContext
-  ) as any;
-  const email = userCtx?.email;
+  const { email } = userContext();
+  const { projects, setProjects, currentProject, setCurrentProject } = projectsContext();
 
   const initialValues = {
     project_code: '',
@@ -82,33 +79,24 @@ export const Settings = () => {
       return;
     }
 
-    try {
-      const joinProjectResponse = await axiosInstance.put(`/projects/code=${code}`, { email });
-      setValidCodeText(`Successfully joined project '${joinProjectResponse.data.name}'.`);
-      setCurrentProject(joinProjectResponse.data[0]);
-    } catch (error: any) {
-      axiosErrorHandler(error);
-      if (code !== '') {
-        return 'Invalid code';
-      }
+    const projectJoined = await joinProject(code, email);
+
+    if (projectJoined) {
+      setValidCodeText(`Successfully joined project '${projectJoined.name}'.`);
+      setCurrentProject(projectJoined);
+    } else if (code !== '') {
+      return 'Invalid code';
     }
   };
 
   const submitProjectName = async (projectName: string) => {
-    try {
-      const projectToLeave = projects.filter((project: any) => project.name == projectName);
-      if (projectName !== '') {
-        const updatedProjects = await axiosInstance.delete(
-          `/projects/code=${projectToLeave[0].code}/user/email=${userCtx?.email}`
-        );
-        setProjects(updatedProjects.data);
-        setValidNameText(`Left project '${projectToLeave[0].name}'.`);
-      }
-      if (projectToLeave.length === 0) {
-        return `Could not find a project named '${projectName}' to delete.`;
-      }
-    } catch (error: any) {
-      axiosErrorHandler(error);
+    const projectToLeave = projects.filter((project: any) => project.name == projectName);
+    if (projectName !== '') {
+      const updatedProjects = await deleteProject(projectToLeave, email);
+      setProjects(updatedProjects);
+      setValidNameText(`Left project '${projectToLeave[0].name}'.`);
+    } else if (projectToLeave.length === 0) {
+      return `Could not find a project named '${projectName}' to delete.`;
     }
   };
 

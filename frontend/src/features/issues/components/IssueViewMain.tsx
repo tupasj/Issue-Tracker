@@ -6,8 +6,8 @@ import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { createComment } from '@/features/comments';
 import { updateIssueOpenStatus } from '@/features/issues';
+import { Button } from '@/elements';
 import { IssueComments } from './IssueComments';
-import { Button } from '@/elements/UI';
 
 const Container = styled.div`
   flex-grow: 1;

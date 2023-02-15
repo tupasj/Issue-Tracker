@@ -6,7 +6,8 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { projectsContext } from '@/context';
 import { updateIssuePriority, deleteIssue } from '@/features/issues';
-import { BasicSelect, Button } from '@/elements/UI';
+import { Button } from '@/elements';
+import { BasicSelect } from '@/components/UI';
 
 const Container = styled.div`
   display: flex;

@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faForward, faCircleCheck, faGears } from '@fortawesome/free-solid-svg-icons';
 import { IssueViewModalContent } from './IssueViewModalContent';
 import { convertTimestamp } from '@/utils/issueUtils';
-import { IssuePriority } from '@/elements/Issue';
-import { BasicModal } from '@/elements/UI';
+import { BasicModal } from '@/components/UI';
+import { IssuePriority } from './IssuePriority';
 
 const Container = styled.span``;
 
@@ -97,7 +97,7 @@ export const IssueViewHeader = ({ issues, setIssues, currentIssue }: Props) => {
           <Username>{currentIssue.postedBy}</Username> on {formattedTime}
         </AdditionalInfo>
       </TitleSecondaryContainer>
-      <BasicModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
+      <BasicModal modalOpen={modalOpen} handleClose={() => setModalOpen(false)}>
         <IssueViewModalContent issues={issues} setIssues={setIssues} />
       </BasicModal>
     </Container>

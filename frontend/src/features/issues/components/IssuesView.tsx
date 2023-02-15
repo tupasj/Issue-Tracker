@@ -4,7 +4,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { projectsContext } from '@/context';
 import { getIssues } from '@/features/issues';
 import { IssuesOptionsBar } from './IssuesOptionsBar';
-import { IssueCard } from '@/elements/Issue';
+import { IssueCard } from './IssueCard';
 
 const Container = styled.div`
   height: 100%;

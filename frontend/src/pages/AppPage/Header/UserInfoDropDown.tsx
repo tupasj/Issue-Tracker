@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown, DropDownItem } from '@/elements/UI';
+import { Dropdown, DropdownItem } from '@/components/Dropdown';
 import { logout } from '@/features/auth';
 
 const Container = styled.div`
@@ -42,12 +42,12 @@ export const UserInfoDropDown = () => {
     <Container onClick={toggleDropdown}>
       <StyledFontAwesomeIcon icon={faAngleDown} />
       <Dropdown dropdownActive={dropdownActive}>
-        <DropDownItem clickable={false}>Regular user</DropDownItem>
+        <DropdownItem clickable={false}>Regular user</DropdownItem>
         <Divider />
-        <DropDownItem clickable={true}>Set status</DropDownItem>
-        <DropDownItem clickable={true} onClickHandler={handleLogout}>
+        <DropdownItem clickable={true}>Set status</DropdownItem>
+        <DropdownItem clickable={true} onClickHandler={handleLogout}>
           Log out
-        </DropDownItem>
+        </DropdownItem>
       </Dropdown>
     </Container>
   );

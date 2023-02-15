@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { login } from '@/features/auth';
-import { Input } from '@/elements/Form';
+import { Input } from '@/components/Form';
 
 const FormWrapper = styled.div`
   display: flex;

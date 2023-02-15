@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { PieChart, Pie, Cell } from 'recharts';
 import { Key } from './Key';
 import { useEffect, useState } from 'react';
-import { LoadingPlaceholder } from '@/elements/UI';
+import { LoadingPlaceholder } from '@/elements';
 
 const Container = styled.div``;
 
@@ -45,7 +45,7 @@ export const Chart = ({ title, data, colors }: Props) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (data[0] && colors[0]) {
+    if (data[0].value && colors[0]) {
       setLoading(false);
     }
   }, [data, colors]);

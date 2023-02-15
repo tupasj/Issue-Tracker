@@ -4,6 +4,7 @@ import { usePriorityChartData, useLabelChartData } from '@/hooks';
 import { projectsContext } from '@/context';
 import { Chart } from './Chart';
 import { getIssues } from '@/features/issues';
+import { NoIssuesNotification } from './NoIssuesNotification';
 
 const Container = styled.div`
   display: grid;
@@ -29,23 +30,29 @@ export const Dashboard = () => {
   }, [currentProject]);
 
   return (
-    <Container>
-      {priorityChartData.labels[0] && priorityChartData.colors[0] && (
-        <Chart
-          title="Issues by priority"
-          data={priorityChartData.labels}
-          colors={priorityChartData.colors}
-        />
+    <>
+      {labelChartData.labels[0] && labelChartData.colors[0] ? (
+        <Container>
+          {priorityChartData.labels[0] && priorityChartData.colors[0] && (
+            <Chart
+              title="Issues by priority"
+              data={priorityChartData.labels}
+              colors={priorityChartData.colors}
+            />
+          )}
+          {labelChartData.labels[0] && labelChartData.colors[0] && (
+            <Chart
+              title="Issues by label"
+              data={labelChartData.labels}
+              colors={labelChartData.colors}
+            />
+          )}
+          {/* <Chart title="Issues by status" data={data} colors={colors} />
+    <Chart title="Personal progress" data={data} colors={colors} /> */}
+        </Container>
+      ) : (
+        <NoIssuesNotification />
       )}
-      {labelChartData.labels[0] && labelChartData.colors[0] && (
-        <Chart
-          title="Issues by label"
-          data={labelChartData.labels}
-          colors={labelChartData.colors}
-        />
-      )}
-      {/* <Chart title="Issues by status" data={data} colors={colors} />
-      <Chart title="Personal progress" data={data} colors={colors} /> */}
-    </Container>
+    </>
   );
 };
