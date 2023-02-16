@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IssuesContext } from '@/context';
-import { Issues } from '@/features/issues';
 import { Dashboard } from '@/features/dashboard';
+import { Issues } from '@/features/issues';
+import { Milestones } from '@/features/milestones';
 import { Settings } from './Settings';
 
 const Container = styled.main`
@@ -20,6 +21,7 @@ export const Main = () => {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/issues/*" element={<Issues />} />
+          <Route path="/milestones" element={<Milestones />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </IssuesContext.Provider>

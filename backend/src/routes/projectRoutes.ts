@@ -10,6 +10,10 @@ import {
   updateProjectIssue,
   getProjectUsers,
 } from '../controllers/projectController';
+import {
+  createMilestone,
+  getProjectMilestones,
+} from '../controllers/milestoneController';
 
 const router = express.Router();
 
@@ -29,5 +33,10 @@ router.route('/code=:code/issues/:openStatus?').get(getProjectIssues);
 router
   .route('/code=:code/issue/issueNumber=:issueNumber')
   .patch(updateProjectIssue);
+
+router
+  .route('/code=:code/milestones/:id?')
+  .post(createMilestone)
+  .get(getProjectMilestones);
 
 export default router;

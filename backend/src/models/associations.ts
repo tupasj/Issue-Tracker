@@ -5,6 +5,7 @@ import { UserDisplayName } from './UserDisplayName';
 import { Issue } from './Issue';
 import { Comment } from './Comment';
 import { Label } from './Label';
+import { Milestone } from './Milestone';
 
 const establishSequelizeAssociations = async () => {
   // Project & User. Association: Many to many.
@@ -36,6 +37,10 @@ const establishSequelizeAssociations = async () => {
   // Issue & Label. Association: Many to many.
   Issue.belongsToMany(Label, { through: 'IssueLabels' });
   Label.belongsToMany(Issue, { through: 'IssueLabels' });
+  // Projects & Milestones. Association: One to many.
+  Project.hasMany(Milestone, { onDelete: 'CASCADE' });
+  // Milestone and Issues. Association: One to many.
+  Milestone.hasMany(Issue);
 
   await db.sync();
 };
