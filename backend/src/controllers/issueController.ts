@@ -88,11 +88,18 @@ const createIssue = async (req: Request, res: Response) => {
 };
 
 const getProjectIssues = async (req: Request, res: Response) => {
-  const { code } = req.params;
+  const { code, openStatus } = req.params;
+  const { isOpen } = req.query;
 
   try {
     const project: any = await Project.findOne({ where: { code } });
-    const projectIssues = await project.getIssues();
+
+    let projectIssues;
+    if (openStatus) {
+      projectIssues = await project.getIssues({ where: { is_open: isOpen } });
+    } else {
+      projectIssues = await project.getIssues();
+    }
 
     // Add postedBy and labels properties to each element in projectIssues array
     for (let i = 0; i < projectIssues.length; i++) {
@@ -105,6 +112,7 @@ const getProjectIssues = async (req: Request, res: Response) => {
       projectIssues[i].setDataValue('labels', issueLabels);
     }
 
+    projectIssues.sort((a: any, b: any) => b.issue_number - a.issue_number);
     res.status(200).json(projectIssues);
   } catch (error: any) {
     res.status(400).json({ message: error.message });

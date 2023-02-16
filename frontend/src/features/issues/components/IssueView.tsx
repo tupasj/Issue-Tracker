@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
+import { issuesContext } from '@/context';
 import { getCurrentIssue } from '@/utils/issueUtils';
 import { IssueOptions } from './IssueOptions';
 import { IssueViewHeader } from './IssueViewHeader';
@@ -24,13 +25,9 @@ const OptionsWrapper = styled.div`
   width: 200px;
 `;
 
-type Props = {
-  issues: any[];
-  setIssues: React.Dispatch<React.SetStateAction<any>>;
-};
-
-export const IssueView = ({ issues, setIssues }: Props) => {
+export const IssueView = () => {
   let { issueNumber } = useParams();
+  const { issues, setIssues } = issuesContext();
   const currentIssue = getCurrentIssue(issues, issueNumber);
 
   return (

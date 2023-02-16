@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { projectsContext } from '@/context';
+import { issuesContext, projectsContext } from '@/context';
 import { getIssues } from '@/features/issues';
 import { IssuesOptionsBar } from './IssuesOptionsBar';
 import { IssueCard } from './IssueCard';
@@ -19,33 +19,20 @@ const IssuesList = styled.div`
   padding: 8px;
 `;
 
-type Props = {
-  issues: any;
-  setIssues: React.Dispatch<React.SetStateAction<any>>;
-};
-
-export const IssuesView = ({ issues, setIssues }: Props) => {
+export const IssuesView = () => {
   let { openStatus }: any = useParams();
   let routeOpenStatus = openStatus;
   let location = useLocation();
   const { currentProject } = projectsContext();
+  const { issues, setIssues } = issuesContext();
 
   useEffect(() => {
-    const filterIssues = async () => {
-      if (openStatus == 'open') {
-        const allIssues = await getIssues(currentProject);
-        let openIssues = allIssues.filter((issue: any) => issue.is_open === true);
-        openIssues = openIssues.sort((a: any, b: any) => b.issue_number - a.issue_number);
-        setIssues(openIssues);
-      } else {
-        const allIssues = await getIssues(currentProject);
-        let closedIssues = allIssues.filter((issue: any) => issue.is_open === false);
-        closedIssues = closedIssues.sort((a: any, b: any) => b.issue_number - a.issue_number);
-        setIssues(closedIssues);
-      }
+    const fetchIssues = async () => {
+      const fetchedIssues = await getIssues(currentProject, openStatus);
+      setIssues(fetchedIssues);
     };
 
-    filterIssues();
+    fetchIssues();
   }, [location]);
 
   return (

@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getIssues } from '@/features/issues';
 
-export const useIssues = (
-  currentProject: any,
-  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+export const useIssues = (currentProject: any) => {
   const [issues, setIssues] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchIssues = async () => {
@@ -17,11 +15,10 @@ export const useIssues = (
   }, []);
 
   useEffect(() => {
-    if (setLoading && issues[0]) {
-      // @ts-ignore
-      setLoading(false);
+    if (issues[0]) {
+      setIsLoading(false);
     }
   }, [issues]);
 
-  return issues;
+  return { issues, isLoading };
 };

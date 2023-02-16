@@ -9,9 +9,17 @@ const createIssue = async (payload: any) => {
   }
 };
 
-const getIssues = async (currentProject: any) => {
+const getIssues = async (currentProject: any, openStatus?: string) => {
   try {
-    const issuesResponse = await axiosInstance.get(`/projects/code=${currentProject.code}/issues`);
+    let issuesResponse;
+    if (openStatus) {
+      const isOpenBool = openStatus === 'open' ? 'true' : 'false';
+      issuesResponse = await axiosInstance.get(
+        `/projects/code=${currentProject.code}/issues/:openStatus?isOpen=${isOpenBool}`
+      );
+    } else {
+      issuesResponse = await axiosInstance.get(`/projects/code=${currentProject.code}/issues`);
+    }
     return issuesResponse.data;
   } catch (error: any) {
     axiosErrorHandler(error);
