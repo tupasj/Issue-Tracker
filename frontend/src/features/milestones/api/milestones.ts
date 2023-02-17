@@ -12,10 +12,20 @@ const createMilestone = async (currentProject: any, payload: any) => {
   }
 };
 
-const getMilestones = async (currentProject: any) => {
+const getMilestones = async (currentProject: any, openStatus?: string) => {
   try {
-    const milestones = await axiosInstance.get(`/projects/code=${currentProject.code}/milestones`);
-    return milestones.data;
+    let milestonesResponse: any;
+    if (openStatus) {
+      const isOpenBool = openStatus === 'open' ? 'true' : 'false';
+      milestonesResponse = await axiosInstance.get(
+        `/projects/code=${currentProject.code}/milestones/:openStatus?isOpen=${isOpenBool}`
+      );
+    } else {
+      milestonesResponse = await axiosInstance.get(
+        `/projects/code=${currentProject.code}/milestones`
+      );
+    }
+    return milestonesResponse.data;
   } catch (error: any) {
     axiosErrorHandler(error);
   }

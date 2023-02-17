@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { issuesContext, projectsContext } from '@/context';
+import { useParams, useLocation } from 'react-router-dom';
+import { projectsContext } from '@/context';
 import { Button } from '@/elements';
-import { IssueSwitch } from '@/features/issues';
 import { getMilestones } from '../api';
 import { MilestoneCards } from './MilestoneCards';
 import { NoMilestonesFound } from './NoMilestonesFound';
 import { MilestoneAddModal } from './MilestoneAddModal';
+import { MilestoneSwitch } from './MilestonesSwitch';
 
 const Container = styled.div`
   display: flex;
@@ -40,7 +41,8 @@ type Props = {
 
 export const MilestonesView = ({ milestones, setMilestones }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { issues } = issuesContext();
+  let { openStatus }: any = useParams();
+  let location = useLocation();
   const { currentProject } = projectsContext();
 
   const handleClick = async () => {
@@ -55,17 +57,18 @@ export const MilestonesView = ({ milestones, setMilestones }: Props) => {
 
   useEffect(() => {
     const fetchMilestones = async () => {
-      const retrievedMilestones = await getMilestones(currentProject);
+      const retrievedMilestones = await getMilestones(currentProject, openStatus);
+      console.log('retrievedMilestones: ', retrievedMilestones);
       setMilestones(retrievedMilestones);
     };
 
     fetchMilestones();
-  }, []);
+  }, [location]);
 
   return (
     <Container>
       <MilestonesHeader>
-        <IssueSwitch issues={issues} />
+        <MilestoneSwitch milestones={milestones} />
         <Button onClick={handleClick}>Add Milestone</Button>
       </MilestonesHeader>
       <MilestonesContainer>

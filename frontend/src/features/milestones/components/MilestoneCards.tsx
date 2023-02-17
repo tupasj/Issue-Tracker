@@ -15,7 +15,12 @@ export const MilestoneCards = ({ milestones }: Props) => {
   return (
     <Container>
       {milestones.map((milestone) => (
-        <MilestoneCard key={milestone.id} title={milestone.title} />
+        <MilestoneCard
+          key={milestone.id}
+          id={milestone.id}
+          title={milestone.title}
+          isOpen={milestone.is_open}
+        />
       ))}
     </Container>
   );

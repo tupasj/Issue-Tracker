@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignsPost } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -33,10 +34,15 @@ const IssueInfo = styled.div`
 const ProgressBarContainer = styled.div``;
 
 type Props = {
+  id: number;
   title: string;
+  isOpen: boolean;
 };
 
-export const MilestoneCard = ({ title }: Props) => {
+export const MilestoneCard = ({ id, title }: Props) => {
+  const navigate = useNavigate();
+
+  // onClick={() => navigate('/app/milestones/')}
   return (
     <Container>
       <Title>

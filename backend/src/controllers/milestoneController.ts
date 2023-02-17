@@ -18,13 +18,24 @@ const createMilestone = async (req: Request, res: Response) => {
 };
 
 const getProjectMilestones = async (req: Request, res: Response) => {
-  const { code } = req.params;
+  const { code, openStatus } = req.params;
+  const { isOpen } = req.query;
 
   try {
     const project: any = await Project.findOne({ where: { code } });
-    const milestones = await project.getMilestones();
 
-    res.status(200).json(milestones);
+    let projectMilestones;
+    if (openStatus) {
+      console.log('openStatus: ', openStatus);
+      projectMilestones = await project.getMilestones({
+        where: { is_open: isOpen },
+      });
+    } else {
+      console.log('else');
+      projectMilestones = await project.getMilestones();
+    }
+
+    res.status(200).json(projectMilestones);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }

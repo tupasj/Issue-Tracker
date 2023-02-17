@@ -11,6 +11,11 @@ const Milestone = db.define(
     description: {
       type: DataTypes.TEXT,
     },
+    is_open: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
   },
   {
     timestamps: false,

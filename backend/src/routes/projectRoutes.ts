@@ -35,7 +35,7 @@ router
   .patch(updateProjectIssue);
 
 router
-  .route('/code=:code/milestones/:id?')
+  .route('/code=:code/milestones/:openStatus?')
   .post(createMilestone)
   .get(getProjectMilestones);
 
