@@ -5,14 +5,18 @@ import { issuesContext, projectsContext } from '@/context';
 import { getIssues } from '@/features/issues';
 import { IssuesOptionsBar } from './IssuesOptionsBar';
 import { IssueCard } from './IssueCard';
+import { NoIssuesFound } from './NoIssuesFound';
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100%;
   border-radius: 6px;
   background-color: #f7faf9;
 `;
 
 const IssuesList = styled.div`
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -55,7 +59,7 @@ export const IssuesView = () => {
             ))}
           </>
         ) : (
-          <p>No issues</p>
+          <NoIssuesFound />
         )}
       </IssuesList>
     </Container>

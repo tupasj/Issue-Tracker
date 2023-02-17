@@ -21,7 +21,7 @@ export const Main = () => {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/issues/*" element={<Issues />} />
-          <Route path="/milestones" element={<Milestones />} />
+          <Route path="/milestones/*" element={<Milestones />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </IssuesContext.Provider>

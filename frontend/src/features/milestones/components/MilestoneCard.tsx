@@ -32,11 +32,15 @@ const IssueInfo = styled.div`
 
 const ProgressBarContainer = styled.div``;
 
-export const MilestoneCard = () => {
+type Props = {
+  title: string;
+};
+
+export const MilestoneCard = ({ title }: Props) => {
   return (
     <Container>
       <Title>
-        <FontAwesomeIcon icon={faSignsPost} /> Milestone name
+        <FontAwesomeIcon icon={faSignsPost} /> {title}
       </Title>
       <ProgressBarContainer>
         <div>Progress Bar</div>
