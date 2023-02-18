@@ -26,12 +26,10 @@ const getProjectMilestones = async (req: Request, res: Response) => {
 
     let projectMilestones;
     if (openStatus) {
-      console.log('openStatus: ', openStatus);
       projectMilestones = await project.getMilestones({
         where: { is_open: isOpen },
       });
     } else {
-      console.log('else');
       projectMilestones = await project.getMilestones();
     }
 

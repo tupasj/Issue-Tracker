@@ -4,6 +4,7 @@ import { userContext, projectsContext } from '@/context';
 import { createComment } from '@/features/comments';
 import { createIssue } from '@/features/issues';
 import { getUsers } from '@/features/users';
+import { getMilestones } from '@/features/milestones';
 import { BasicModal, BasicSelect, MultiSelect, MultiSelectObjects } from '@/components/UI';
 
 const modalStyling = {
@@ -65,6 +66,8 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
   const [labels, setLabels] = useState<string[]>([]);
   const [assignees, setAssignees] = useState<string[]>([]);
   const [projectUsers, setProjectUsers] = useState<any[]>([]);
+  const [projectMilestones, setProjectMilestones] = useState<string[]>([]);
+  const [currentMilestone, setCurrentMilestone] = useState('none');
   const { email } = userContext();
   const { currentProject } = projectsContext();
 
@@ -99,11 +102,19 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
       const users = await getUsers(currentProject);
       setProjectUsers(users);
     };
+    const fetchMilestones = async () => {
+      const milestones = await getMilestones(currentProject);
+      const milestoneTitles: string[] = milestones.map((milestone: any) => milestone.title);
+      milestoneTitles.push('none');
+      setProjectMilestones(milestoneTitles);
+    };
 
     if (open) {
       fetchUsers();
+      fetchMilestones();
     } else if (!open) {
       setAssignees([]);
+      setCurrentMilestone('none');
     }
   }, [open]);
 
@@ -153,8 +164,13 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
             defaultState={labels}
             setState={setLabels}
           />
-          <div>Milestone</div>
-          <div>...</div>
+          <div>Milestones</div>
+          <BasicSelect
+            label="milestones"
+            items={projectMilestones}
+            defaultState={currentMilestone}
+            setState={setCurrentMilestone}
+          />
         </IssueOptions>
       </Container>
     </BasicModal>

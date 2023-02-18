@@ -3,6 +3,7 @@ export * from './IssueCard';
 export * from './IssueComments';
 export * from './IssueEditor';
 export * from './IssueOptionBlock';
+export * from './IssueOptionItems';
 export * from './IssueOptions';
 export * from './Issues';
 export * from './IssuesOptionsBar';

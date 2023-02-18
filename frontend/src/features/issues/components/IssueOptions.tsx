@@ -2,7 +2,10 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
+import { BasicSelect, MultiSelect, MultiSelectObjects } from '@/components/UI';
 import { updateIssueLabels } from '@/features/issues';
+import { getMilestones } from '@/features/milestones';
+import { getUsers } from '@/features/users';
 import { IssueOptionBlock } from './IssueOptionBlock';
 
 const Container = styled.div``;
@@ -15,7 +18,7 @@ type Props = {
 };
 
 export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) => {
-  const [labelNamesState, setLabelNamesState] = useState<string[]>([]);
+  const [labelNames, setLabelNames] = useState<string[]>([]);
   const labelItems = [
     'bug',
     'duplicate',
@@ -25,46 +28,87 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
     'refactoring',
     "won't fix",
   ];
+  const [projectMilestones, setProjectMilestones] = useState<string[]>([]);
+  const [currentMilestone, setCurrentMilestone] = useState('none');
+  const [assignees, setAssignees] = useState<string[]>([]);
+  const [projectUsers, setProjectUsers] = useState<any[]>([]);
   const { email } = userContext();
   const { currentProject } = projectsContext();
 
-  const handleLabelSubmit = async (labelNames: string[]) => {
-    const updatedIssue = await updateIssueLabels(issueNumber, currentProject, labelNames, email);
+  const handleMilestoneSubmit = async () => {
+    // update milestone for current issue
+  };
+
+  const handleLabelSubmit = async (labels: any[]) => {
+    const updatedIssue = await updateIssueLabels(issueNumber, currentProject, labels, email);
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
     setIssues(updatedIssues);
   };
 
-  useEffect(() => {
-    const labelNames = labels.map((item: any) => item.name);
-    setLabelNamesState(labelNames);
+  const handleAssigneeSubmit = async () => {
+    // update assignees for current issue
+  };
 
-    // const getIssueUsers = async () => {
-    //   try {
-    //     const getIssueUsers = await axiosInstance.get(
-    //       `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/users`
-    //     );
-    //   } catch (error: any) {
-    //     axiosErrorHandler(error);
-    //   }
-    // };
-    // getIssueUsers();
+  useEffect(() => {
+    const labelNamesArray = labels.map((item: any) => item.name);
+    const fetchMilestones = async () => {
+      const milestones = await getMilestones(currentProject);
+      const milestoneTitles: string[] = milestones.map((milestone: any) => milestone.title);
+      milestoneTitles.push('none');
+      setProjectMilestones(milestoneTitles);
+    };
+    const fetchUsers = async () => {
+      const users = await getUsers(currentProject);
+      setProjectUsers(users);
+    };
+
+    setLabelNames(labelNamesArray);
+    fetchMilestones();
+    fetchUsers();
   }, []);
 
   return (
     <Container>
-      <IssueOptionBlock title="Milestone" emptyTextPlaceholder="No milestone assigned" />
+      <IssueOptionBlock
+        title="Milestone"
+        emptyTextPlaceholder="No milestone assigned"
+        handleSubmit={handleMilestoneSubmit}
+        changes={currentMilestone}
+      >
+        <BasicSelect
+          label="milestones"
+          items={projectMilestones}
+          defaultState={currentMilestone}
+          setState={setCurrentMilestone}
+        />
+      </IssueOptionBlock>
       <IssueOptionBlock
         title="Labels"
         emptyTextPlaceholder="No labels added"
         handleSubmit={handleLabelSubmit}
-        multi={true}
-        label="labels"
-        items={labels}
-        itemNames={labelItems}
-        defaultState={labelNamesState}
-        setState={setLabelNamesState}
-      />
-      <IssueOptionBlock title="Assignees" emptyTextPlaceholder="No users assigned to this Issue" />
+        changes={labelNames}
+        labels={labels}
+      >
+        <MultiSelect
+          label="labels"
+          items={labelItems}
+          defaultState={labelNames}
+          setState={setLabelNames}
+        />
+      </IssueOptionBlock>
+      <IssueOptionBlock
+        title="Assignees"
+        emptyTextPlaceholder="No users assigned to this Issue"
+        handleSubmit={handleAssigneeSubmit}
+        changes={projectUsers}
+      >
+        <MultiSelectObjects
+          label="assignees"
+          items={projectUsers}
+          defaultState={assignees}
+          setState={setAssignees}
+        />
+      </IssueOptionBlock>
     </Container>
   );
 };

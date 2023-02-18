@@ -72,6 +72,7 @@ const Styles = createGlobalStyle`
 	--orange: #F97316;
 	--yellow: #FBBF24;
 	--blue: #1D4ED8;
+	--light-blue: #3B82F6;
 }
 html {
 	box-sizing: border-box;

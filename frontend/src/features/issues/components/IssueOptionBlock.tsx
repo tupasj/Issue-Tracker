@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { MultiSelect } from '@/components/UI';
-import { Label } from '@/elements/Label';
+import { IssueOptionItems } from './IssueOptionItems';
 
 const Option = styled.div`
   padding-bottom: 8px;
@@ -27,39 +26,27 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   }
 `;
 
-const LabelsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-`;
-
 type Props = {
   title: string;
   emptyTextPlaceholder: string;
+  children: React.ReactNode;
   handleSubmit?: (...params: any) => Promise<void>;
-  multi?: boolean;
-  label?: string | any;
-  items?: any[] | any;
-  itemNames?: string[] | any;
-  defaultState?: string[] | any;
-  setState?: React.Dispatch<React.SetStateAction<string[]>> | any;
+  changes: any;
+  labels?: any[];
 };
 
 export const IssueOptionBlock = ({
   title,
   emptyTextPlaceholder,
+  children,
   handleSubmit,
-  multi,
-  label,
-  items,
-  itemNames,
-  defaultState,
-  setState,
+  changes,
+  labels,
 }: Props) => {
   const [editingActive, setEditingActive] = useState(false);
 
-  const confirmChanges = (labelNames: any) => {
-    handleSubmit?.(labelNames);
+  const confirmChanges = (changes: any) => {
+    handleSubmit?.(changes);
     setEditingActive(false);
   };
 
@@ -68,36 +55,22 @@ export const IssueOptionBlock = ({
       <FlexContainer>
         <Option>{title}</Option>
         {editingActive ? (
-          <StyledFontAwesomeIcon icon={faCheck} onClick={() => confirmChanges(defaultState)} />
+          <StyledFontAwesomeIcon icon={faCheck} onClick={() => confirmChanges(changes)} />
         ) : (
           <StyledFontAwesomeIcon icon={faPenToSquare} onClick={() => setEditingActive(true)} />
         )}
       </FlexContainer>
       <>
         {editingActive ? (
-          <>
-            {multi ? (
-              <MultiSelect
-                label={label}
-                items={itemNames}
-                defaultState={defaultState}
-                setState={setState}
-              />
-            ) : (
-              <p>Basic select</p>
-            )}
-          </>
+          children
         ) : (
           <OptionContent>
-            {items && items.length > 0 ? (
-              <LabelsContainer>
-                {items.map((item: any) => (
-                  <Label key={item.name} name={item.name} color={item.color} />
-                ))}
-              </LabelsContainer>
-            ) : (
-              <p>{emptyTextPlaceholder}</p>
-            )}
+            <IssueOptionItems
+              title={title}
+              emptyTextPlaceholder={emptyTextPlaceholder}
+              changes={changes}
+              labels={labels}
+            />
           </OptionContent>
         )}
       </>

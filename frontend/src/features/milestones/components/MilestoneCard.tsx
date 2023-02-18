@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignsPost } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -41,10 +41,10 @@ type Props = {
 
 export const MilestoneCard = ({ id, title }: Props) => {
   const navigate = useNavigate();
+  let { openStatus } = useParams();
 
-  // onClick={() => navigate('/app/milestones/')}
   return (
-    <Container>
+    <Container onClick={() => navigate(`/app/milestones/${openStatus}/${id}`)}>
       <Title>
         <FontAwesomeIcon icon={faSignsPost} /> {title}
       </Title>
