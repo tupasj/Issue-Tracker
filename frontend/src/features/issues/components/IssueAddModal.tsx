@@ -66,8 +66,8 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
   const [labels, setLabels] = useState<string[]>([]);
   const [assignees, setAssignees] = useState<string[]>([]);
   const [projectUsers, setProjectUsers] = useState<any[]>([]);
-  const [projectMilestones, setProjectMilestones] = useState<string[]>([]);
-  const [currentMilestone, setCurrentMilestone] = useState('none');
+  const [projectMilestones, setProjectMilestones] = useState<any[]>([]);
+  const [currentMilestone, setcurrentMilestone] = useState<any>();
   const { email } = userContext();
   const { currentProject } = projectsContext();
 
@@ -89,6 +89,7 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
       assignees,
       priority,
       labels,
+      currentMilestone,
     };
     const newIssue: any = await createIssue(payload);
     setIssues([...issues, newIssue]);
@@ -104,9 +105,8 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
     };
     const fetchMilestones = async () => {
       const milestones = await getMilestones(currentProject);
-      const milestoneTitles: string[] = milestones.map((milestone: any) => milestone.title);
-      milestoneTitles.push('none');
-      setProjectMilestones(milestoneTitles);
+      const milestoneSelections = [...milestones, { title: 'none' }];
+      setProjectMilestones(milestoneSelections);
     };
 
     if (open) {
@@ -114,7 +114,7 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
       fetchMilestones();
     } else if (!open) {
       setAssignees([]);
-      setCurrentMilestone('none');
+      setcurrentMilestone('none');
     }
   }, [open]);
 
@@ -169,7 +169,8 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
             label="milestones"
             items={projectMilestones}
             defaultState={currentMilestone}
-            setState={setCurrentMilestone}
+            setState={setcurrentMilestone}
+            milestones={true}
           />
         </IssueOptions>
       </Container>

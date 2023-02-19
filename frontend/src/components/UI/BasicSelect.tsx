@@ -9,14 +9,38 @@ const StyledFormControl = styled(FormControl)`
   margin: 0 !important;
 `;
 
-type Props = {
+type SelectMilestonesProps = {
   label: string;
-  items: string[];
+  items: any[];
   defaultState: string;
   setState: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const BasicSelect = ({ label, items, defaultState, setState }: Props) => {
+const SelectMilestones = ({ label, items, defaultState, setState }: SelectMilestonesProps) => {
+  const handleChange = (event: SelectChangeEvent) => {
+    setState(event.target.value);
+  };
+
+  return (
+    <Select labelId={label} id={label} value={defaultState} label={label} onChange={handleChange}>
+      {items.map((item: any) => (
+        <MenuItem key={item.id} value={item}>
+          {item.title}
+        </MenuItem>
+      ))}
+    </Select>
+  );
+};
+
+type Props = {
+  label: string;
+  items: string[] | any[];
+  defaultState: string;
+  setState: React.Dispatch<React.SetStateAction<string>>;
+  milestones?: boolean;
+};
+
+export const BasicSelect = ({ label, items, defaultState, setState, milestones }: Props) => {
   const handleChange = (event: SelectChangeEvent) => {
     setState(event.target.value);
   };
@@ -24,13 +48,28 @@ export const BasicSelect = ({ label, items, defaultState, setState }: Props) => 
   return (
     <StyledFormControl sx={{ m: 1, width: 120 }} size="small">
       <InputLabel id={label}>...</InputLabel>
-      <Select labelId={label} id={label} value={defaultState} label={label} onChange={handleChange}>
-        {items.map((item) => (
-          <MenuItem key={item} value={item}>
-            {item}
-          </MenuItem>
-        ))}
-      </Select>
+      {milestones ? (
+        <SelectMilestones
+          label={label}
+          items={items}
+          defaultState={defaultState}
+          setState={setState}
+        />
+      ) : (
+        <Select
+          labelId={label}
+          id={label}
+          value={defaultState}
+          label={label}
+          onChange={handleChange}
+        >
+          {items.map((item) => (
+            <MenuItem key={item} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+        </Select>
+      )}
     </StyledFormControl>
   );
 };

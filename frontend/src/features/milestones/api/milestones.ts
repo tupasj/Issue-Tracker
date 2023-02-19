@@ -12,6 +12,17 @@ const createMilestone = async (currentProject: any, payload: any) => {
   }
 };
 
+const getMilestone = async (currentProject: any, issueNumber: number) => {
+  try {
+    const issueMilestone = await axiosInstance.get(
+      `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/milestone`
+    );
+    return issueMilestone.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const getMilestones = async (currentProject: any, openStatus?: string) => {
   try {
     let milestonesResponse: any;
@@ -31,4 +42,15 @@ const getMilestones = async (currentProject: any, openStatus?: string) => {
   }
 };
 
-export { createMilestone, getMilestones };
+const getMilestoneIssues = async (currentProject: any, milestoneId: number) => {
+  try {
+    const milestoneIssues = await axiosInstance.get(
+      `/code=${currentProject.code}/milestone/id=${milestoneId}`
+    );
+    return milestoneIssues.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+export { createMilestone, getMilestone, getMilestones, getMilestoneIssues };

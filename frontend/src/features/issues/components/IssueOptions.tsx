@@ -4,7 +4,7 @@ import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { BasicSelect, MultiSelect, MultiSelectObjects } from '@/components/UI';
 import { updateIssueLabels } from '@/features/issues';
-import { getMilestones } from '@/features/milestones';
+import { getMilestone, getMilestones } from '@/features/milestones';
 import { getUsers } from '@/features/users';
 import { IssueOptionBlock } from './IssueOptionBlock';
 
@@ -28,8 +28,8 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
     'refactoring',
     "won't fix",
   ];
-  const [projectMilestones, setProjectMilestones] = useState<string[]>([]);
-  const [currentMilestone, setCurrentMilestone] = useState('none');
+  const [projectMilestones, setProjectMilestones] = useState<any[]>([]);
+  const [currentMilestone, setcurrentMilestone] = useState<any>();
   const [assignees, setAssignees] = useState<string[]>([]);
   const [projectUsers, setProjectUsers] = useState<any[]>([]);
   const { email } = userContext();
@@ -52,10 +52,11 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
   useEffect(() => {
     const labelNamesArray = labels.map((item: any) => item.name);
     const fetchMilestones = async () => {
+      const milestone = await getMilestone(currentProject, issueNumber);
       const milestones = await getMilestones(currentProject);
-      const milestoneTitles: string[] = milestones.map((milestone: any) => milestone.title);
-      milestoneTitles.push('none');
-      setProjectMilestones(milestoneTitles);
+      const milestoneSelections = [...milestones, { title: 'none' }];
+      setcurrentMilestone(milestone);
+      setProjectMilestones(milestoneSelections);
     };
     const fetchUsers = async () => {
       const users = await getUsers(currentProject);
@@ -79,7 +80,8 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
           label="milestones"
           items={projectMilestones}
           defaultState={currentMilestone}
-          setState={setCurrentMilestone}
+          setState={setcurrentMilestone}
+          milestones={true}
         />
       </IssueOptionBlock>
       <IssueOptionBlock

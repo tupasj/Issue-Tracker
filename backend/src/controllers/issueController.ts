@@ -5,6 +5,7 @@ import { User } from '../models/User';
 import { Project } from '../models/Project';
 import { UserDisplayName } from '../models/UserDisplayName';
 import { Label } from '../models/Label';
+import { Milestone } from '../models/Milestone';
 
 const getLabelObjects = async (labelNames: string[]) => {
   const labelObjects: any[] = [];
@@ -24,7 +25,8 @@ const getLabelObjects = async (labelNames: string[]) => {
 };
 
 const createIssue = async (req: Request, res: Response) => {
-  const { code, email, title, assignees, priority, labels } = req.body;
+  const { code, email, title, assignees, priority, labels, currentMilestone } =
+    req.body;
 
   try {
     const project: any = await Project.findOne({ where: { code } });
@@ -80,6 +82,13 @@ const createIssue = async (req: Request, res: Response) => {
       });
       await issue.addUser(user);
     }
+
+    // Add milestone
+    const milestone: any = await Milestone.findOne({
+      where: { id: currentMilestone.id },
+    });
+    await milestone.addIssue(issue);
+    issue.setDataValue('milestone', milestone);
 
     res.status(201).json(issue);
   } catch (error: any) {
@@ -236,6 +245,23 @@ const getIssueUsers = async (req: Request, res: Response) => {
   }
 };
 
+const getIssueMilestone = async (req: Request, res: Response) => {
+  const { issueNumber } = req.params;
+
+  try {
+    const issue: any = await Issue.findOne({
+      where: {
+        issue_number: issueNumber,
+      },
+    });
+    const issueMilestone = await issue.getMilestone();
+
+    res.status(200).json(issueMilestone);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export {
   createIssue,
   getProjectIssues,
@@ -244,4 +270,5 @@ export {
   deleteIssue,
   assignIssueUsers,
   getIssueUsers,
+  getIssueMilestone,
 };

@@ -12,6 +12,7 @@ import {
 } from '../controllers/projectController';
 import {
   createMilestone,
+  getMilestoneIssues,
   getProjectMilestones,
 } from '../controllers/milestoneController';
 
@@ -38,5 +39,6 @@ router
   .route('/code=:code/milestones/:openStatus?')
   .post(createMilestone)
   .get(getProjectMilestones);
+router.route('/code=:code/milestone/id=:id').get(getMilestoneIssues);
 
 export default router;

@@ -17,6 +17,20 @@ const createMilestone = async (req: Request, res: Response) => {
   }
 };
 
+const getMilestoneIssues = async (req: Request, res: Response) => {
+  const { code, id } = req.params;
+
+  try {
+    const project: any = await Project.findOne({ where: { code } });
+    const milestone: any = await project.getMilestones({ where: { id } });
+    const milestoneIssues = await milestone[0].getIssues();
+
+    res.status(200).json(milestoneIssues);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const getProjectMilestones = async (req: Request, res: Response) => {
   const { code, openStatus } = req.params;
   const { isOpen } = req.query;
@@ -39,4 +53,4 @@ const getProjectMilestones = async (req: Request, res: Response) => {
   }
 };
 
-export { createMilestone, getProjectMilestones };
+export { createMilestone, getMilestoneIssues, getProjectMilestones };

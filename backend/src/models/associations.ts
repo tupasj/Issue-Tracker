@@ -39,8 +39,10 @@ const establishSequelizeAssociations = async () => {
   Label.belongsToMany(Issue, { through: 'IssueLabels' });
   // Projects & Milestones. Association: One to many.
   Project.hasMany(Milestone, { onDelete: 'CASCADE' });
+  Milestone.belongsTo(Project);
   // Milestone and Issues. Association: One to many.
   Milestone.hasMany(Issue);
+  Issue.belongsTo(Milestone);
 
   await db.sync();
 };
