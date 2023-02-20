@@ -180,6 +180,58 @@ const updateIssuePriority = async (req: Request, res: Response) => {
   }
 };
 
+const updateIssueMilestone = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+  const { milestoneId } = req.body;
+
+  try {
+    if (milestoneId === 9999) {
+      // get current milestone
+      // remove association
+      const issue: any = await Issue.findOne({
+        where: {
+          issue_number: issueNumber,
+          projectCode: projectCode,
+        },
+      });
+
+      res.status(200).end();
+    }
+    await Issue.update(
+      { milestoneId },
+      {
+        where: {
+          issue_number: issueNumber,
+          projectCode: projectCode,
+        },
+      }
+    );
+    const updatedIssue = await Issue.findOne({
+      where: {
+        issue_number: issueNumber,
+        projectCode: projectCode,
+      },
+    });
+    res.status(200).json(updatedIssue);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const removeIssueMilestone = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+
+  try {
+    const queryResult: any = await db.query(
+      `UPDATE issues SET "milestoneId" = null WHERE "projectCode"='${projectCode}' AND issue_number=${issueNumber};`
+    );
+    console.log('queryResult: ', queryResult);
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const deleteIssue = async (req: Request, res: Response) => {
   const { issueNumber, projectCode } = req.params;
 
@@ -267,6 +319,8 @@ export {
   getProjectIssues,
   updateIssueLabels,
   updateIssuePriority,
+  updateIssueMilestone,
+  removeIssueMilestone,
   deleteIssue,
   assignIssueUsers,
   getIssueUsers,

@@ -18,10 +18,9 @@ type ItemProps = {
 };
 
 const Milestones = ({ changes, emptyTextPlaceholder }: ItemProps) => {
-  // console.log('milestoneChanges: ', changes);
   return (
     <MilestonesContainer>
-      {changes && changes !== 'none' ? (
+      {changes && changes.title !== 'none' ? (
         <div>
           <FontAwesomeIcon icon={faSignsPost} />
           <span> {changes.title}</span>
@@ -33,7 +32,7 @@ const Milestones = ({ changes, emptyTextPlaceholder }: ItemProps) => {
   );
 };
 
-const Labels = ({ changes, emptyTextPlaceholder, labels }: ItemProps) => {
+const Labels = ({ emptyTextPlaceholder, labels }: ItemProps) => {
   const labelsArray = labels as any;
 
   return (

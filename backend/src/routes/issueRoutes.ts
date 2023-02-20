@@ -11,6 +11,8 @@ import {
   getIssueUsers,
   assignIssueUsers,
   getIssueMilestone,
+  updateIssueMilestone,
+  removeIssueMilestone,
 } from '../controllers/issueController';
 
 const router = express.Router();
@@ -44,6 +46,8 @@ router
 
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/milestone')
-  .get(getIssueMilestone);
+  .get(getIssueMilestone)
+  .put(updateIssueMilestone)
+  .delete(removeIssueMilestone);
 
 export default router;

@@ -67,6 +67,29 @@ const updateIssuePriority = async (issueNumber: number, currentProject: any, pri
   }
 };
 
+const updateIssueMilestone = async (issueNumber: number, currentProject: any, milestone: any) => {
+  try {
+    const updatedIssue = await axiosInstance.put(
+      `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/milestone`,
+      { milestoneId: milestone.id }
+    );
+    return updatedIssue.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+const removeIssueMilestone = async (issueNumber: number, currentProject: any) => {
+  try {
+    const removeIssueMilestoneResponse = await axiosInstance.delete(
+      `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/milestone`
+    );
+    return removeIssueMilestoneResponse;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const deleteIssue = async (issueNumber: number, currentProject: any) => {
   try {
     const deleteResponse = await axiosInstance.delete(
@@ -84,5 +107,7 @@ export {
   updateIssueLabels,
   updateIssueOpenStatus,
   updateIssuePriority,
+  updateIssueMilestone,
+  removeIssueMilestone,
   deleteIssue,
 };

@@ -105,7 +105,7 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
     };
     const fetchMilestones = async () => {
       const milestones = await getMilestones(currentProject);
-      const milestoneSelections = [...milestones, { title: 'none' }];
+      const milestoneSelections = [...milestones, { id: 9999, title: 'none' }];
       setProjectMilestones(milestoneSelections);
     };
 

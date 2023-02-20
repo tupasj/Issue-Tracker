@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { BasicSelect, MultiSelect, MultiSelectObjects } from '@/components/UI';
-import { updateIssueLabels } from '@/features/issues';
+import { updateIssueLabels, updateIssueMilestone, removeIssueMilestone } from '@/features/issues';
 import { getMilestone, getMilestones } from '@/features/milestones';
 import { getUsers } from '@/features/users';
 import { IssueOptionBlock } from './IssueOptionBlock';
@@ -36,16 +36,22 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
   const { currentProject } = projectsContext();
 
   const handleMilestoneSubmit = async () => {
-    // update milestone for current issue
+    if (currentMilestone.title === 'none') {
+      await removeIssueMilestone(issueNumber, currentProject);
+      return;
+    }
+    await updateIssueMilestone(issueNumber, currentProject, currentMilestone);
   };
 
   const handleLabelSubmit = async (labels: any[]) => {
+    console.log('handleLabelSubmit');
     const updatedIssue = await updateIssueLabels(issueNumber, currentProject, labels, email);
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
     setIssues(updatedIssues);
   };
 
   const handleAssigneeSubmit = async () => {
+    console.log('handleAssigneeSubmit');
     // update assignees for current issue
   };
 
@@ -54,7 +60,7 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
     const fetchMilestones = async () => {
       const milestone = await getMilestone(currentProject, issueNumber);
       const milestones = await getMilestones(currentProject);
-      const milestoneSelections = [...milestones, { title: 'none' }];
+      const milestoneSelections = [...milestones, { id: 9999, title: 'none' }];
       setcurrentMilestone(milestone);
       setProjectMilestones(milestoneSelections);
     };
