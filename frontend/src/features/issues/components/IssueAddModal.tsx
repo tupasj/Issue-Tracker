@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { userContext, projectsContext } from '@/context';
+import { sortIssues } from '@/utils/issueUtils';
 import { createComment } from '@/features/comments';
 import { createIssue } from '@/features/issues';
 import { getUsers } from '@/features/users';
@@ -82,6 +83,7 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
 
   const createNewIssue = async (e: any) => {
     e.preventDefault();
+    const milestone = currentMilestone.title === 'none' ? null : currentMilestone;
     const payload = {
       code: currentProject.code,
       email,
@@ -89,10 +91,13 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
       assignees,
       priority,
       labels,
-      currentMilestone,
+      currentMilestone: milestone,
     };
     const newIssue: any = await createIssue(payload);
-    setIssues([...issues, newIssue]);
+    const issuesArray = [...issues, newIssue];
+    const sortedIssues = sortIssues(issuesArray);
+    setIssues(sortedIssues);
+
     if (commentTextContent !== '') {
       addComment(newIssue.issue_number);
     }
@@ -114,6 +119,7 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
       fetchMilestones();
     } else if (!open) {
       setAssignees([]);
+      setLabels([]);
       setcurrentMilestone('none');
     }
   }, [open]);

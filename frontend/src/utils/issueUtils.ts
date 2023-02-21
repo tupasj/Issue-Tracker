@@ -34,4 +34,8 @@ const makeUpdatedIssues = (issues: any[], updatedIssue: any) => {
   return updatedIssues;
 };
 
-export { getPriorityColor, convertTimestamp, getCurrentIssue, makeUpdatedIssues };
+const sortIssues = (issues: any[]) => {
+  return issues.sort((a: any, b: any) => b.issue_number - a.issue_number);
+};
+
+export { getPriorityColor, convertTimestamp, getCurrentIssue, makeUpdatedIssues, sortIssues };

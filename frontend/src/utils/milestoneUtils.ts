@@ -4,4 +4,15 @@ const getCurrentMilestone = (milestones: any[], currentMilestoneId: any) => {
   return currentMilestone;
 };
 
-export { getCurrentMilestone };
+const makeUpdatedMilestones = (milestones: any[], updatedMilestone: any) => {
+  const updatedMilestones = milestones.map((milestone) => {
+    if (milestone.id === updatedMilestone.id) {
+      return updatedMilestone;
+    } else {
+      return milestone;
+    }
+  });
+  return updatedMilestones;
+};
+
+export { getCurrentMilestone, makeUpdatedMilestones };

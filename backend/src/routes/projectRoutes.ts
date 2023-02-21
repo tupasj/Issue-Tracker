@@ -14,6 +14,8 @@ import {
   createMilestone,
   getMilestoneIssues,
   getProjectMilestones,
+  updateMilestone,
+  deleteMilestone,
 } from '../controllers/milestoneController';
 
 const router = express.Router();
@@ -39,6 +41,10 @@ router
   .route('/code=:code/milestones/:openStatus?')
   .post(createMilestone)
   .get(getProjectMilestones);
-router.route('/code=:code/milestone/id=:id').get(getMilestoneIssues);
+router
+  .route('/code=:code/milestone/id=:id')
+  .get(getMilestoneIssues)
+  .patch(updateMilestone)
+  .delete(deleteMilestone);
 
 export default router;

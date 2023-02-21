@@ -12,7 +12,10 @@ export const Milestones = () => {
         path="/:openStatus"
         element={<MilestonesView milestones={milestones} setMilestones={setMilestones} />}
       />
-      <Route path="/:openStatus/:milestoneId" element={<MilestoneView milestones={milestones} />} />
+      <Route
+        path="/:openStatus/:milestoneId"
+        element={<MilestoneView milestones={milestones} setMilestones={setMilestones} />}
+      />
     </Routes>
   );
 };

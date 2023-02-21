@@ -84,11 +84,13 @@ const createIssue = async (req: Request, res: Response) => {
     }
 
     // Add milestone
-    const milestone: any = await Milestone.findOne({
-      where: { id: currentMilestone.id },
-    });
-    await milestone.addIssue(issue);
-    issue.setDataValue('milestone', milestone);
+    if (currentMilestone) {
+      const milestone: any = await Milestone.findOne({
+        where: { id: currentMilestone.id },
+      });
+      await milestone.addIssue(issue);
+      issue.setDataValue('milestone', milestone);
+    }
 
     res.status(201).json(issue);
   } catch (error: any) {

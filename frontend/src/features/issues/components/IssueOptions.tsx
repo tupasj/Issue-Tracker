@@ -44,14 +44,12 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
   };
 
   const handleLabelSubmit = async (labels: any[]) => {
-    console.log('handleLabelSubmit');
     const updatedIssue = await updateIssueLabels(issueNumber, currentProject, labels, email);
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
     setIssues(updatedIssues);
   };
 
   const handleAssigneeSubmit = async () => {
-    console.log('handleAssigneeSubmit');
     // update assignees for current issue
   };
 

@@ -66,7 +66,7 @@ export const MilestoneAddModal = ({ modalOpen, handleClose, milestones, setMiles
         <TextInput
           type="text"
           minLength={1}
-          maxLength={50}
+          maxLength={100}
           onChange={(e) => setTitleInput(e.target.value)}
         />
         <H3>Description</H3>

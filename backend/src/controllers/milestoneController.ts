@@ -53,4 +53,53 @@ const getProjectMilestones = async (req: Request, res: Response) => {
   }
 };
 
-export { createMilestone, getMilestoneIssues, getProjectMilestones };
+const updateMilestone = async (req: Request, res: Response) => {
+  const { code, id } = req.params;
+  const { title, description } = req.body;
+
+  try {
+    await Milestone.update(
+      { title: title, description: description },
+      {
+        where: {
+          id: id,
+          projectCode: code,
+        },
+      }
+    );
+
+    const updatedMilestone = await Milestone.findOne({
+      where: {
+        id: id,
+        projectCode: code,
+      },
+    });
+    res.status(200).json(updatedMilestone);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const deleteMilestone = async (req: Request, res: Response) => {
+  const { code, id } = req.params;
+
+  try {
+    await Milestone.destroy({
+      where: {
+        id: id,
+        projectCode: code,
+      },
+    });
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export {
+  createMilestone,
+  getMilestoneIssues,
+  getProjectMilestones,
+  updateMilestone,
+  deleteMilestone,
+};

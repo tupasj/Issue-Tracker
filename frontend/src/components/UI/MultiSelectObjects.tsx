@@ -43,7 +43,7 @@ export const MultiSelectObjects = ({ label, items, defaultState, setState }: Pro
         labelId={label}
         id={label}
         multiple
-        value={defaultState}
+        defaultValue={defaultState}
         onChange={handleChange}
         input={<OutlinedInput label="Tag" />}
         renderValue={() => '...'}
