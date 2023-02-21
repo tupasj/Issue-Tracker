@@ -41,10 +41,10 @@ type Props = {
 
 export const MilestoneCard = ({ id, title }: Props) => {
   const navigate = useNavigate();
-  let { openStatus } = useParams();
+  let { milestonesOpenStatus } = useParams();
 
   return (
-    <Container onClick={() => navigate(`/app/milestones/${openStatus}/${id}`)}>
+    <Container onClick={() => navigate(`/app/milestones/${milestonesOpenStatus}/${id}`)}>
       <Title>
         <FontAwesomeIcon icon={faSignsPost} /> {title}
       </Title>

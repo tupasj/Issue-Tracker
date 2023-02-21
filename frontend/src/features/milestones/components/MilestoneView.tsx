@@ -99,7 +99,7 @@ export const MilestoneView = ({ milestones, setMilestones }: Props) => {
         </ProgressbarContainer>
       </TitleSection>
       <Divider />
-      <IssuesView />
+      <IssuesView milestones={milestones} milestoneId={milestoneId} />
       <MilestoneEditModal
         modalOpen={editModalOpen}
         handleClose={handleEditModalClose}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { IssueView } from '@/features/issues';
 import { MilestonesView } from './MilestonesView';
 import { MilestoneView } from './MilestoneView';
 
@@ -9,12 +10,16 @@ export const Milestones = () => {
   return (
     <Routes>
       <Route
-        path="/:openStatus"
+        path="/:milestonesOpenStatus"
         element={<MilestonesView milestones={milestones} setMilestones={setMilestones} />}
       />
       <Route
-        path="/:openStatus/:milestoneId"
+        path="/:milestonesOpenStatus/:milestoneId"
         element={<MilestoneView milestones={milestones} setMilestones={setMilestones} />}
+      />
+      <Route
+        path="/:milestonesOpenStatus/:milestoneId/issues/:issuesOpenStatus/:issueNumber"
+        element={<IssueView />}
       />
     </Routes>
   );

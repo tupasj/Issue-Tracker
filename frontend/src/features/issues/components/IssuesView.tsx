@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { issuesContext, projectsContext } from '@/context';
-import { getIssues } from '@/features/issues';
+import { getMilestoneIssues } from '@/features/milestones';
+import { getIssues } from '../api';
 import { IssuesOptionsBar } from './IssuesOptionsBar';
 import { IssueCard } from './IssueCard';
 import { NoIssuesFound } from './NoIssuesFound';
@@ -23,20 +24,36 @@ const IssuesList = styled.div`
   padding: 8px;
 `;
 
-export const IssuesView = () => {
-  let { openStatus }: any = useParams();
+type Props = {
+  milestones?: any[];
+  milestoneId?: string;
+};
+
+export const IssuesView = ({ milestones, milestoneId }: Props) => {
+  let { openStatus, milestonesOpenStatus, issuesOpenStatus }: any = useParams();
   let routeOpenStatus = openStatus;
   let location = useLocation();
   const { currentProject } = projectsContext();
   const { issues, setIssues } = issuesContext();
 
   useEffect(() => {
-    const fetchIssues = async () => {
-      const fetchedIssues = await getIssues(currentProject, openStatus);
-      setIssues(fetchedIssues);
-    };
+    console.log('issuesView issuesOpenStatus ', issuesOpenStatus);
+    if (milestones) {
+      const milestoneIdInt = parseInt(milestoneId as string);
+      const fetchMilestoneIssues = async () => {
+        const milestoneIssues = await getMilestoneIssues(currentProject, milestoneIdInt);
+        setIssues(milestoneIssues);
+      };
 
-    fetchIssues();
+      fetchMilestoneIssues();
+    } else {
+      const fetchIssues = async () => {
+        const fetchedIssues = await getIssues(currentProject, openStatus);
+        setIssues(fetchedIssues);
+      };
+
+      fetchIssues();
+    }
   }, [location]);
 
   return (
@@ -55,6 +72,9 @@ export const IssuesView = () => {
                 postedBy={issue.postedBy}
                 routeOpenStatus={routeOpenStatus}
                 labels={issue.labels}
+                milestonesOpenStatus={milestonesOpenStatus}
+                milestoneId={milestoneId}
+                issuesOpenStatus={issuesOpenStatus}
               />
             ))}
           </>

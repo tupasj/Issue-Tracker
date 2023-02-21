@@ -41,7 +41,7 @@ type Props = {
 
 export const MilestonesView = ({ milestones, setMilestones }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
-  let { openStatus }: any = useParams();
+  let { milestonesOpenStatus }: any = useParams();
   let location = useLocation();
   const { currentProject } = projectsContext();
 
@@ -50,8 +50,9 @@ export const MilestonesView = ({ milestones, setMilestones }: Props) => {
   };
 
   useEffect(() => {
+    console.log('milestonesView milestonesOpenStatus', milestonesOpenStatus);
     const fetchMilestones = async () => {
-      const retrievedMilestones = await getMilestones(currentProject, openStatus);
+      const retrievedMilestones = await getMilestones(currentProject, milestonesOpenStatus);
       setMilestones(retrievedMilestones);
     };
 
