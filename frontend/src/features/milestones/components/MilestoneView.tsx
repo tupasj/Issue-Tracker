@@ -10,6 +10,8 @@ import { MilestoneEditModal } from './MilestoneEditModal';
 import { MilestoneDeleteModal } from './MilestoneDeleteModal';
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100%;
 `;
 

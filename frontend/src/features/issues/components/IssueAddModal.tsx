@@ -83,7 +83,7 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
 
   const createNewIssue = async (e: any) => {
     e.preventDefault();
-    const milestone = currentMilestone.title === 'none' ? null : currentMilestone;
+    const milestone = currentMilestone === 'none' ? null : currentMilestone;
     const payload = {
       code: currentProject.code,
       email,

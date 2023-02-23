@@ -109,12 +109,19 @@ const updateProjectIssue = async (req: Request, res: Response) => {
         },
       }
     );
-    const updatedIssue = await Issue.findOne({
+    const updatedIssue: any = await Issue.findOne({
       where: {
         projectCode: code,
         issue_number: issueNumber,
       },
     });
+    let issueLabels: any = updatedIssue.getLabels();
+    const nullObject = Object.keys(issueLabels).length === 0;
+    if (nullObject) {
+      issueLabels = [];
+    }
+
+    updatedIssue.setDataValue('labels', issueLabels);
     res.status(200).json(updatedIssue);
   } catch (error: any) {
     res.status(400).json({ message: error.message });

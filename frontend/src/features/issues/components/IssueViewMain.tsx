@@ -73,8 +73,10 @@ export const IssueViewMain = ({ issues, setIssues, currentIssue }: Props) => {
   const toggleIssueOpenStatus = async () => {
     const newStatus = currentIssue.is_open ? false : true;
     const updatedIssue = await updateIssueOpenStatus(currentIssue, newStatus);
+    console.log('updatedIssue: ', updatedIssue);
     if (updatedIssue) {
       const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
+      console.log('updatedIssues: ', updatedIssues);
       setIssues(updatedIssues);
     }
   };

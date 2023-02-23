@@ -17,11 +17,12 @@ const Container = styled.div`
 `;
 
 const IssuesList = styled.div`
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 8px;
+  height: 100%;
+  overflow: scroll;
 `;
 
 type Props = {

@@ -7,11 +7,11 @@ import { Main } from '@/pages/AppPage';
 const Container = styled.div`
   display: grid;
   grid-template-columns: 200px 1fr;
-  grid-template-rows: 54px 1fr;
+  grid-template-rows: 5.5% 94.5%;
   grid-template-areas:
     'header header'
     'sidebar main';
-  min-height: 100vh;
+  height: 100vh;
 `;
 
 type Props = {
