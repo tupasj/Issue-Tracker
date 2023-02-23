@@ -42,7 +42,7 @@ router
   .post(createMilestone)
   .get(getProjectMilestones);
 router
-  .route('/code=:code/milestone/id=:id')
+  .route('/code=:code/milestone/id=:id/:openStatus?')
   .get(getMilestoneIssues)
   .patch(updateMilestone)
   .delete(deleteMilestone);

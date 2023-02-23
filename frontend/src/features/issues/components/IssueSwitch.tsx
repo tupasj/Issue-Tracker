@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { projectsContext } from '@/context';
 import { getIssues } from '@/features/issues';
+import { getMilestoneIssues } from '@/features/milestones';
 
 const Container = styled.div`
   display: flex;
@@ -11,8 +12,7 @@ const Container = styled.div`
 `;
 
 const SwitchLeft = styled.span<any>`
-  background-color: ${(props) =>
-    props.openStatus === 'open' ? 'var(--light-gray)' : 'var(--white)'};
+  background-color: ${(props) => (props.open === 'open' ? 'var(--light-gray)' : 'var(--white)')};
   border: 2px solid rgba(0, 0, 0, 0.25);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -26,8 +26,7 @@ const SwitchLeft = styled.span<any>`
 `;
 
 const SwitchRight = styled.span<any>`
-  background-color: ${(props) =>
-    props.openStatus === 'open' ? 'var(--white)' : 'var(--light-gray)'};
+  background-color: ${(props) => (props.open === 'open' ? 'var(--white)' : 'var(--light-gray)')};
   border: 2px solid rgba(0, 0, 0, 0.25);
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
@@ -42,19 +41,25 @@ const SwitchRight = styled.span<any>`
 
 type Props = {
   issues: any;
+  milestoneId?: string;
 };
 
-export const IssueSwitch = ({ issues }: Props) => {
-  let { openStatus }: any = useParams();
+export const IssueSwitch = ({ issues, milestoneId }: Props) => {
+  let { openStatus, milestonesOpenStatus, issuesOpenStatus }: any = useParams();
   const navigate = useNavigate();
   let location = useLocation();
   const [allIssues, setAllIssues] = useState<any[]>(issues);
   const { currentProject } = projectsContext();
+  let open = milestoneId ? issuesOpenStatus : openStatus;
 
   const toggleSwitch = () => {
-    if (openStatus === 'open') {
+    if (milestoneId && issuesOpenStatus === 'open') {
+      navigate(`/app/milestones/${milestonesOpenStatus}/${milestoneId}/issues/closed`);
+    } else if (milestoneId && issuesOpenStatus === 'closed') {
+      navigate(`/app/milestones/${milestonesOpenStatus}/${milestoneId}/issues/open`);
+    } else if (openStatus === 'open') {
       navigate('/app/issues/closed');
-    } else {
+    } else if (openStatus === 'closed') {
       navigate('/app/issues/open');
     }
   };
@@ -64,15 +69,25 @@ export const IssueSwitch = ({ issues }: Props) => {
       const allIssues = await getIssues(currentProject);
       setAllIssues(allIssues);
     };
-    getAllIssues();
+    const getAllMilestoneIssues = async () => {
+      const milestoneIdInt = parseInt(milestoneId as string);
+      const allMilestoneIssues = await getMilestoneIssues(currentProject, milestoneIdInt);
+      setAllIssues(allMilestoneIssues);
+    };
+
+    if (milestoneId) {
+      getAllMilestoneIssues();
+    } else {
+      getAllIssues();
+    }
   }, [location]);
 
   return (
     <Container>
-      <SwitchLeft openStatus={openStatus} onClick={toggleSwitch}>
+      <SwitchLeft open={open} onClick={toggleSwitch}>
         Open ({allIssues.filter((issue: any) => issue.is_open === true).length})
       </SwitchLeft>
-      <SwitchRight openStatus={openStatus} onClick={toggleSwitch}>
+      <SwitchRight open={open} onClick={toggleSwitch}>
         Closed ({allIssues.filter((issue: any) => issue.is_open === false).length})
       </SwitchRight>
     </Container>

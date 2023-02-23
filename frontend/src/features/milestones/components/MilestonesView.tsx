@@ -50,7 +50,6 @@ export const MilestonesView = ({ milestones, setMilestones }: Props) => {
   };
 
   useEffect(() => {
-    console.log('milestonesView milestonesOpenStatus', milestonesOpenStatus);
     const fetchMilestones = async () => {
       const retrievedMilestones = await getMilestones(currentProject, milestonesOpenStatus);
       setMilestones(retrievedMilestones);

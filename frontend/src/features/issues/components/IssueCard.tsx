@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignsPost } from '@fortawesome/free-solid-svg-icons';
 import { getPriorityColor, convertTimestamp } from '@/utils/issueUtils';
@@ -53,9 +53,8 @@ type Props = {
   postedBy: string;
   routeOpenStatus: string;
   labels: any[];
-  milestonesOpenStatus?: any;
   milestoneId?: string;
-  issuesOpenStatus?: any;
+  isOpen: any;
 };
 
 export const IssueCard = ({
@@ -67,20 +66,20 @@ export const IssueCard = ({
   postedBy,
   routeOpenStatus,
   labels,
-  milestonesOpenStatus,
   milestoneId,
-  issuesOpenStatus,
+  isOpen,
 }: Props) => {
   const navigate = useNavigate();
+  let { milestonesOpenStatus } = useParams();
   const priorityColor = getPriorityColor(priority);
   const formattedTime = convertTimestamp(timePosted);
 
   const handleClick = () => {
-    console.log('milestonesOpenStatus', milestonesOpenStatus);
     if (milestonesOpenStatus) {
       const milestoneIdInt = parseInt(milestoneId as string);
+      const openStatus = isOpen ? 'open' : 'closed';
       navigate(
-        `/app/milestones/${milestonesOpenStatus}/${milestoneIdInt}/issues/${issuesOpenStatus}/${number}`
+        `/app/milestones/${milestonesOpenStatus}/${milestoneIdInt}/issues/${openStatus}/${number}`
       );
     } else {
       navigate(`/app/issues/${routeOpenStatus}/${number}`);

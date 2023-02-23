@@ -23,20 +23,24 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 type Props = {
   issues: any[];
   setIssues: React.Dispatch<React.SetStateAction<any>>;
+  milestoneId?: string;
+  milestonesOpenStatus?: any;
 };
 
-export const IssuesOptionsBar = ({ issues, setIssues }: Props) => {
+export const IssuesOptionsBar = ({ issues, setIssues, milestoneId }: Props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <Container>
-      <IssueSwitch issues={issues} />
+      <IssueSwitch issues={issues} milestoneId={milestoneId} />
       <IssueSearchbar issues={issues} setIssues={setIssues} />
-      <Button onClick={handleOpen}>
-        Add Issue <StyledFontAwesomeIcon icon={faPlus} />
-      </Button>
+      {!milestoneId && (
+        <Button onClick={handleOpen}>
+          Add Issue <StyledFontAwesomeIcon icon={faPlus} />
+        </Button>
+      )}
       <IssueAddModal issues={issues} open={open} handleClose={handleClose} setIssues={setIssues} />
     </Container>
   );

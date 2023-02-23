@@ -44,7 +44,9 @@ export const MilestoneCard = ({ id, title }: Props) => {
   let { milestonesOpenStatus } = useParams();
 
   return (
-    <Container onClick={() => navigate(`/app/milestones/${milestonesOpenStatus}/${id}`)}>
+    <Container
+      onClick={() => navigate(`/app/milestones/${milestonesOpenStatus}/${id}/issues/open`)}
+    >
       <Title>
         <FontAwesomeIcon icon={faSignsPost} /> {title}
       </Title>

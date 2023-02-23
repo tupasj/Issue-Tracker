@@ -37,11 +37,14 @@ export const IssuesView = ({ milestones, milestoneId }: Props) => {
   const { issues, setIssues } = issuesContext();
 
   useEffect(() => {
-    console.log('issuesView issuesOpenStatus ', issuesOpenStatus);
     if (milestones) {
       const milestoneIdInt = parseInt(milestoneId as string);
       const fetchMilestoneIssues = async () => {
-        const milestoneIssues = await getMilestoneIssues(currentProject, milestoneIdInt);
+        const milestoneIssues = await getMilestoneIssues(
+          currentProject,
+          milestoneIdInt,
+          issuesOpenStatus
+        );
         setIssues(milestoneIssues);
       };
 
@@ -58,7 +61,12 @@ export const IssuesView = ({ milestones, milestoneId }: Props) => {
 
   return (
     <Container>
-      <IssuesOptionsBar issues={issues} setIssues={setIssues} />
+      <IssuesOptionsBar
+        issues={issues}
+        setIssues={setIssues}
+        milestoneId={milestoneId}
+        milestonesOpenStatus={milestonesOpenStatus}
+      />
       <IssuesList>
         {issues[0] ? (
           <>
@@ -72,9 +80,8 @@ export const IssuesView = ({ milestones, milestoneId }: Props) => {
                 postedBy={issue.postedBy}
                 routeOpenStatus={routeOpenStatus}
                 labels={issue.labels}
-                milestonesOpenStatus={milestonesOpenStatus}
                 milestoneId={milestoneId}
-                issuesOpenStatus={issuesOpenStatus}
+                isOpen={issue.is_open}
               />
             ))}
           </>

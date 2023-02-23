@@ -17,7 +17,7 @@ export const NoIssuesFound = () => {
   return (
     <Container>
       <FontAwesomeIcon icon={faFolderOpen} />
-      <div>No Issues found for this project.</div>
+      <div>No Issues found.</div>
     </Container>
   );
 };

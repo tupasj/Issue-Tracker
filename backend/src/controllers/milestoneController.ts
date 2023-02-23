@@ -19,12 +19,20 @@ const createMilestone = async (req: Request, res: Response) => {
 };
 
 const getMilestoneIssues = async (req: Request, res: Response) => {
-  const { code, id } = req.params;
+  const { code, id, openStatus } = req.params;
+  const { isOpen } = req.query;
 
   try {
     const project: any = await Project.findOne({ where: { code } });
     const milestone: any = await project.getMilestones({ where: { id } });
-    const milestoneIssues = await milestone[0].getIssues();
+    let milestoneIssues;
+    if (openStatus) {
+      milestoneIssues = await milestone[0].getIssues({
+        where: { is_open: isOpen },
+      });
+    } else {
+      milestoneIssues = await milestone[0].getIssues();
+    }
 
     // Add postedBy and labels properties to each element in milestoneIssues array
     for (let i = 0; i < milestoneIssues.length; i++) {

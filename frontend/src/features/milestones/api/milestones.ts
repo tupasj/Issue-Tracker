@@ -42,12 +42,24 @@ const getMilestones = async (currentProject: any, openStatus?: string) => {
   }
 };
 
-const getMilestoneIssues = async (currentProject: any, milestoneId: number) => {
+const getMilestoneIssues = async (
+  currentProject: any,
+  milestoneId: number,
+  openStatus?: string
+) => {
   try {
-    const milestoneIssues = await axiosInstance.get(
-      `/projects/code=${currentProject.code}/milestone/id=${milestoneId}`
-    );
-    return milestoneIssues.data;
+    let milestoneIssuesResponse: any;
+    if (openStatus) {
+      const isOpenBool = openStatus === 'open' ? 'true' : 'false';
+      milestoneIssuesResponse = await axiosInstance.get(
+        `/projects/code=${currentProject.code}/milestone/id=${milestoneId}/:openStatus?isOpen=${isOpenBool}`
+      );
+    } else {
+      milestoneIssuesResponse = await axiosInstance.get(
+        `/projects/code=${currentProject.code}/milestone/id=${milestoneId}`
+      );
+    }
+    return milestoneIssuesResponse.data;
   } catch (error: any) {
     axiosErrorHandler(error);
   }

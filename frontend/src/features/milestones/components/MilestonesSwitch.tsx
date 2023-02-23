@@ -45,14 +45,14 @@ type Props = {
 };
 
 export const MilestoneSwitch = ({ milestones }: Props) => {
-  let { openStatus }: any = useParams();
+  let { milestonesOpenStatus }: any = useParams();
   const navigate = useNavigate();
   let location = useLocation();
   const [allMilestones, setAllMilestones] = useState<any[]>(milestones);
   const { currentProject } = projectsContext();
 
   const toggleSwitch = () => {
-    if (openStatus === 'open') {
+    if (milestonesOpenStatus === 'open') {
       navigate('/app/milestones/closed');
     } else {
       navigate('/app/milestones/open');
@@ -69,10 +69,10 @@ export const MilestoneSwitch = ({ milestones }: Props) => {
 
   return (
     <Container>
-      <SwitchLeft openStatus={openStatus} onClick={toggleSwitch}>
+      <SwitchLeft openStatus={milestonesOpenStatus} onClick={toggleSwitch}>
         Open ({allMilestones.filter((milestone: any) => milestone.is_open === true).length})
       </SwitchLeft>
-      <SwitchRight openStatus={openStatus} onClick={toggleSwitch}>
+      <SwitchRight openStatus={milestonesOpenStatus} onClick={toggleSwitch}>
         Closed ({allMilestones.filter((milestone: any) => milestone.is_open === false).length})
       </SwitchRight>
     </Container>
