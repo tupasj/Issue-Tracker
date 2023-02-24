@@ -5,6 +5,7 @@ import { getPercentage } from '@/utils/mathUtils';
 export const useLabelChartData = (allIssues: any) => {
   const [labels, setLabels] = useState<any[]>([]);
   const [colors, setColors] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     //   Push every label in an issue to a labels array
@@ -50,5 +51,11 @@ export const useLabelChartData = (allIssues: any) => {
     }
   }, [allIssues]);
 
-  return { labels, colors };
+  useEffect(() => {
+    if (labels[0] && colors[0]) {
+      setIsLoading(false);
+    }
+  }, [labels]);
+
+  return { labels, colors, isLoading };
 };

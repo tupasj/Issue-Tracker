@@ -14,6 +14,7 @@ const Container = styled.div`
 
 export const Dashboard = () => {
   const [allIssues, setAllIssues] = useState<any[]>([]);
+  const [issuesLoading, setIssuesLoading] = useState(true);
   const priorityChartData = usePriorityChartData(allIssues);
   const labelChartData = useLabelChartData(allIssues);
   const { currentProject } = projectsContext();
@@ -22,6 +23,7 @@ export const Dashboard = () => {
     const fetchIssues = async () => {
       const issues = await getIssues(currentProject);
       setAllIssues(issues);
+      setIssuesLoading(false);
     };
 
     if (currentProject) {
@@ -31,28 +33,25 @@ export const Dashboard = () => {
 
   return (
     <>
-      {labelChartData.labels[0] && labelChartData.colors[0] ? (
-        <Container>
-          {priorityChartData.labels[0] && priorityChartData.colors[0] && (
-            <Chart
-              title="Issues by priority"
-              data={priorityChartData.labels}
-              colors={priorityChartData.colors}
-            />
-          )}
-          {labelChartData.labels[0] && labelChartData.colors[0] && (
-            <Chart
-              title="Issues by label"
-              data={labelChartData.labels}
-              colors={labelChartData.colors}
-            />
-          )}
-          {/* <Chart title="Issues by status" data={data} colors={colors} />
+      <Container>
+        <Chart
+          title="Issues by priority"
+          issuesLoading={issuesLoading}
+          data={priorityChartData.labels}
+          colors={priorityChartData.colors}
+          chartDataLoading={priorityChartData.isLoading}
+        />
+        <Chart
+          title="Issues by label"
+          issuesLoading={issuesLoading}
+          data={labelChartData.labels}
+          colors={labelChartData.colors}
+          chartDataLoading={labelChartData.isLoading}
+        />
+        {/* <Chart title="Issues by status" data={data} colors={colors} />
     <Chart title="Personal progress" data={data} colors={colors} /> */}
-        </Container>
-      ) : (
-        <NoIssuesNotification />
-      )}
+      </Container>
+      {allIssues.length === 0 && <NoIssuesNotification />}
     </>
   );
 };
