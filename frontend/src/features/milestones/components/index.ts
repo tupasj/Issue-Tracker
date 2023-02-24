@@ -3,6 +3,7 @@ export * from './MilestoneCard';
 export * from './MilestoneCards';
 export * from './MilestoneDeleteModal';
 export * from './MilestoneEditModal';
+export * from './MilestoneProgressBar';
 export * from './Milestones';
 export * from './MilestonesSwitch';
 export * from './MilestoneView';

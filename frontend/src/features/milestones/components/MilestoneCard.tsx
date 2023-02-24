@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignsPost } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
+import { projectsContext } from '@/context';
+import { useMilestoneIssues } from '@/hooks';
+import { MilestoneProgressBar } from './MilestoneProgressBar';
 
 const Container = styled.div`
   display: flex;
@@ -28,10 +31,20 @@ const Title = styled.div`
 
 const IssueInfo = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 12px;
+  width: 254px;
 `;
 
-const ProgressBarContainer = styled.div``;
+const ProgressBarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 254px;
+`;
 
 type Props = {
   id: number;
@@ -41,7 +54,19 @@ type Props = {
 
 export const MilestoneCard = ({ id, title }: Props) => {
   const navigate = useNavigate();
+  const { currentProject } = projectsContext();
+  const allMilestoneIssues = useMilestoneIssues(currentProject, id);
+  const openMilestoneIssues = useMilestoneIssues(currentProject, id, 'open');
+  const closedMilestoneIssues = useMilestoneIssues(currentProject, id, 'closed');
   let { milestonesOpenStatus } = useParams();
+  const loading =
+    allMilestoneIssues.isLoading &&
+    openMilestoneIssues.isLoading &&
+    closedMilestoneIssues.isLoading;
+  const noIssues = !allMilestoneIssues.isLoading && allMilestoneIssues.milestoneIssues.length === 0;
+  const completionPercentage =
+    (closedMilestoneIssues.milestoneIssues.length / allMilestoneIssues.milestoneIssues.length) *
+    100;
 
   return (
     <Container
@@ -51,11 +76,17 @@ export const MilestoneCard = ({ id, title }: Props) => {
         <FontAwesomeIcon icon={faSignsPost} /> {title}
       </Title>
       <ProgressBarContainer>
-        <div>Progress Bar</div>
+        <MilestoneProgressBar percentage={completionPercentage} />
         <IssueInfo>
-          <div>0% complete</div>
-          <div>5 open</div>
-          <div>0 closed</div>
+          {!loading && !noIssues ? (
+            <>
+              <div>{completionPercentage}% complete</div>
+              <div>{openMilestoneIssues.milestoneIssues.length} open</div>
+              <div>{closedMilestoneIssues.milestoneIssues.length} closed</div>
+            </>
+          ) : (
+            <p>no issues</p>
+          )}
         </IssueInfo>
       </ProgressBarContainer>
     </Container>
