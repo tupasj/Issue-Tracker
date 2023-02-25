@@ -17,7 +17,8 @@ type Props = {
 };
 
 export const MilestoneProgressBar = ({ percentage }: Props) => {
-  const roundedPercentage = Math.round(percentage);
+  let roundedPercentage = Math.round(percentage);
+  roundedPercentage = Number.isNaN(roundedPercentage) ? 0 : roundedPercentage;
 
   return (
     <Container>

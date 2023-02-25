@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { usePriorityChartData, useLabelChartData } from '@/hooks';
+import { usePriorityChartData, useLabelChartData, useStatusChartData } from '@/hooks';
 import { projectsContext } from '@/context';
 import { Chart } from './Chart';
 import { getIssues } from '@/features/issues';
@@ -17,6 +17,7 @@ export const Dashboard = () => {
   const [issuesLoading, setIssuesLoading] = useState(true);
   const priorityChartData = usePriorityChartData(allIssues);
   const labelChartData = useLabelChartData(allIssues);
+  const statusChartData = useStatusChartData(allIssues);
   const { currentProject } = projectsContext();
 
   useEffect(() => {
@@ -48,8 +49,20 @@ export const Dashboard = () => {
           colors={labelChartData.colors}
           chartDataLoading={labelChartData.isLoading}
         />
-        {/* <Chart title="Issues by status" data={data} colors={colors} />
-    <Chart title="Personal progress" data={data} colors={colors} /> */}
+        <Chart
+          title="Overall progress"
+          issuesLoading={issuesLoading}
+          data={statusChartData.labels}
+          colors={statusChartData.colors}
+          chartDataLoading={statusChartData.isLoading}
+        />
+        <Chart
+          title="Overall progress"
+          issuesLoading={issuesLoading}
+          data={statusChartData.labels}
+          colors={statusChartData.colors}
+          chartDataLoading={statusChartData.isLoading}
+        />
       </Container>
       {allIssues.length === 0 && <NoIssuesNotification />}
     </>

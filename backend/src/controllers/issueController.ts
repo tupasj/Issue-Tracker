@@ -130,6 +130,38 @@ const getProjectIssues = async (req: Request, res: Response) => {
   }
 };
 
+const getUserIssues = async (req: Request, res: Response) => {
+  const { email, openStatus } = req.params;
+  const { isOpen } = req.query;
+
+  try {
+    const user: any = await User.findOne({ where: { email } });
+
+    let userIssues;
+    if (openStatus) {
+      userIssues = await user.getIssues({ where: { is_open: isOpen } });
+    } else {
+      userIssues = await user.getIssues();
+    }
+
+    // Add postedBy and labels properties to each element in userIssues array
+    for (let i = 0; i < userIssues.length; i++) {
+      const user = await userIssues[i].getUsers();
+      const userDisplayName: any = await UserDisplayName.findOne({
+        where: { userEmail: user[0].email },
+      });
+      userIssues[i].setDataValue('postedBy', userDisplayName.display_name);
+      const issueLabels = await userIssues[i].getLabels();
+      userIssues[i].setDataValue('labels', issueLabels);
+    }
+
+    userIssues.sort((a: any, b: any) => b.issue_number - a.issue_number);
+    res.status(200).json(userIssues);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const updateIssueLabels = async (req: Request, res: Response) => {
   const { issueNumber, projectCode } = req.params;
   const { email, labelNames } = req.body;
@@ -319,6 +351,7 @@ const getIssueMilestone = async (req: Request, res: Response) => {
 export {
   createIssue,
   getProjectIssues,
+  getUserIssues,
   updateIssueLabels,
   updateIssuePriority,
   updateIssueMilestone,

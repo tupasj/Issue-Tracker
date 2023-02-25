@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCurrentMilestone } from '@/utils/milestoneUtils';
 import { projectsContext } from '@/context';
+import { useMilestoneIssues } from '@/hooks';
 import { IssuesView } from '@/features/issues';
 import { Divider } from '@/elements';
 import { deleteMilestone } from '../api';
 import { MilestoneEditModal } from './MilestoneEditModal';
 import { MilestoneDeleteModal } from './MilestoneDeleteModal';
+import { MilestoneProgressBar } from './MilestoneProgressBar';
 
 const Container = styled.div`
   display: flex;
@@ -50,11 +52,12 @@ const TitleWrapper = styled.div`
 `;
 
 const ProgressbarContainer = styled.div`
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: end;
+  gap: 6px;
+  width: 250px;
   line-height: 1.25;
 `;
 
@@ -70,6 +73,12 @@ export const MilestoneView = ({ milestones, setMilestones }: Props) => {
   let navigate = useNavigate();
   const { currentProject } = projectsContext();
   const currentMilestone = getCurrentMilestone(milestones, milestoneId);
+  const id = parseInt(milestoneId as string);
+  const allMilestoneIssues = useMilestoneIssues(currentProject, id);
+  const closedMilestoneIssues = useMilestoneIssues(currentProject, id, 'closed');
+  const completionPercentage =
+    (closedMilestoneIssues.milestoneIssues.length / allMilestoneIssues.milestoneIssues.length) *
+    100;
 
   const handleEditModalClose = () => {
     setEditModalOpen(false);
@@ -93,7 +102,7 @@ export const MilestoneView = ({ milestones, setMilestones }: Props) => {
           <Description>{currentMilestone.description}</Description>
         </TitleWrapper>
         <ProgressbarContainer>
-          <div>Progress bar</div>
+          <MilestoneProgressBar percentage={completionPercentage} />
           <div>
             <Edit onClick={() => setEditModalOpen(true)}>Edit</Edit>{' '}
             <Delete onClick={() => setDeleteModalOpen(true)}>Delete</Delete>

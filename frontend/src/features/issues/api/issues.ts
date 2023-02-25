@@ -26,6 +26,23 @@ const getIssues = async (currentProject: any, openStatus?: string) => {
   }
 };
 
+const getUserIssues = async (email: string, openStatus?: string) => {
+  try {
+    let userIssuesResponse;
+    if (openStatus) {
+      const isOpenBool = openStatus === 'open' ? 'true' : 'false';
+      userIssuesResponse = await axiosInstance.get(
+        `/issues/user/email=${email}/issues/:openStatus?isOpen=${isOpenBool}`
+      );
+    } else {
+      userIssuesResponse = await axiosInstance.get(`/issues/user/email=${email}/issues`);
+    }
+    return userIssuesResponse.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const updateIssueLabels = async (
   issueNumber: number,
   currentProject: any,
@@ -104,6 +121,7 @@ const deleteIssue = async (issueNumber: number, currentProject: any) => {
 export {
   createIssue,
   getIssues,
+  getUserIssues,
   updateIssueLabels,
   updateIssueOpenStatus,
   updateIssuePriority,

@@ -5,6 +5,7 @@ import {
 } from '../controllers/commentController';
 import { addLabels, getDefaultLabels } from '../controllers/labelController';
 import {
+  getUserIssues,
   updateIssueLabels,
   updateIssuePriority,
   deleteIssue,
@@ -24,12 +25,14 @@ router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/priority')
   .patch(updateIssuePriority);
 
-router
-  .route('/issueNumber=:issueNumber/user/email=:email/comment')
-  .post(createComment);
+router.route('/user/email=:email/issues/:openStatus?').get(getUserIssues);
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/comments')
   .get(getUserComments);
+
+router
+  .route('/issueNumber=:issueNumber/user/email=:email/comment')
+  .post(createComment);
 
 router
   .route('/issueNumber=:issueNumber/labels')
