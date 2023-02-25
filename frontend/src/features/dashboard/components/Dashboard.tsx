@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { usePriorityChartData, useLabelChartData, useStatusChartData } from '@/hooks';
-import { projectsContext } from '@/context';
+import { projectsContext, userContext } from '@/context';
 import { Chart } from './Chart';
-import { getIssues } from '@/features/issues';
+import { getIssues, getUserIssues } from '@/features/issues';
 import { NoIssuesNotification } from './NoIssuesNotification';
 
 const Container = styled.div`
@@ -14,11 +14,14 @@ const Container = styled.div`
 
 export const Dashboard = () => {
   const [allIssues, setAllIssues] = useState<any[]>([]);
+  const [userIssues, setUserIssues] = useState<any[]>([]);
   const [issuesLoading, setIssuesLoading] = useState(true);
   const priorityChartData = usePriorityChartData(allIssues);
   const labelChartData = useLabelChartData(allIssues);
-  const statusChartData = useStatusChartData(allIssues);
+  const overallStatusChartData = useStatusChartData(allIssues);
+  const personalStatusChartData = useStatusChartData(userIssues);
   const { currentProject } = projectsContext();
+  const { email } = userContext();
 
   useEffect(() => {
     const fetchIssues = async () => {
@@ -26,9 +29,15 @@ export const Dashboard = () => {
       setAllIssues(issues);
       setIssuesLoading(false);
     };
+    const fetchUserIssues = async () => {
+      const userIssues = await getUserIssues(email);
+      setUserIssues(userIssues);
+      setIssuesLoading(false);
+    };
 
     if (currentProject) {
       fetchIssues();
+      fetchUserIssues();
     }
   }, [currentProject]);
 
@@ -52,16 +61,16 @@ export const Dashboard = () => {
         <Chart
           title="Overall progress"
           issuesLoading={issuesLoading}
-          data={statusChartData.labels}
-          colors={statusChartData.colors}
-          chartDataLoading={statusChartData.isLoading}
+          data={overallStatusChartData.labels}
+          colors={overallStatusChartData.colors}
+          chartDataLoading={overallStatusChartData.isLoading}
         />
         <Chart
-          title="Overall progress"
+          title="Personal progress"
           issuesLoading={issuesLoading}
-          data={statusChartData.labels}
-          colors={statusChartData.colors}
-          chartDataLoading={statusChartData.isLoading}
+          data={personalStatusChartData.labels}
+          colors={personalStatusChartData.colors}
+          chartDataLoading={personalStatusChartData.isLoading}
         />
       </Container>
       {allIssues.length === 0 && <NoIssuesNotification />}
