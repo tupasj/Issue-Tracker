@@ -13,12 +13,22 @@ const H3 = styled.h3`
   font-style: italic;
 `;
 
-export const SettingsPersonalization = () => {
+type Props = {
+  setImageSelection: React.Dispatch<React.SetStateAction<any>>;
+};
+
+export const SettingsPersonalization = ({ setImageSelection }: Props) => {
   return (
     <Container>
       <H2>Personalization</H2>
       <H3>Change profile picture</H3>
-      <input type="file" id="profile_image" name="profile_image" accept="image/png, image/jpeg" />
+      <input
+        type="file"
+        id="profile_image"
+        name="profile_image"
+        accept="image/png, image/jpeg"
+        onChange={(e: any) => setImageSelection(e.target.files[0])}
+      />
       <H3>Change display name</H3>
       <div>
         <input type="radio" id="username" name="display_name" value="username" />

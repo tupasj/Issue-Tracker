@@ -1,9 +1,13 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { SettingsProjects } from './SettingsProjects';
-import { SettingsPersonalization } from './SettingsPersonalization';
+import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
+import { userContext } from '@/context';
+import { updateUserProfileImage } from '@/features/users';
 import { SettingsAdditional } from './SettingsAdditional';
+import { SettingsPersonalization } from './SettingsPersonalization';
+import { SettingsProjects } from './SettingsProjects';
 
 const SubmitButton = styled.button`
   display: block;
@@ -32,9 +36,19 @@ const StyledForm = styled(Form)`
 interface FormValues {}
 
 export const Settings = () => {
+  const [imageSelection, setImageSelection] = useState<any | null>(null);
   const initialValues = {};
   const validationSchema = Yup.object({});
-  const handleSubmit = (values: FormValues) => {};
+  const { email } = userContext();
+
+  const uploadImage = async () => {};
+
+  const handleSubmit = async () => {
+    if (imageSelection) {
+      uploadImage();
+      updateUserProfileImage(email, imageSelection.name);
+    }
+  };
 
   let validationActive = false;
   return (
@@ -47,9 +61,11 @@ export const Settings = () => {
     >
       <StyledForm>
         <SettingsProjects />
-        <SettingsPersonalization />
+        <SettingsPersonalization setImageSelection={setImageSelection} />
         <SettingsAdditional />
-        <SubmitButton type="submit">Save changes</SubmitButton>
+        <SubmitButton type="submit" onClick={handleSubmit}>
+          Save changes
+        </SubmitButton>
       </StyledForm>
     </Formik>
   );

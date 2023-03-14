@@ -85,50 +85,38 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-const editUserInfo = async (req: Request, res: Response) => {
+const updateUserProfileImage = async (req: Request, res: Response) => {
+  const { email } = req.params;
+  const { imageName } = req.body;
+  const imageUrl = `https://res.cloudinary.com/doje91kts/image/upload/v1674677491/Web%20Development%20Projects/Issue%20Tracker/${imageName}`;
+
   try {
-    const { email } = req.params;
-    const query = req.query;
-
-    //  Get DB user
-    const dbUser: any = await User.findOne({
-      where: { email },
-    });
-
-    // Iterate through req.query
-    for (const queryProperty in query) {
-      const queryPropertyName = queryProperty;
-      let queryPropertyValue = query[queryProperty];
-
-      // For each req.query property, if name matches property name in db, then update the db value
-      for (const dbUserProperty in dbUser.dataValues) {
-        const dbUserPropertyName = dbUserProperty;
-        let dbUserPropertyValue = dbUser.dataValues[dbUserProperty];
-
-        if (dbUserPropertyName === queryPropertyName) {
-          if (Array.isArray(dbUserPropertyValue)) {
-            console.log('update array');
-            await db.query(
-              `UPDATE users SET project_codes = project_codes || '{${queryPropertyValue}}' WHERE email='${email}'`,
-              {
-                type: QueryTypes.UPDATE,
-              }
-            );
-          } else {
-            console.log('update non-array');
-            await db.query(
-              `UPDATE users SET ${dbUserPropertyName}='${queryPropertyValue}' WHERE email='${email}'`,
-              {
-                type: QueryTypes.UPDATE,
-              }
-            );
-          }
-          break;
-        }
-      }
-    }
-
+    await User.update({ profile_image: imageUrl }, { where: { email } });
     res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const updateUserDisplayName = async (req: Request, res: Response) => {
+  const { email } = req.params;
+  const { displayNameSelection } = req.body;
+
+  try {
+    const user: any = await User.findOne({ where: { email } });
+    if (displayNameSelection === 'username') {
+      await UserDisplayName.update(
+        { display_name: user.username },
+        { where: { email } }
+      );
+    } else if (displayNameSelection === 'name') {
+      const fullName = `${user.first_name} ${user.last_name}`;
+      await UserDisplayName.update(
+        { display_name: fullName },
+        { where: { email } }
+      );
+    }
+    res.status(200);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -157,8 +145,9 @@ export {
   getUserInfo,
   createUser,
   loginUser,
+  updateUserProfileImage,
+  updateUserDisplayName,
   deleteUser,
   logoutUser,
-  editUserInfo,
   refreshUserToken,
 };

@@ -3,9 +3,10 @@ import {
   getUserInfo,
   createUser,
   loginUser,
+  updateUserProfileImage,
+  updateUserDisplayName,
   deleteUser,
   logoutUser,
-  editUserInfo,
   refreshUserToken,
 } from '../controllers/userController';
 
@@ -15,8 +16,9 @@ router.route('/register').post(createUser);
 router.route('/login').post(loginUser);
 router.route('/logout').delete(logoutUser);
 router.route('/refreshToken').post(refreshUserToken);
-router.route('/email=:email/attributes?').patch(editUserInfo);
 router.route('/email=:email').get(getUserInfo);
+router.route('/email=:email/profileImage').patch(updateUserProfileImage);
+router.route('/email=:email/displayName').patch(updateUserDisplayName);
 router.route('/delete/email=:email').delete(deleteUser);
 
 export default router;
