@@ -29,7 +29,7 @@ const Image = styled.img`
 `;
 
 export const UserInfo = () => {
-  const { email } = userContext();
+  const { email, profileImage } = userContext();
   const userInfo = useUserInfo(email);
 
   return (
@@ -40,7 +40,7 @@ export const UserInfo = () => {
             {userInfo.first_name} {userInfo.last_name}
           </p>
           <ImageContainer>
-            <Image src={userInfo.profile_image} />
+            <Image src={profileImage} />
           </ImageContainer>
           <UserInfoDropDown />
         </>

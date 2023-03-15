@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import { getUserProfileImage } from '@/features/users';
 import { UserContext, UserContextInterface, ProjectsContext } from '@/context';
 import { Header } from '@/pages/AppPage/Header';
 import { Sidebar } from '@/pages/AppPage/Sidebar';
@@ -29,9 +31,21 @@ export const AppPage = ({
   projects,
   setProjects,
 }: Props) => {
+  const [imageURL, setImageURL] = useState('');
   const definedUserContext: UserContextInterface = {
     email: userEmail,
+    profileImage: imageURL,
+    setProfileImage: setImageURL,
   };
+
+  useEffect(() => {
+    const fetchUserProfileImage = async () => {
+      const userProfileImage = await getUserProfileImage(userEmail as string);
+      setImageURL(userProfileImage);
+    };
+
+    fetchUserProfileImage();
+  }, []);
 
   return (
     <Container>

@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { axiosInstance, axiosErrorHandler } from '@/lib/axios';
 import { userContext } from '@/context';
-import { updateUserProfileImage } from '@/features/users';
+import { getUserProfileImage, updateUserProfileImage } from '@/features/users';
 import { SettingsAdditional } from './SettingsAdditional';
 import { SettingsPersonalization } from './SettingsPersonalization';
 import { SettingsProjects } from './SettingsProjects';
@@ -39,14 +38,13 @@ export const Settings = () => {
   const [imageSelection, setImageSelection] = useState<any | null>(null);
   const initialValues = {};
   const validationSchema = Yup.object({});
-  const { email } = userContext();
-
-  const uploadImage = async () => {};
+  const { email, setProfileImage } = userContext();
 
   const handleSubmit = async () => {
     if (imageSelection) {
-      uploadImage();
-      updateUserProfileImage(email, imageSelection.name);
+      await updateUserProfileImage(email, imageSelection.name);
+      const userProfileImage = await getUserProfileImage(email);
+      setProfileImage(userProfileImage);
     }
   };
 

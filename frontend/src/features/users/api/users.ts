@@ -18,15 +18,23 @@ const getUsers = async (currentProject: any) => {
   }
 };
 
-const updateUserProfileImage = async (email: string, imageName: string) => {
+const getUserProfileImage = async (email: string) => {
   try {
-    const userProfileImage = await axiosInstance.patch(`/user/email=${email}/profileImage`, {
-      imageName,
-    });
+    const userProfileImage: any = await axiosInstance.get(`/user/email=${email}/profileImage`);
     return userProfileImage.data;
   } catch (error: any) {
     axiosErrorHandler(error);
   }
 };
 
-export { getUserInfo, getUsers, updateUserProfileImage };
+const updateUserProfileImage = async (email: string, imageName: string) => {
+  try {
+    await axiosInstance.patch(`/user/email=${email}/profileImage`, {
+      imageName,
+    });
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+export { getUserInfo, getUsers, getUserProfileImage, updateUserProfileImage };

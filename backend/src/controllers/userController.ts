@@ -85,10 +85,21 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
+const getUserProfileImage = async (req: Request, res: Response) => {
+  const { email } = req.params;
+
+  try {
+    const user: any = await User.findOne({ where: { email } });
+    res.status(200).json(user.profile_image);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const updateUserProfileImage = async (req: Request, res: Response) => {
   const { email } = req.params;
   const { imageName } = req.body;
-  const imageUrl = `https://res.cloudinary.com/doje91kts/image/upload/v1674677491/Web%20Development%20Projects/Issue%20Tracker/${imageName}`;
+  const imageUrl = `https://cdn.jsdelivr.net/gh/tupasj/Issue-Tracker/frontend/src/assets/${imageName}`;
 
   try {
     await User.update({ profile_image: imageUrl }, { where: { email } });
@@ -145,6 +156,7 @@ export {
   getUserInfo,
   createUser,
   loginUser,
+  getUserProfileImage,
   updateUserProfileImage,
   updateUserDisplayName,
   deleteUser,
