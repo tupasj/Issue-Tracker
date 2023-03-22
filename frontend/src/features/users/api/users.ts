@@ -29,9 +29,7 @@ const getUserProfileImage = async (email: string) => {
 
 const updateUserProfileImage = async (email: string, imageName: string) => {
   try {
-    await axiosInstance.patch(`/user/email=${email}/profileImage`, {
-      imageName,
-    });
+    await axiosInstance.patch(`/user/email=${email}/profileImage`, imageName);
   } catch (error: any) {
     axiosErrorHandler(error);
   }

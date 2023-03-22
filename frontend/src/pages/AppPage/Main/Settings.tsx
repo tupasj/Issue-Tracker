@@ -7,6 +7,9 @@ import { getUserProfileImage, updateUserProfileImage } from '@/features/users';
 import { SettingsAdditional } from './SettingsAdditional';
 import { SettingsPersonalization } from './SettingsPersonalization';
 import { SettingsProjects } from './SettingsProjects';
+import { firebaseStorage } from '@/lib/firebase';
+import { ref, uploadBytes } from 'firebase/storage';
+import { v4 } from 'uuid';
 
 const SubmitButton = styled.button`
   display: block;
@@ -40,12 +43,12 @@ export const Settings = () => {
   const validationSchema = Yup.object({});
   const { email, setProfileImage } = userContext();
 
-  const handleSubmit = async () => {
-    if (imageSelection) {
-      await updateUserProfileImage(email, imageSelection.name);
-      const userProfileImage = await getUserProfileImage(email);
-      setProfileImage(userProfileImage);
-    }
+  const handleSubmit = async (e: any) => {
+    console.log('prevent default');
+    e.preventDefault();
+
+    const imageRef = ref(firebaseStorage, `images/${imageSelection.name + v4()}`);
+    uploadBytes(imageRef, imageSelection).then(() => alert('Image Uploaded'));
   };
 
   let validationActive = false;
@@ -55,15 +58,13 @@ export const Settings = () => {
       validationSchema={validationSchema}
       validateOnBlur={validationActive}
       validateOnChange={validationActive}
-      onSubmit={handleSubmit}
+      onSubmit={() => {}}
     >
-      <StyledForm>
+      <StyledForm onSubmit={(e: any) => handleSubmit(e)} encType="multipart/form-data">
         <SettingsProjects />
         <SettingsPersonalization setImageSelection={setImageSelection} />
         <SettingsAdditional />
-        <SubmitButton type="submit" onClick={handleSubmit}>
-          Save changes
-        </SubmitButton>
+        <SubmitButton type="submit">Save changes</SubmitButton>
       </StyledForm>
     </Formik>
   );

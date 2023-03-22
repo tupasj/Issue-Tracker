@@ -24,9 +24,7 @@ export const SettingsPersonalization = ({ setImageSelection }: Props) => {
       <H3>Change profile picture</H3>
       <input
         type="file"
-        id="profile_image"
         name="profile_image"
-        accept="image/png, image/jpeg"
         onChange={(e: any) => setImageSelection(e.target.files[0])}
       />
       <H3>Change display name</H3>
