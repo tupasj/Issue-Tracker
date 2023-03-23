@@ -1,15 +1,15 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { v4 } from 'uuid';
+import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
+import { firebaseStorage } from '@/lib/firebase';
 import { userContext } from '@/context';
 import { getUserProfileImage, updateUserProfileImage } from '@/features/users';
 import { SettingsAdditional } from './SettingsAdditional';
 import { SettingsPersonalization } from './SettingsPersonalization';
 import { SettingsProjects } from './SettingsProjects';
-import { firebaseStorage } from '@/lib/firebase';
-import { ref, uploadBytes } from 'firebase/storage';
-import { v4 } from 'uuid';
 
 const SubmitButton = styled.button`
   display: block;
@@ -39,9 +39,11 @@ interface FormValues {}
 
 export const Settings = () => {
   const [imageSelection, setImageSelection] = useState<any | null>(null);
+  const [imageSelections, setImageSelections] = useState<any | null>([]);
   const initialValues = {};
   const validationSchema = Yup.object({});
   const { email, setProfileImage } = userContext();
+  const firebaseStorageImages = ref(firebaseStorage, 'images/');
 
   const handleSubmit = async (e: any) => {
     console.log('prevent default');
@@ -50,6 +52,20 @@ export const Settings = () => {
     const imageRef = ref(firebaseStorage, `images/${imageSelection.name + v4()}`);
     uploadBytes(imageRef, imageSelection).then(() => alert('Image Uploaded'));
   };
+
+  useEffect(() => {
+    const fetchFirebaseStorageImages = () => {
+      listAll(firebaseStorageImages).then((response) => {
+        response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+            setImageSelections((prev: any) => [...prev, url]);
+          });
+        });
+      });
+    };
+
+    fetchFirebaseStorageImages();
+  }, []);
 
   let validationActive = false;
   return (
@@ -65,6 +81,7 @@ export const Settings = () => {
         <SettingsPersonalization setImageSelection={setImageSelection} />
         <SettingsAdditional />
         <SubmitButton type="submit">Save changes</SubmitButton>
+        <img src={imageSelections[0]}></img>
       </StyledForm>
     </Formik>
   );
