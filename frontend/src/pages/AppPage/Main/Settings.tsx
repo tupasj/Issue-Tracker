@@ -39,32 +39,45 @@ interface FormValues {}
 
 export const Settings = () => {
   const [imageSelection, setImageSelection] = useState<any | null>(null);
-  const [imageSelections, setImageSelections] = useState<any | null>([]);
+  const [testImage, setTestImage] = useState<any | null>(null);
   const initialValues = {};
   const validationSchema = Yup.object({});
   const { email, setProfileImage } = userContext();
-  const firebaseStorageImages = ref(firebaseStorage, 'images/');
 
   const handleSubmit = async (e: any) => {
     console.log('prevent default');
     e.preventDefault();
 
-    const imageRef = ref(firebaseStorage, `images/${imageSelection.name + v4()}`);
-    uploadBytes(imageRef, imageSelection).then(() => alert('Image Uploaded'));
+    const imageRef: any = ref(firebaseStorage, `images/${imageSelection.name + v4()}`);
+    const imageName = imageRef._location.path_.slice(7);
+    const imageBaseURL =
+      'https://firebasestorage.googleapis.com/v0/b/issue-tracker-ec9be.appspot.com/o/images%2F';
+    const imageFullPath = imageBaseURL + imageName + '?alt=media';
+    // console.log('imageRef: ', imageRef);
+    // console.log('imageName: ', imageName);
+    // console.log('imageFullPath: ', imageFullPath);
+    await updateUserProfileImage(email, imageBaseURL);
+    setTestImage(imageFullPath);
+
+    try {
+      uploadBytes(imageRef, imageSelection);
+      console.log('image uploaded');
+    } catch (error: any) {
+      console.log('uploadBytes error: ', error);
+    }
   };
 
   useEffect(() => {
-    const fetchFirebaseStorageImages = () => {
-      listAll(firebaseStorageImages).then((response) => {
-        response.items.forEach((item) => {
-          getDownloadURL(item).then((url) => {
-            setImageSelections((prev: any) => [...prev, url]);
-          });
-        });
-      });
+    const fetchUserProfileImage = async () => {
+      try {
+        const userProfileImage = await getUserProfileImage(email);
+        setTestImage(userProfileImage);
+      } catch (error: any) {
+        console.log('error: ', error);
+      }
     };
 
-    fetchFirebaseStorageImages();
+    fetchUserProfileImage();
   }, []);
 
   let validationActive = false;
@@ -81,7 +94,11 @@ export const Settings = () => {
         <SettingsPersonalization setImageSelection={setImageSelection} />
         <SettingsAdditional />
         <SubmitButton type="submit">Save changes</SubmitButton>
-        <img src={imageSelections[0]}></img>
+        {testImage && <img src={testImage}></img>}
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/issue-tracker-ec9be.appspot.com/o/images%2Fanonymous-user-avatar.png55d5886e-9de7-4311-84a7-943b9060497c?alt=media"
+          alt="foobar"
+        ></img>
       </StyledForm>
     </Formik>
   );

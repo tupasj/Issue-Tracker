@@ -98,11 +98,10 @@ const getUserProfileImage = async (req: Request, res: Response) => {
 
 const updateUserProfileImage = async (req: Request, res: Response) => {
   const { email } = req.params;
-  const { imageName } = req.body;
-  const imageUrl = `https://cdn.jsdelivr.net/gh/tupasj/Issue-Tracker/frontend/src/assets/${imageName}`;
+  const { imageURL } = req.body;
 
   try {
-    await User.update({ profile_image: imageUrl }, { where: { email } });
+    await User.update({ profile_image: imageURL }, { where: { email } });
     res.status(200).end();
   } catch (error: any) {
     res.status(400).json({ message: error.message });
