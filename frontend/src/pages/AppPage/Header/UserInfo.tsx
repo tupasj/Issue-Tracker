@@ -39,9 +39,7 @@ export const UserInfo = () => {
           <p>
             {userInfo.first_name} {userInfo.last_name}
           </p>
-          <ImageContainer>
-            <Image src={profileImage} />
-          </ImageContainer>
+          <ImageContainer>{profileImage && <Image src={profileImage} />}</ImageContainer>
           <UserInfoDropDown />
         </>
       )}
