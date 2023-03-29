@@ -1,8 +1,10 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, forwardRef, ReactNode } from 'react';
 import { userContext, projectsContext } from '@/context';
 import { Input } from '@/components/Form';
 import { joinProject, deleteProject } from '@/features/projects';
+import { Formik, Field, Form, useFormikContext } from 'formik';
+import { SubformSubmitButton } from '@/components/Form';
 
 const Container = styled.div`
   display: flex;
@@ -29,64 +31,88 @@ const StyledInput = styled(Input)`
   padding-right: 0px !important;
 `;
 
-export const SettingsProjects = () => {
-  const [validCodeText, setValidCodeText] = useState('');
-  const [validNameText, setValidNameText] = useState('');
-  const { email } = userContext();
-  const { projects, setProjects, currentProject, setCurrentProject } = projectsContext();
+const Button = styled.button`
+  visibility: hidden;
+`;
 
-  const submitProjectCode = async (code: string) => {
-    if (code == undefined) {
-      return;
-    }
+type Props = {
+  submitButtonRef: any;
+};
 
-    const projectJoined = await joinProject(code, email);
+interface Values {}
 
-    if (projectJoined) {
-      setValidCodeText(`Successfully joined project '${projectJoined.name}'.`);
-      setCurrentProject(projectJoined);
-      setProjects([...projects, projectJoined]);
-    } else if (code !== '') {
-      return 'Invalid code';
-    }
-  };
+export const SettingsProjects = ({ submitButtonRef }: Props) => {
+  const initialValues = {};
 
-  const submitProjectName = async (projectName: string) => {
-    const projectToLeave = projects.filter((project: any) => project.name == projectName);
-
-    if (projectName !== '' && projectToLeave[0]) {
-      const updatedProjects = await deleteProject(projectToLeave, email);
-      setProjects(updatedProjects);
-      setValidNameText(`Left project '${projectToLeave[0].name}'.`);
-    } else if (projectName !== '') {
-      return `Could not find a project named '${projectName}' to delete.`;
-    }
+  const handleSubmit = () => {
+    console.log('SettingsProjects submit');
   };
 
   return (
-    <Container>
-      <H2>Projects</H2>
-      <ProjectCode>Current project code: {currentProject && currentProject.code}</ProjectCode>
-      <H3>Join a project</H3>
-      <StyledInput
-        stacked={false}
-        type="text"
-        id="code"
-        name="code"
-        placeholder="Enter project code..."
-        validate={submitProjectCode}
-        successText={validCodeText}
-      />
-      <H3>Leave a project</H3>
-      <StyledInput
-        stacked={false}
-        type="text"
-        id="project_name"
-        name="project_name"
-        placeholder="Enter project name..."
-        validate={submitProjectName}
-        successText={validNameText}
-      />
-    </Container>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Form>
+        <SubformSubmitButton ref={submitButtonRef} />
+      </Form>
+    </Formik>
   );
+
+  // const [validCodeText, setValidCodeText] = useState('');
+  // const [validNameText, setValidNameText] = useState('');
+  // const { email } = userContext();
+  // const { projects, setProjects, currentProject, setCurrentProject } = projectsContext();
+
+  // const submitProjectCode = async (code: string) => {
+  //   if (code == undefined) {
+  //     return;
+  //   }
+
+  //   const projectJoined = await joinProject(code, email);
+
+  //   if (projectJoined) {
+  //     setValidCodeText(`Successfully joined project '${projectJoined.name}'.`);
+  //     setCurrentProject(projectJoined);
+  //     setProjects([...projects, projectJoined]);
+  //   } else if (code !== '') {
+  //     return 'Invalid code';
+  //   }
+  // };
+
+  // const submitProjectName = async (projectName: string) => {
+  //   const projectToLeave = projects.filter((project: any) => project.name == projectName);
+
+  //   if (projectName !== '' && projectToLeave[0]) {
+  //     const updatedProjects = await deleteProject(projectToLeave, email);
+  //     setProjects(updatedProjects);
+  //     setValidNameText(`Left project '${projectToLeave[0].name}'.`);
+  //   } else if (projectName !== '') {
+  //     return `Could not find a project named '${projectName}' to delete.`;
+  //   }
+  // };
+
+  // return (
+  //   <Container>
+  //     <H2>Projects</H2>
+  //     <ProjectCode>Current project code: {currentProject && currentProject.code}</ProjectCode>
+  //     <H3>Join a project</H3>
+  //     <StyledInput
+  //       stacked={false}
+  //       type="text"
+  //       id="code"
+  //       name="code"
+  //       placeholder="Enter project code..."
+  //       validate={submitProjectCode}
+  //       successText={validCodeText}
+  //     />
+  //     <H3>Leave a project</H3>
+  //     <StyledInput
+  //       stacked={false}
+  //       type="text"
+  //       id="project_name"
+  //       name="project_name"
+  //       placeholder="Enter project name..."
+  //       validate={submitProjectName}
+  //       successText={validNameText}
+  //     />
+  //   </Container>
+  // );
 };
