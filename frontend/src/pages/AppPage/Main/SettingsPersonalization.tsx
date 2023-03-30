@@ -23,7 +23,7 @@ const StyledInput = styled(Input)`
 
 type Props = {
   submitButtonRef: any;
-  setImageSelection?: React.Dispatch<React.SetStateAction<any>>;
+  setImageSelection: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export const SettingsPersonalization = ({ submitButtonRef, setImageSelection }: Props) => {
@@ -36,44 +36,24 @@ export const SettingsPersonalization = ({ submitButtonRef, setImageSelection }: 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       <Form>
+        <Container>
+          <H2>Personalization</H2>
+          <H3>Change profile picture</H3>
+          <input
+            type="file"
+            name="profile_image"
+            onChange={(e: any) => setImageSelection(e.target.files[0])}
+          />
+          <H3>Change display name</H3>
+          <div>
+            <Field type="radio" id="username" name="display_name" value="username" />
+            <label htmlFor="username">Username</label>
+            <Field type="radio" id="name" name="display_name" value="name" />
+            <label htmlFor="name">Name</label>
+          </div>
+        </Container>
         <SubformSubmitButton ref={submitButtonRef} />
       </Form>
     </Formik>
-    // <Container>
-    //   <H2>Personalization</H2>
-    //   <H3>Change profile picture</H3>
-    //   <input
-    //     type="file"
-    //     name="profile_image"
-    //     onChange={(e: any) => setImageSelection(e.target.files[0])}
-    //   />
-    //   <H3>Change display name</H3>
-    //   <div>
-    //     <input type="radio" id="username" name="display_name" value="username" />
-    //     <label htmlFor="username">Username</label>
-    //     <input type="radio" id="name" name="display_name" value="name" />
-    //     <label htmlFor="name">Name</label>
-    //   </div>
-    //   <div>
-    //     <Field
-    //       type="radio"
-    //       id="username"
-    //       name="display_name"
-    //       value="username"
-    //       validate={logValues}
-    //     />
-    //     <label htmlFor="username">Username</label>
-    //     <Field type="radio" id="name" name="display_name" value="name" validate={logValues} />
-    //     <label htmlFor="name">Name</label>
-    //     <StyledInput
-    //       stacked={false}
-    //       type="text"
-    //       id="test"
-    //       name="test"
-    //       placeholder="test input"
-    //       validate={logValues}
-    //     />
-    //   </div>
-    // </Container>
   );
 };

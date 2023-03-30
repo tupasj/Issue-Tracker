@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const SubformSubmitButton = forwardRef<Ref, Props>((props, ref) => (
-  <Button ref={ref} type="submit" onClick={() => console.log('SubformSubmitButton clicked')}>
+  <Button ref={ref} type="submit">
     {props.children}
   </Button>
 ));

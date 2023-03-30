@@ -34,19 +34,26 @@ const SubmitButton = styled.button`
 `;
 
 export const Settings = () => {
+  const [imageSelection, setImageSelection] = useState<any | null>(null);
   const projectsRef: any = useRef(null);
   const personalizationRef: any = useRef(null);
+  const additionalRef: any = useRef(null);
 
   const handleClick = () => {
     console.log('Settings handleClick');
     projectsRef.current.click();
     personalizationRef.current.click();
+    additionalRef.current.click();
   };
 
   return (
     <div>
       <SettingsProjects submitButtonRef={projectsRef} />
-      <SettingsPersonalization submitButtonRef={personalizationRef} />
+      <SettingsPersonalization
+        submitButtonRef={personalizationRef}
+        setImageSelection={setImageSelection}
+      />
+      <SettingsAdditional submitButtonRef={additionalRef} />
       <button type="submit" onClick={handleClick}>
         Submit all
       </button>
