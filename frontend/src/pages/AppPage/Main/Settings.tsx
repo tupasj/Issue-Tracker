@@ -1,20 +1,10 @@
 import styled from 'styled-components';
-import { useState, useEffect, useRef, ReactNode, forwardRef } from 'react';
-import { v4 } from 'uuid';
-import { ref, uploadBytes } from 'firebase/storage';
-import { firebaseStorage } from '@/lib/firebase';
-import { userContext } from '@/context';
-import { getUserProfileImage, updateUserProfileImage } from '@/features/users';
+import { useRef } from 'react';
 import { SettingsAdditional } from './SettingsAdditional';
 import { SettingsPersonalization } from './SettingsPersonalization';
 import { SettingsProjects } from './SettingsProjects';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: start;
-`;
+const Container = styled.div``;
 
 const SubmitButton = styled.button`
   display: block;
@@ -34,7 +24,6 @@ const SubmitButton = styled.button`
 `;
 
 export const Settings = () => {
-  const [imageSelection, setImageSelection] = useState<any | null>(null);
   const projectsRef: any = useRef(null);
   const personalizationRef: any = useRef(null);
   const additionalRef: any = useRef(null);
@@ -47,16 +36,13 @@ export const Settings = () => {
   };
 
   return (
-    <div>
+    <Container>
       <SettingsProjects submitButtonRef={projectsRef} />
-      <SettingsPersonalization
-        submitButtonRef={personalizationRef}
-        setImageSelection={setImageSelection}
-      />
+      <SettingsPersonalization submitButtonRef={personalizationRef} />
       <SettingsAdditional submitButtonRef={additionalRef} />
-      <button type="submit" onClick={handleClick}>
-        Submit all
-      </button>
-    </div>
+      <SubmitButton type="submit" onClick={handleClick}>
+        Save changes
+      </SubmitButton>
+    </Container>
   );
 };

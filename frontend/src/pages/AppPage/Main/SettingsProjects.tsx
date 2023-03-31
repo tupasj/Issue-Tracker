@@ -31,10 +31,6 @@ const StyledInput = styled(Input)`
   padding-right: 0px !important;
 `;
 
-const Button = styled.button`
-  visibility: hidden;
-`;
-
 type Props = {
   submitButtonRef: any;
 };
@@ -49,47 +45,42 @@ export const SettingsProjects = ({ submitButtonRef }: Props) => {
   const initialValues = {};
 
   const submitProjectCode = async (code: string) => {
-    if (validationActive) {
-      if (code == undefined) {
-        return;
-      }
+    if (code == undefined) {
+      return;
+    }
 
-      const projectJoined = await joinProject(code, email);
+    const projectJoined = await joinProject(code, email);
 
-      if (projectJoined) {
-        setValidCodeText(`Successfully joined project '${projectJoined.name}'.`);
-        setCurrentProject(projectJoined);
-        setProjects([...projects, projectJoined]);
-      } else if (code !== '') {
-        return 'Invalid code';
-      }
+    if (projectJoined) {
+      setValidCodeText(`Successfully joined project '${projectJoined.name}'.`);
+      setCurrentProject(projectJoined);
+      setProjects([...projects, projectJoined]);
+    } else if (code !== '') {
+      return 'Invalid code';
     }
   };
 
   const submitProjectName = async (projectName: string) => {
-    if (validationActive) {
-      const projectToLeave = projects.filter((project: any) => project.name == projectName);
+    const projectToLeave = projects.filter((project: any) => project.name == projectName);
 
-      if (projectName !== '' && projectToLeave[0]) {
-        const updatedProjects = await deleteProject(projectToLeave, email);
-        setProjects(updatedProjects);
-        setValidNameText(`Left project '${projectToLeave[0].name}'.`);
-      } else if (projectName !== '') {
-        return `Could not find a project named '${projectName}' to delete.`;
-      }
+    if (projectName !== '' && projectToLeave[0]) {
+      const updatedProjects = await deleteProject(projectToLeave, email);
+      setProjects(updatedProjects);
+      setValidNameText(`Left project '${projectToLeave[0].name}'.`);
+    } else if (projectName !== '' || !projectToLeave) {
+      return `Could not find a project named '${projectName}' to leave.`;
     }
   };
 
   const handleSubmit = () => {
-    validationActive = true;
+    console.log('SettingsProjects submit');
   };
 
-  let validationActive = false;
   return (
     <Formik
       initialValues={initialValues}
-      validateOnBlur={validationActive}
-      validateOnChange={validationActive}
+      validateOnBlur={false}
+      validateOnChange={false}
       onSubmit={handleSubmit}
     >
       <Form>

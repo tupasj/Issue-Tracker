@@ -1,5 +1,11 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
+import { v4 } from 'uuid';
+import { ref, uploadBytes } from 'firebase/storage';
+import { firebaseStorage } from '@/lib/firebase';
+import { userContext } from '@/context';
+import { getUserProfileImage, updateUserProfileImage } from '@/features/users';
 import { Input } from '@/components/Form';
 import { SubformSubmitButton } from '@/components/Form';
 
@@ -23,15 +29,42 @@ const StyledInput = styled(Input)`
 
 type Props = {
   submitButtonRef: any;
-  setImageSelection: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const SettingsPersonalization = ({ submitButtonRef, setImageSelection }: Props) => {
+export const SettingsPersonalization = ({ submitButtonRef }: Props) => {
+  const [imageSelection, setImageSelection] = useState<any | null>(null);
+  const { email, setProfileImage } = userContext();
   const initialValues = {};
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log('SettingsPersonalization submit');
+    try {
+      const imageRef: any = ref(firebaseStorage, `images/${imageSelection.name + v4()}`);
+      const imageName = imageRef._location.path_.slice(7);
+      const imageBaseURL =
+        'https://firebasestorage.googleapis.com/v0/b/issue-tracker-ec9be.appspot.com/o/images%2F';
+      const imageFullPath = imageBaseURL + imageName + '?alt=media';
+
+      await updateUserProfileImage(email, imageFullPath);
+      await uploadBytes(imageRef, imageSelection);
+      setProfileImage(imageFullPath);
+    } catch (error: any) {
+      console.log('uploadBytes error: ', error);
+    }
   };
+
+  useEffect(() => {
+    const fetchUserProfileImage = async () => {
+      try {
+        const userProfileImage = await getUserProfileImage(email);
+        setProfileImage(userProfileImage);
+      } catch (error: any) {
+        console.log('error: ', error);
+      }
+    };
+
+    fetchUserProfileImage();
+  }, []);
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
