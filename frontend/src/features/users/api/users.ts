@@ -35,4 +35,28 @@ const updateUserProfileImage = async (email: string, imageURL: string) => {
   }
 };
 
-export { getUserInfo, getUsers, getUserProfileImage, updateUserProfileImage };
+const updateUserDisplayName = async (email: string, payload: any) => {
+  try {
+    await axiosInstance.patch(`/user/email=${email}/displayName`, payload);
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+const updateUserUsername = async (email: string, payload: any) => {
+  try {
+    console.log('updateUserUsername email: ', email);
+    await axiosInstance.patch(`/user/email=${email}/username`, payload);
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+export {
+  getUserInfo,
+  getUsers,
+  getUserProfileImage,
+  updateUserProfileImage,
+  updateUserDisplayName,
+  updateUserUsername,
+};

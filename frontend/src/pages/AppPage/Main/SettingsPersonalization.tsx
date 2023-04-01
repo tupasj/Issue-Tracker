@@ -5,7 +5,11 @@ import { v4 } from 'uuid';
 import { ref, uploadBytes } from 'firebase/storage';
 import { firebaseStorage } from '@/lib/firebase';
 import { userContext } from '@/context';
-import { getUserProfileImage, updateUserProfileImage } from '@/features/users';
+import {
+  getUserProfileImage,
+  updateUserProfileImage,
+  updateUserDisplayName,
+} from '@/features/users';
 import { Input } from '@/components/Form';
 import { SubformSubmitButton } from '@/components/Form';
 
@@ -34,10 +38,11 @@ type Props = {
 export const SettingsPersonalization = ({ submitButtonRef }: Props) => {
   const [imageSelection, setImageSelection] = useState<any | null>(null);
   const { email, setProfileImage } = userContext();
-  const initialValues = {};
+  const initialValues = {
+    displayNameSelection: '',
+  };
 
-  const handleSubmit = async () => {
-    console.log('SettingsPersonalization submit');
+  const changeProfileImage = async () => {
     try {
       const imageRef: any = ref(firebaseStorage, `images/${imageSelection.name + v4()}`);
       const imageName = imageRef._location.path_.slice(7);
@@ -51,6 +56,13 @@ export const SettingsPersonalization = ({ submitButtonRef }: Props) => {
     } catch (error: any) {
       console.log('uploadBytes error: ', error);
     }
+  };
+
+  const handleSubmit = async (values: any) => {
+    console.log('SettingsPersonalization submit');
+    console.log('values: ', values);
+    await changeProfileImage();
+    await updateUserDisplayName(email, values);
   };
 
   useEffect(() => {
@@ -67,7 +79,7 @@ export const SettingsPersonalization = ({ submitButtonRef }: Props) => {
   }, []);
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)}>
       <Form>
         <Container>
           <H2>Personalization</H2>
@@ -79,9 +91,9 @@ export const SettingsPersonalization = ({ submitButtonRef }: Props) => {
           />
           <H3>Change display name</H3>
           <div>
-            <Field type="radio" id="username" name="display_name" value="username" />
+            <Field type="radio" id="username" name="displayNameSelection" value="username" />
             <label htmlFor="username">Username</label>
-            <Field type="radio" id="name" name="display_name" value="name" />
+            <Field type="radio" id="name" name="displayNameSelection" value="name" />
             <label htmlFor="name">Name</label>
           </div>
         </Container>

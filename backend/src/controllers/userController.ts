@@ -112,20 +112,35 @@ const updateUserDisplayName = async (req: Request, res: Response) => {
   const { email } = req.params;
   const { displayNameSelection } = req.body;
 
+  console.log('updateUserDisplayName');
   try {
     const user: any = await User.findOne({ where: { email } });
     if (displayNameSelection === 'username') {
+      console.log('update username');
       await UserDisplayName.update(
         { display_name: user.username },
-        { where: { email } }
+        { where: { userEmail: email } }
       );
     } else if (displayNameSelection === 'name') {
+      console.log('update name');
       const fullName = `${user.first_name} ${user.last_name}`;
       await UserDisplayName.update(
         { display_name: fullName },
-        { where: { email } }
+        { where: { userEmail: email } }
       );
     }
+    res.status(200);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const updateUserUsername = async (req: Request, res: Response) => {
+  const { email } = req.params;
+  const { username } = req.body;
+
+  try {
+    await User.update({ username }, { where: { email } });
     res.status(200);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -158,6 +173,7 @@ export {
   getUserProfileImage,
   updateUserProfileImage,
   updateUserDisplayName,
+  updateUserUsername,
   deleteUser,
   logoutUser,
   refreshUserToken,

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Input } from '@/components/Form';
 import { Formik, Form } from 'formik';
+import { userContext } from '@/context';
+import { updateUserUsername } from '@/features/users';
 import { SubformSubmitButton } from '@/components/Form';
 
 const Container = styled.div`
@@ -25,14 +27,22 @@ type Props = {
 interface Values {}
 
 export const SettingsAdditional = ({ submitButtonRef }: Props) => {
-  const initialValues = {};
+  const { email } = userContext();
+  const initialValues = {
+    username: '',
+    phoneNumber: '',
+  };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (values: any) => {
     console.log('SettingsAdditional submit');
+    console.log('values: ', values);
+    if (values.username) {
+      await updateUserUsername(email, values);
+    }
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)}>
       <Form>
         <Container>
           <H2>Add additional info</H2>
@@ -42,8 +52,8 @@ export const SettingsAdditional = ({ submitButtonRef }: Props) => {
           <Input
             stacked={false}
             type="tel"
-            id="phone_number"
-            name="phone_number"
+            id="phoneNumber"
+            name="phoneNumber"
             placeholder="123-45-678"
             pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
           />
