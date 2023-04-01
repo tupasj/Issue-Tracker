@@ -45,8 +45,15 @@ const updateUserDisplayName = async (email: string, payload: any) => {
 
 const updateUserUsername = async (email: string, payload: any) => {
   try {
-    console.log('updateUserUsername email: ', email);
     await axiosInstance.patch(`/user/email=${email}/username`, payload);
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+const updateUserPhoneNumber = async (email: string, payload: any) => {
+  try {
+    await axiosInstance.patch(`/user/email=${email}/phoneNumber`, payload);
   } catch (error: any) {
     axiosErrorHandler(error);
   }
@@ -58,5 +65,6 @@ export {
   getUserProfileImage,
   updateUserProfileImage,
   updateUserDisplayName,
+  updateUserPhoneNumber,
   updateUserUsername,
 };

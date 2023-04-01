@@ -7,6 +7,7 @@ import {
   updateUserProfileImage,
   updateUserDisplayName,
   updateUserUsername,
+  updateUserPhoneNumber,
   deleteUser,
   logoutUser,
   refreshUserToken,
@@ -25,6 +26,7 @@ router
   .patch(updateUserProfileImage);
 router.route('/email=:email/displayName').patch(updateUserDisplayName);
 router.route('/email=:email/username').patch(updateUserUsername);
+router.route('/email=:email/phoneNumber').patch(updateUserPhoneNumber);
 router.route('/delete/email=:email').delete(deleteUser);
 
 export default router;

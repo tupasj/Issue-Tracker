@@ -147,6 +147,18 @@ const updateUserUsername = async (req: Request, res: Response) => {
   }
 };
 
+const updateUserPhoneNumber = async (req: Request, res: Response) => {
+  const { email } = req.params;
+  const { phoneNumber } = req.body;
+
+  try {
+    await User.update({ phone_number: phoneNumber }, { where: { email } });
+    res.status(200);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const deleteUser = async (req: Request, res: Response) => {
   const { email } = req.params;
 
@@ -174,6 +186,7 @@ export {
   updateUserProfileImage,
   updateUserDisplayName,
   updateUserUsername,
+  updateUserPhoneNumber,
   deleteUser,
   logoutUser,
   refreshUserToken,

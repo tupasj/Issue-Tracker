@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Input } from '@/components/Form';
 import { Formik, Form } from 'formik';
 import { userContext } from '@/context';
-import { updateUserUsername } from '@/features/users';
+import { updateUserUsername, updateUserPhoneNumber } from '@/features/users';
 import { SubformSubmitButton } from '@/components/Form';
 
 const Container = styled.div`
@@ -39,6 +39,9 @@ export const SettingsAdditional = ({ submitButtonRef }: Props) => {
     if (values.username) {
       await updateUserUsername(email, values);
     }
+    if (values.phoneNumber) {
+      await updateUserPhoneNumber(email, values);
+    }
   };
 
   return (
@@ -54,8 +57,8 @@ export const SettingsAdditional = ({ submitButtonRef }: Props) => {
             type="tel"
             id="phoneNumber"
             name="phoneNumber"
-            placeholder="123-45-678"
-            pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+            placeholder="123-456-7890"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
           />
         </Container>
         <SubformSubmitButton ref={submitButtonRef} />

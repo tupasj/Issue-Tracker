@@ -27,7 +27,10 @@ const User = db.define('user', {
     },
   },
   phone_number: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
+    validate: {
+      is: /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
+    },
   },
   password: {
     type: DataTypes.STRING,
