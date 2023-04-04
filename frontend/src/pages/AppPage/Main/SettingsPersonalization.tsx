@@ -33,9 +33,10 @@ const StyledInput = styled(Input)`
 
 type Props = {
   submitButtonRef: any;
+  setChangesApplied: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const SettingsPersonalization = ({ submitButtonRef }: Props) => {
+export const SettingsPersonalization = ({ submitButtonRef, setChangesApplied }: Props) => {
   const [imageSelection, setImageSelection] = useState<any | null>(null);
   const { email, setProfileImage } = userContext();
   const initialValues = {
@@ -44,25 +45,41 @@ export const SettingsPersonalization = ({ submitButtonRef }: Props) => {
 
   const changeProfileImage = async () => {
     try {
-      const imageRef: any = ref(firebaseStorage, `images/${imageSelection.name + v4()}`);
-      const imageName = imageRef._location.path_.slice(7);
-      const imageBaseURL =
-        'https://firebasestorage.googleapis.com/v0/b/issue-tracker-ec9be.appspot.com/o/images%2F';
-      const imageFullPath = imageBaseURL + imageName + '?alt=media';
+      if (imageSelection) {
+        const imageRef: any = ref(firebaseStorage, `images/${imageSelection.name + v4()}`);
+        const imageName = imageRef._location.path_.slice(7);
+        const imageBaseURL =
+          'https://firebasestorage.googleapis.com/v0/b/issue-tracker-ec9be.appspot.com/o/images%2F';
+        const imageFullPath = imageBaseURL + imageName + '?alt=media';
 
-      await updateUserProfileImage(email, imageFullPath);
-      await uploadBytes(imageRef, imageSelection);
-      setProfileImage(imageFullPath);
+        await updateUserProfileImage(email, imageFullPath);
+        await uploadBytes(imageRef, imageSelection);
+        setProfileImage(imageFullPath);
+        setChangesApplied(true);
+      }
     } catch (error: any) {
       console.log('uploadBytes error: ', error);
     }
   };
 
+  const changeUserDisplayName = async (values: any) => {
+    try {
+      if (values.displayNameSelection) {
+        await updateUserDisplayName(email, values);
+        setChangesApplied(true);
+      }
+    } catch (error: any) {
+      console.log('changeUserDisplayName error: ', error);
+    }
+  };
+
   const handleSubmit = async (values: any) => {
-    console.log('SettingsPersonalization submit');
-    console.log('values: ', values);
-    await changeProfileImage();
-    await updateUserDisplayName(email, values);
+    if (imageSelection || values.displayNameSelection) {
+      console.log('SettingsPersonalization submit');
+      console.log('values: ', values);
+      await changeProfileImage();
+      await changeUserDisplayName(values);
+    }
   };
 
   useEffect(() => {

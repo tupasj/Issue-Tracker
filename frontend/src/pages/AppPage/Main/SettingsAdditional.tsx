@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Input } from '@/components/Form';
 import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import { userContext } from '@/context';
 import { updateUserUsername, updateUserPhoneNumber } from '@/features/users';
 import { SubformSubmitButton } from '@/components/Form';
@@ -22,30 +23,49 @@ const H3 = styled.h3`
 
 type Props = {
   submitButtonRef: any;
+  setChangesApplied: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 interface Values {}
 
-export const SettingsAdditional = ({ submitButtonRef }: Props) => {
+export const SettingsAdditional = ({ submitButtonRef, setChangesApplied }: Props) => {
   const { email } = userContext();
   const initialValues = {
     username: '',
     phoneNumber: '',
   };
+  const validationSchema = Yup.object({
+    username: Yup.string()
+      .min(2, 'Usernames must be a minimum of 2 characters.')
+      .max(50, 'Usernames must not exceed 50 characters.'),
+    phoneNumber: Yup.string().matches(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/, {
+      message: 'Invalid phone number format.',
+    }),
+  });
 
   const handleSubmit = async (values: any) => {
-    console.log('SettingsAdditional submit');
-    console.log('values: ', values);
-    if (values.username) {
-      await updateUserUsername(email, values);
-    }
-    if (values.phoneNumber) {
-      await updateUserPhoneNumber(email, values);
+    if (values.username || values.phoneNumber) {
+      console.log('SettingsAdditional submit');
+      console.log('values: ', values);
+      if (values.username) {
+        await updateUserUsername(email, values);
+        setChangesApplied(true);
+      }
+      if (values.phoneNumber) {
+        await updateUserPhoneNumber(email, values);
+        setChangesApplied(true);
+      }
     }
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)}>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      validateOnBlur={false}
+      validateOnChange={false}
+      onSubmit={(values) => handleSubmit(values)}
+    >
       <Form>
         <Container>
           <H2>Add additional info</H2>

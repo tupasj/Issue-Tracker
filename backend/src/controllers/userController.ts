@@ -129,7 +129,7 @@ const updateUserDisplayName = async (req: Request, res: Response) => {
         { where: { userEmail: email } }
       );
     }
-    res.status(200);
+    res.status(200).end();
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -141,7 +141,7 @@ const updateUserUsername = async (req: Request, res: Response) => {
 
   try {
     await User.update({ username }, { where: { email } });
-    res.status(200);
+    res.status(200).end();
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }

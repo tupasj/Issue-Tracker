@@ -1,14 +1,20 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import { SettingsAdditional } from './SettingsAdditional';
 import { SettingsPersonalization } from './SettingsPersonalization';
 import { SettingsProjects } from './SettingsProjects';
 
 const Container = styled.div``;
 
+const SubmitButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 26px;
+`;
+
 const SubmitButton = styled.button`
   display: block;
-  margin-top: 26px;
   padding: 6px;
   width: 150px;
   border-radius: 4px;
@@ -23,7 +29,13 @@ const SubmitButton = styled.button`
   }
 `;
 
+const ChangesNotification = styled.span`
+  font-style: italic;
+  font-size: 0.95rem;
+`;
+
 export const Settings = () => {
+  const [changesApplied, setChangesApplied] = useState(false);
   const projectsRef: any = useRef(null);
   const personalizationRef: any = useRef(null);
   const additionalRef: any = useRef(null);
@@ -37,12 +49,18 @@ export const Settings = () => {
 
   return (
     <Container>
-      <SettingsProjects submitButtonRef={projectsRef} />
-      <SettingsPersonalization submitButtonRef={personalizationRef} />
-      <SettingsAdditional submitButtonRef={additionalRef} />
-      <SubmitButton type="submit" onClick={handleClick}>
-        Save changes
-      </SubmitButton>
+      <SettingsProjects setChangesApplied={setChangesApplied} submitButtonRef={projectsRef} />
+      <SettingsPersonalization
+        setChangesApplied={setChangesApplied}
+        submitButtonRef={personalizationRef}
+      />
+      <SettingsAdditional setChangesApplied={setChangesApplied} submitButtonRef={additionalRef} />
+      <SubmitButtonContainer>
+        <SubmitButton type="submit" onClick={handleClick}>
+          Save changes
+        </SubmitButton>
+        {changesApplied && <ChangesNotification>Changes applied</ChangesNotification>}
+      </SubmitButtonContainer>
     </Container>
   );
 };

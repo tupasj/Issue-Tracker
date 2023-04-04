@@ -13,6 +13,10 @@ const User = db.define('user', {
   },
   username: {
     type: DataTypes.STRING,
+    validate: {
+      min: 2,
+      max: 50,
+    },
   },
   first_name: {
     type: DataTypes.STRING,

@@ -33,11 +33,12 @@ const StyledInput = styled(Input)`
 
 type Props = {
   submitButtonRef: any;
+  setChangesApplied: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 interface Values {}
 
-export const SettingsProjects = ({ submitButtonRef }: Props) => {
+export const SettingsProjects = ({ submitButtonRef, setChangesApplied }: Props) => {
   const [validCodeText, setValidCodeText] = useState('');
   const [validNameText, setValidNameText] = useState('');
   const { email } = userContext();
@@ -55,6 +56,7 @@ export const SettingsProjects = ({ submitButtonRef }: Props) => {
       setValidCodeText(`Successfully joined project '${projectJoined.name}'.`);
       setCurrentProject(projectJoined);
       setProjects([...projects, projectJoined]);
+      setChangesApplied(true);
     } else if (code !== '') {
       return 'Invalid code';
     }
@@ -67,6 +69,7 @@ export const SettingsProjects = ({ submitButtonRef }: Props) => {
       const updatedProjects = await deleteProject(projectToLeave, email);
       setProjects(updatedProjects);
       setValidNameText(`Left project '${projectToLeave[0].name}'.`);
+      setChangesApplied(true);
     } else if (projectName !== '' || !projectToLeave) {
       return `Could not find a project named '${projectName}' to leave.`;
     }
@@ -74,13 +77,15 @@ export const SettingsProjects = ({ submitButtonRef }: Props) => {
 
   const handleSubmit = () => {
     console.log('SettingsProjects submit');
+    validationActive = true;
   };
 
+  let validationActive = false;
   return (
     <Formik
       initialValues={initialValues}
-      validateOnBlur={false}
-      validateOnChange={false}
+      validateOnBlur={validationActive}
+      validateOnChange={validationActive}
       onSubmit={handleSubmit}
     >
       <Form>
