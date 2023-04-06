@@ -108,6 +108,19 @@ const updateUserProfileImage = async (req: Request, res: Response) => {
   }
 };
 
+const getUserDisplayName = async (req: Request, res: Response) => {
+  const { email } = req.params;
+
+  try {
+    const user: any = await UserDisplayName.findOne({
+      where: { userEmail: email },
+    });
+    res.status(200).json(user.display_name);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const updateUserDisplayName = async (req: Request, res: Response) => {
   const { email } = req.params;
   const { displayNameSelection } = req.body;
@@ -184,6 +197,7 @@ export {
   loginUser,
   getUserProfileImage,
   updateUserProfileImage,
+  getUserDisplayName,
   updateUserDisplayName,
   updateUserUsername,
   updateUserPhoneNumber,

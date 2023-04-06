@@ -8,6 +8,7 @@ import { userContext } from '@/context';
 import {
   getUserProfileImage,
   updateUserProfileImage,
+  getUserDisplayName,
   updateUserDisplayName,
 } from '@/features/users';
 import { Input } from '@/components/Form';
@@ -38,7 +39,7 @@ type Props = {
 
 export const SettingsPersonalization = ({ submitButtonRef, setChangesApplied }: Props) => {
   const [imageSelection, setImageSelection] = useState<any | null>(null);
-  const { email, setProfileImage } = userContext();
+  const { email, setProfileImage, setDisplayName } = userContext();
   const initialValues = {
     displayNameSelection: '',
   };
@@ -67,6 +68,8 @@ export const SettingsPersonalization = ({ submitButtonRef, setChangesApplied }: 
       if (values.displayNameSelection) {
         await updateUserDisplayName(email, values);
         setChangesApplied(true);
+        const displayName = await getUserDisplayName(email);
+        setDisplayName(displayName);
       }
     } catch (error: any) {
       console.log('changeUserDisplayName error: ', error);

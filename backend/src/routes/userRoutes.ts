@@ -5,6 +5,7 @@ import {
   loginUser,
   getUserProfileImage,
   updateUserProfileImage,
+  getUserDisplayName,
   updateUserDisplayName,
   updateUserUsername,
   updateUserPhoneNumber,
@@ -24,7 +25,10 @@ router
   .route('/email=:email/profileImage')
   .get(getUserProfileImage)
   .patch(updateUserProfileImage);
-router.route('/email=:email/displayName').patch(updateUserDisplayName);
+router
+  .route('/email=:email/displayName')
+  .get(getUserDisplayName)
+  .patch(updateUserDisplayName);
 router.route('/email=:email/username').patch(updateUserUsername);
 router.route('/email=:email/phoneNumber').patch(updateUserPhoneNumber);
 router.route('/delete/email=:email').delete(deleteUser);

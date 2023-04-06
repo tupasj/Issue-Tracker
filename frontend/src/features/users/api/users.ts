@@ -35,6 +35,15 @@ const updateUserProfileImage = async (email: string, imageURL: string) => {
   }
 };
 
+const getUserDisplayName = async (email: string) => {
+  try {
+    const userDisplayName = await axiosInstance.get(`/user/email=${email}/displayName`);
+    return userDisplayName.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const updateUserDisplayName = async (email: string, payload: any) => {
   try {
     await axiosInstance.patch(`/user/email=${email}/displayName`, payload);
@@ -63,6 +72,7 @@ export {
   getUserInfo,
   getUsers,
   getUserProfileImage,
+  getUserDisplayName,
   updateUserProfileImage,
   updateUserDisplayName,
   updateUserPhoneNumber,

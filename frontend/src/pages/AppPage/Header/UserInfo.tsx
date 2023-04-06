@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { userContext } from '@/context/UserContext';
 import { UserInfoDropDown } from '@/pages/AppPage/Header';
-import { useUserInfo } from '@/hooks';
 
 const Container = styled.div`
   position: absolute;
@@ -29,20 +28,13 @@ const Image = styled.img`
 `;
 
 export const UserInfo = () => {
-  const { email, profileImage } = userContext();
-  const userInfo = useUserInfo(email);
+  const { profileImage, displayName } = userContext();
 
   return (
     <Container>
-      {userInfo && (
-        <>
-          <p>
-            {userInfo.first_name} {userInfo.last_name}
-          </p>
-          <ImageContainer>{profileImage && <Image src={profileImage} />}</ImageContainer>
-          <UserInfoDropDown />
-        </>
-      )}
+      <p>{displayName && displayName}</p>
+      <ImageContainer>{profileImage && <Image src={profileImage} />}</ImageContainer>
+      <UserInfoDropDown />
     </Container>
   );
 };

@@ -2,6 +2,8 @@ import { createContext, useContext } from 'react';
 
 export interface UserContextInterface {
   email: any;
+  displayName: string;
+  setDisplayName: React.Dispatch<React.SetStateAction<string>>;
   profileImage: string;
   setProfileImage: React.Dispatch<React.SetStateAction<string>>;
 }

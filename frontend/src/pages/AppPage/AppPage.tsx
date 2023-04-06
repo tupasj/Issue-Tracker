@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { getUserProfileImage } from '@/features/users';
+import { getUserDisplayName, getUserProfileImage } from '@/features/users';
 import { UserContext, UserContextInterface, ProjectsContext } from '@/context';
 import { Header } from '@/pages/AppPage/Header';
 import { Sidebar } from '@/pages/AppPage/Sidebar';
@@ -32,18 +32,26 @@ export const AppPage = ({
   setProjects,
 }: Props) => {
   const [imageURL, setImageURL] = useState('');
+  const [userDisplayName, setUserDisplayName] = useState('');
   const definedUserContext: UserContextInterface = {
     email: userEmail,
+    displayName: userDisplayName,
+    setDisplayName: setUserDisplayName,
     profileImage: imageURL,
     setProfileImage: setImageURL,
   };
 
   useEffect(() => {
+    const fetchUserDisplayName = async () => {
+      const userDisplayName = await getUserDisplayName(userEmail as string);
+      setUserDisplayName(userDisplayName);
+    };
     const fetchUserProfileImage = async () => {
       const userProfileImage = await getUserProfileImage(userEmail as string);
       setImageURL(userProfileImage);
     };
 
+    fetchUserDisplayName();
     fetchUserProfileImage();
   }, []);
 
