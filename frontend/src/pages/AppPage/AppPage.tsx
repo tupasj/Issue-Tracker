@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { getUserDisplayName, getUserProfileImage } from '@/features/users';
+import { getUserInfo } from '@/features/users';
 import { UserContext, UserContextInterface, ProjectsContext } from '@/context';
 import { Header } from '@/pages/AppPage/Header';
 import { Sidebar } from '@/pages/AppPage/Sidebar';
@@ -33,26 +33,26 @@ export const AppPage = ({
 }: Props) => {
   const [imageURL, setImageURL] = useState('');
   const [userDisplayName, setUserDisplayName] = useState('');
+  const [userStatus, setUserStatus] = useState('');
   const definedUserContext: UserContextInterface = {
     email: userEmail,
     displayName: userDisplayName,
     setDisplayName: setUserDisplayName,
     profileImage: imageURL,
     setProfileImage: setImageURL,
+    status: userStatus,
+    setStatus: setUserStatus,
   };
 
   useEffect(() => {
-    const fetchUserDisplayName = async () => {
-      const userDisplayName = await getUserDisplayName(userEmail as string);
-      setUserDisplayName(userDisplayName);
-    };
-    const fetchUserProfileImage = async () => {
-      const userProfileImage = await getUserProfileImage(userEmail as string);
-      setImageURL(userProfileImage);
+    const fetchUserInfo = async () => {
+      const userInfo = await getUserInfo(userEmail as string);
+      console.log('userInfo: ', userInfo);
+      setUserStatus(userInfo.status);
+      setImageURL(userInfo.profile_image);
     };
 
-    fetchUserDisplayName();
-    fetchUserProfileImage();
+    fetchUserInfo();
   }, []);
 
   return (

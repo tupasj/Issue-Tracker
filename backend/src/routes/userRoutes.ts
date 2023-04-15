@@ -9,6 +9,7 @@ import {
   updateUserDisplayName,
   updateUserUsername,
   updateUserPhoneNumber,
+  updateUserStatus,
   deleteUser,
   logoutUser,
   refreshUserToken,
@@ -31,6 +32,7 @@ router
   .patch(updateUserDisplayName);
 router.route('/email=:email/username').patch(updateUserUsername);
 router.route('/email=:email/phoneNumber').patch(updateUserPhoneNumber);
+router.route('/email=:email/status').patch(updateUserStatus);
 router.route('/delete/email=:email').delete(deleteUser);
 
 export default router;

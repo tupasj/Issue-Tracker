@@ -96,18 +96,6 @@ const getUserProfileImage = async (req: Request, res: Response) => {
   }
 };
 
-const updateUserProfileImage = async (req: Request, res: Response) => {
-  const { email } = req.params;
-  const { imageURL } = req.body;
-
-  try {
-    await User.update({ profile_image: imageURL }, { where: { email } });
-    res.status(200).end();
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
 const getUserDisplayName = async (req: Request, res: Response) => {
   const { email } = req.params;
 
@@ -121,21 +109,30 @@ const getUserDisplayName = async (req: Request, res: Response) => {
   }
 };
 
+const updateUserProfileImage = async (req: Request, res: Response) => {
+  const { email } = req.params;
+  const { imageURL } = req.body;
+
+  try {
+    await User.update({ profile_image: imageURL }, { where: { email } });
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const updateUserDisplayName = async (req: Request, res: Response) => {
   const { email } = req.params;
   const { displayNameSelection } = req.body;
 
-  console.log('updateUserDisplayName');
   try {
     const user: any = await User.findOne({ where: { email } });
     if (displayNameSelection === 'username') {
-      console.log('update username');
       await UserDisplayName.update(
         { display_name: user.username },
         { where: { userEmail: email } }
       );
     } else if (displayNameSelection === 'name') {
-      console.log('update name');
       const fullName = `${user.first_name} ${user.last_name}`;
       await UserDisplayName.update(
         { display_name: fullName },
@@ -172,6 +169,16 @@ const updateUserPhoneNumber = async (req: Request, res: Response) => {
   }
 };
 
+const updateUserStatus = async (req: Request, res: Response) => {
+  const { email } = req.params;
+
+  try {
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const deleteUser = async (req: Request, res: Response) => {
   const { email } = req.params;
 
@@ -196,11 +203,12 @@ export {
   createUser,
   loginUser,
   getUserProfileImage,
-  updateUserProfileImage,
   getUserDisplayName,
+  updateUserProfileImage,
   updateUserDisplayName,
   updateUserUsername,
   updateUserPhoneNumber,
+  updateUserStatus,
   deleteUser,
   logoutUser,
   refreshUserToken,
