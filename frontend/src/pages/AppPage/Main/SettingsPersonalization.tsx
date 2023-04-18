@@ -5,13 +5,12 @@ import { v4 } from 'uuid';
 import { ref, uploadBytes } from 'firebase/storage';
 import { firebaseStorage } from '@/lib/firebase';
 import { userContext } from '@/context';
+import { useUserInfo } from '@/hooks';
 import {
-  getUserProfileImage,
   updateUserProfileImage,
   getUserDisplayName,
   updateUserDisplayName,
 } from '@/features/users';
-import { Input } from '@/components/Form';
 import { SubformSubmitButton } from '@/components/Form';
 
 const Container = styled.div``;
@@ -27,11 +26,6 @@ const H3 = styled.h3`
   font-style: italic;
 `;
 
-const StyledInput = styled(Input)`
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-`;
-
 type Props = {
   submitButtonRef: any;
   setChangesApplied: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,6 +37,7 @@ export const SettingsPersonalization = ({ submitButtonRef, setChangesApplied }: 
   const initialValues = {
     displayNameSelection: '',
   };
+  const userInfo = useUserInfo(email);
 
   const changeProfileImage = async () => {
     try {
@@ -86,17 +81,12 @@ export const SettingsPersonalization = ({ submitButtonRef, setChangesApplied }: 
   };
 
   useEffect(() => {
-    const fetchUserProfileImage = async () => {
-      try {
-        const userProfileImage = await getUserProfileImage(email);
-        setProfileImage(userProfileImage);
-      } catch (error: any) {
-        console.log('error: ', error);
-      }
-    };
-
-    fetchUserProfileImage();
-  }, []);
+    if (userInfo) {
+      console.log('userInfo');
+    } else {
+      console.log('no userInfo');
+    }
+  }, [userInfo]);
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)}>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { getUserInfo } from '@/features/users';
+import { getUserInfo, getUserDisplayName } from '@/features/users';
 import { UserContext, UserContextInterface, ProjectsContext } from '@/context';
 import { Header } from '@/pages/AppPage/Header';
 import { Sidebar } from '@/pages/AppPage/Sidebar';
@@ -51,8 +51,13 @@ export const AppPage = ({
       setUserStatus(userInfo.status);
       setImageURL(userInfo.profile_image);
     };
+    const fetchUserDisplayName = async () => {
+      const userDisplayName = await getUserDisplayName(userEmail as string);
+      setUserDisplayName(userDisplayName);
+    };
 
     fetchUserInfo();
+    fetchUserDisplayName();
   }, []);
 
   return (
