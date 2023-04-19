@@ -41,7 +41,7 @@ const StatusIndicator = styled.div.attrs((props: { statusColor: string }) => pro
   left: -5px;
   height: 10px;
   width: 10px;
-  border: 2px solid var(--white);
+  border: 1px solid var(--light-gray);
   border-radius: 50%;
   background-color: ${(props) => props.statusColor};
 `;

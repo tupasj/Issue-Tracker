@@ -59,6 +59,14 @@ const updateUserPhoneNumber = async (email: string, payload: any) => {
   }
 };
 
+const updateUserStatus = async (email: string, payload: any) => {
+  try {
+    await axiosInstance.patch(`/user/email=${email}/status`, payload);
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 export {
   getUserInfo,
   getUsers,
@@ -67,4 +75,5 @@ export {
   updateUserDisplayName,
   updateUserPhoneNumber,
   updateUserUsername,
+  updateUserStatus,
 };

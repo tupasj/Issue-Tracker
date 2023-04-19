@@ -14,12 +14,26 @@ type DropDownItemProps = {
   children: React.ReactNode;
   clickable: boolean;
   onClickHandler?: () => void;
+  setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const DropdownItem = ({ children, clickable, onClickHandler }: DropDownItemProps) => {
-  return (
-    <DropDownItemContainer clickable={clickable} onClick={onClickHandler}>
-      {children}
-    </DropDownItemContainer>
-  );
+export const DropdownItem = ({
+  children,
+  clickable,
+  onClickHandler,
+  setModalOpen,
+}: DropDownItemProps) => {
+  if (setModalOpen) {
+    return (
+      <DropDownItemContainer clickable={clickable} onClick={() => setModalOpen(true)}>
+        {children}
+      </DropDownItemContainer>
+    );
+  } else {
+    return (
+      <DropDownItemContainer clickable={clickable} onClick={onClickHandler}>
+        {children}
+      </DropDownItemContainer>
+    );
+  }
 };

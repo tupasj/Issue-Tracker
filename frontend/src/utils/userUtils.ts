@@ -1,12 +1,12 @@
 const getUserStatusColor = (status: string) => {
   if (status === 'offline') {
-    return 'var(--red)';
+    return 'var(--white)';
   } else if (status === 'online') {
     return 'var(--green)';
   } else if (status === 'idle') {
     return 'var(--yellow)';
   } else {
-    return 'var(--white)';
+    return 'var(--red)';
   }
 };
 

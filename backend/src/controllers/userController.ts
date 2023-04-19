@@ -171,8 +171,10 @@ const updateUserPhoneNumber = async (req: Request, res: Response) => {
 
 const updateUserStatus = async (req: Request, res: Response) => {
   const { email } = req.params;
+  const { status } = req.body;
 
   try {
+    await User.update({ status }, { where: { email } });
     res.status(200).end();
   } catch (error: any) {
     res.status(400).json({ message: error.message });

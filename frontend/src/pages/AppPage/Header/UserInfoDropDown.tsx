@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, DropdownItem } from '@/components/Dropdown';
 import { logout } from '@/features/auth';
+import { UserSetStatusModal } from '@/features/users';
 
 const Container = styled.div`
   position: relative;
@@ -23,7 +24,12 @@ const Divider = styled.div`
 
 export const UserInfoDropDown = () => {
   const [dropdownActive, setDropdownActive] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
 
   const toggleDropdown = () => {
     if (dropdownActive) {
@@ -44,11 +50,14 @@ export const UserInfoDropDown = () => {
       <Dropdown dropdownActive={dropdownActive}>
         <DropdownItem clickable={false}>Regular user</DropdownItem>
         <Divider />
-        <DropdownItem clickable={true}>Set status</DropdownItem>
+        <DropdownItem clickable={true} setModalOpen={setModalOpen}>
+          Set status
+        </DropdownItem>
         <DropdownItem clickable={true} onClickHandler={handleLogout}>
           Log out
         </DropdownItem>
       </Dropdown>
+      <UserSetStatusModal modalOpen={modalOpen} handleClose={handleClose} />
     </Container>
   );
 };
