@@ -52,7 +52,7 @@ export const UserInfo = () => {
 
   useEffect(() => {
     const userStatusColor = getUserStatusColor(status);
-    setStatusColor(userStatusColor);
+    setStatusColor(userStatusColor as string);
   }, [status]);
 
   return (

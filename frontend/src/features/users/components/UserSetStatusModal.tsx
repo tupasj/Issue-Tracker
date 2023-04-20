@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Formik, Form, Field } from 'formik';
 import { BasicModal } from '@/components/UI';
+import { userContext } from '@/context';
+import { getUserInfo, updateUserStatus } from '@/features/users';
 
 const Container = styled.div`
   display: flex;
@@ -21,6 +23,17 @@ const RadioInput = styled.div`
   padding: 12px;
   &:hover {
     background-color: var(--light-gray);
+  }
+`;
+
+const StyledField = styled(Field)`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledLabel = styled.label`
+  &:hover {
     cursor: pointer;
   }
 `;
@@ -62,6 +75,7 @@ export const UserSetStatusModal = ({ modalOpen, handleClose }: Props) => {
     boxShadow: 4,
     borderRadius: 2,
   };
+  const { email, setStatus } = userContext();
 
   const initialValues = {
     status: '',
@@ -70,6 +84,9 @@ export const UserSetStatusModal = ({ modalOpen, handleClose }: Props) => {
   const handleSubmit = async (values: any) => {
     if (values.status) {
       console.log('values: ', values);
+      await updateUserStatus(email, values);
+      const updatedUser = await getUserInfo(email);
+      setStatus(updatedUser.status);
     }
   };
 
@@ -80,16 +97,16 @@ export const UserSetStatusModal = ({ modalOpen, handleClose }: Props) => {
           <Container>
             <Title>Set status</Title>
             <RadioInput>
-              <Field type="radio" id="available" name="status" value="available" />
-              <label htmlFor="available">Available</label>
+              <StyledField type="radio" id="available" name="status" value="available" />
+              <StyledLabel htmlFor="available">Available</StyledLabel>
             </RadioInput>
             <RadioInput>
-              <Field type="radio" id="away" name="status" value="away" />
-              <label htmlFor="away">Away</label>
+              <StyledField type="radio" id="away" name="status" value="away" />
+              <StyledLabel htmlFor="away">Away</StyledLabel>
             </RadioInput>
             <RadioInput>
-              <Field type="radio" id="busy" name="status" value="busy" />
-              <label htmlFor="busy">Busy</label>
+              <StyledField type="radio" id="busy" name="status" value="busy" />
+              <StyledLabel htmlFor="busy">Busy</StyledLabel>
             </RadioInput>
             <SubmitButtonContainer>
               <SubmitButton>Save changes</SubmitButton>
