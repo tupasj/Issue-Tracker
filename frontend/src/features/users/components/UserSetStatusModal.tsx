@@ -62,9 +62,10 @@ const SubmitButton = styled.button`
 type Props = {
   modalOpen: boolean;
   handleClose: () => void;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const UserSetStatusModal = ({ modalOpen, handleClose }: Props) => {
+export const UserSetStatusModal = ({ modalOpen, handleClose, setModalOpen }: Props) => {
   const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -83,10 +84,10 @@ export const UserSetStatusModal = ({ modalOpen, handleClose }: Props) => {
 
   const handleSubmit = async (values: any) => {
     if (values.status) {
-      console.log('values: ', values);
       await updateUserStatus(email, values);
       const updatedUser = await getUserInfo(email);
       setStatus(updatedUser.status);
+      setModalOpen(false);
     }
   };
 
@@ -109,7 +110,7 @@ export const UserSetStatusModal = ({ modalOpen, handleClose }: Props) => {
               <StyledLabel htmlFor="busy">Busy</StyledLabel>
             </RadioInput>
             <SubmitButtonContainer>
-              <SubmitButton>Save changes</SubmitButton>
+              <SubmitButton type="submit">Save changes</SubmitButton>
             </SubmitButtonContainer>
           </Container>
         </Form>

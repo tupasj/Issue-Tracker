@@ -32,10 +32,12 @@ export const UserInfoDropDown = () => {
   };
 
   const toggleDropdown = () => {
-    if (dropdownActive) {
-      setDropdownActive(false);
-    } else if (!dropdownActive) {
-      setDropdownActive(true);
+    if (!modalOpen) {
+      if (dropdownActive) {
+        setDropdownActive(false);
+      } else if (!dropdownActive) {
+        setDropdownActive(true);
+      }
     }
   };
 
@@ -57,7 +59,11 @@ export const UserInfoDropDown = () => {
           Log out
         </DropdownItem>
       </Dropdown>
-      <UserSetStatusModal modalOpen={modalOpen} handleClose={handleClose} />
+      <UserSetStatusModal
+        modalOpen={modalOpen}
+        handleClose={handleClose}
+        setModalOpen={setModalOpen}
+      />
     </Container>
   );
 };
