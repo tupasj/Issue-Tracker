@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-const SkeletonPulse = styled.div`
+type SkeletonPulseProps = {
+  rounded?: boolean;
+};
+
+const SkeletonPulse = styled.div<SkeletonPulseProps>`
   display: inline-block;
   height: 100%;
   width: 100%;
@@ -15,9 +19,14 @@ const SkeletonPulse = styled.div`
       background-position: -135% 0%;
     }
   }
+  border-radius: ${(props) => (props.rounded ? '50%' : 0)};
 `;
 
-const SkeletonLine = styled(SkeletonPulse)`
+type SkeletonLineProps = {
+  rounded?: boolean;
+};
+
+const SkeletonLine = styled(SkeletonPulse)<SkeletonLineProps>`
   width: 5.5em;
   border-radius: 5px;
 
@@ -26,6 +35,10 @@ const SkeletonLine = styled(SkeletonPulse)`
   }
 `;
 
-export const LoadingPlaceholder = () => {
-  return <SkeletonLine></SkeletonLine>;
+type Props = {
+  rounded?: boolean;
+};
+
+export const LoadingPlaceholder = ({ rounded }: Props) => {
+  return <SkeletonLine rounded={rounded}></SkeletonLine>;
 };

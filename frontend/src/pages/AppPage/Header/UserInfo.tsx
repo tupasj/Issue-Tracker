@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { userContext } from '@/context/UserContext';
-import { getUserInfo } from '@/features/users';
 import { UserInfoDropDown } from '@/pages/AppPage/Header';
 import { getUserStatusColor } from '@/utils/userUtils';
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { v4 } from 'uuid';
 import { ref, uploadBytes } from 'firebase/storage';
@@ -37,7 +37,6 @@ export const SettingsPersonalization = ({ submitButtonRef, setChangesApplied }: 
   const initialValues = {
     displayNameSelection: '',
   };
-  const userInfo = useUserInfo(email);
 
   const changeProfileImage = async () => {
     try {
@@ -79,14 +78,6 @@ export const SettingsPersonalization = ({ submitButtonRef, setChangesApplied }: 
       await changeUserDisplayName(values);
     }
   };
-
-  useEffect(() => {
-    if (userInfo) {
-      console.log('userInfo');
-    } else {
-      console.log('no userInfo');
-    }
-  }, [userInfo]);
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)}>

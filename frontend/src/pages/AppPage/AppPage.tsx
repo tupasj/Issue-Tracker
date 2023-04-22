@@ -47,7 +47,6 @@ export const AppPage = ({
   useEffect(() => {
     const fetchUserInfo = async () => {
       const userInfo = await getUserInfo(userEmail as string);
-      console.log('userInfo: ', userInfo);
       setUserStatus(userInfo.status);
       setImageURL(userInfo.profile_image);
     };
