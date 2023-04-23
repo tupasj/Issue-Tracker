@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import { BasicModal } from '@/components/UI';
 import { userContext } from '@/context';
 import { getUserInfo, updateUserStatus } from '@/features/users';
+import { getUserStatusColor } from '@/utils';
 
 const Container = styled.div`
   display: flex;
@@ -86,7 +87,12 @@ export const UserSetStatusModal = ({ modalOpen, handleClose, setModalOpen }: Pro
     if (values.status) {
       await updateUserStatus(email, values);
       const updatedUser = await getUserInfo(email);
-      setStatus(updatedUser.status);
+      const statusColor = getUserStatusColor(updatedUser.status);
+      const status = {
+        status: updatedUser.status,
+        color: statusColor,
+      };
+      setStatus(status);
       setModalOpen(false);
     }
   };

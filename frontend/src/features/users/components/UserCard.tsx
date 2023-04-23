@@ -75,14 +75,13 @@ const StatusIndicator = styled.div<StatusIndicatorProps>`
 export const UserCard = () => {
   const { email } = userContext();
   const userInfo = useUserInfo(email);
-  // const userInfo = false;
 
   return (
     <Container>
       <ImageContainer>
         {userInfo ? (
           <ImageWrapper>
-            <StatusIndicator statusColor={userInfo.statusColor} />
+            <StatusIndicator statusColor={userInfo.status.color} />
             <Image src={userInfo.profile_image} />
           </ImageWrapper>
         ) : (

@@ -24,7 +24,8 @@ export const useUserInfo = (userEmail: string) => {
   useEffect(() => {
     if (userInfo && userDisplayName) {
       const userStatusColor = getUserStatusColor(userInfo.status);
-      setFullUserInfo({ ...userInfo, ...userDisplayName, statusColor: userStatusColor });
+      const status = { status: userInfo.status, color: userStatusColor };
+      setFullUserInfo({ ...userInfo, ...userDisplayName, status });
       console.log('fullUserInfo: ', fullUserInfo);
     }
   }, [userInfo, userDisplayName]);

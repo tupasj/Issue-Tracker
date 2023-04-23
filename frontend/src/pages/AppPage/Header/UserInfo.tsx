@@ -46,13 +46,7 @@ const StatusIndicator = styled.div.attrs((props: { statusColor: string }) => pro
 `;
 
 export const UserInfo = () => {
-  const [statusColor, setStatusColor] = useState('var(--white)');
   const { profileImage, displayName, status } = userContext();
-
-  useEffect(() => {
-    const userStatusColor = getUserStatusColor(status);
-    setStatusColor(userStatusColor as string);
-  }, [status]);
 
   return (
     <Container>
@@ -60,7 +54,7 @@ export const UserInfo = () => {
       <ImageContainer>
         {profileImage && (
           <ImageWrapper>
-            <StatusIndicator statusColor={statusColor} />
+            <StatusIndicator statusColor={status.color} />
             <Image src={profileImage} />
           </ImageWrapper>
         )}

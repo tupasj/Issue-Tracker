@@ -5,6 +5,7 @@ import { UserContext, UserContextInterface, ProjectsContext } from '@/context';
 import { Header } from '@/pages/AppPage/Header';
 import { Sidebar } from '@/pages/AppPage/Sidebar';
 import { Main } from '@/pages/AppPage';
+import { getUserStatusColor } from '@/utils/userUtils';
 
 const Container = styled.div`
   display: grid;
@@ -33,7 +34,7 @@ export const AppPage = ({
 }: Props) => {
   const [imageURL, setImageURL] = useState('');
   const [userDisplayName, setUserDisplayName] = useState('');
-  const [userStatus, setUserStatus] = useState('');
+  const [userStatus, setUserStatus] = useState();
   const definedUserContext: UserContextInterface = {
     email: userEmail,
     displayName: userDisplayName,
@@ -47,7 +48,9 @@ export const AppPage = ({
   useEffect(() => {
     const fetchUserInfo = async () => {
       const userInfo = await getUserInfo(userEmail as string);
-      setUserStatus(userInfo.status);
+      const userStatusColor = getUserStatusColor(userInfo.status);
+      const status = { status: userInfo.status, color: userStatusColor };
+      setUserStatus(status as any);
       setImageURL(userInfo.profile_image);
     };
     const fetchUserDisplayName = async () => {
