@@ -1,10 +1,14 @@
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { PositionedMenu } from '@/components';
 import { userContext } from '@/context/UserContext';
 import { useUserInfo } from '@/hooks';
 import { LoadingPlaceholder } from '@/elements';
 
 const Container = styled.div`
   display: flex;
+  justify-content: space-between;
   gap: 8px;
   padding: 8px;
   border-radius: 4px;
@@ -13,6 +17,19 @@ const Container = styled.div`
   &:hover {
     background-color: var(--extra-light-gray);
   }
+`;
+
+const Left = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const Right = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  padding-right: 12px;
 `;
 
 const ImageContainer = styled.div`
@@ -56,6 +73,11 @@ const Type = styled.div`
   color: var(--light-medium-gray);
 `;
 
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  font-size: 1.25rem;
+  color: var(--black);
+`;
+
 type StatusIndicatorProps = {
   statusColor: string;
 };
@@ -76,22 +98,42 @@ export const UserCard = () => {
   const { email } = userContext();
   const userInfo = useUserInfo(email);
 
+  const logFoo = () => {
+    console.log('foo');
+  };
+
+  const logBar = () => {
+    console.log('bar');
+  };
+
   return (
     <Container>
-      <ImageContainer>
-        {userInfo ? (
-          <ImageWrapper>
-            <StatusIndicator statusColor={userInfo.status.color} />
-            <Image src={userInfo.profile_image} />
-          </ImageWrapper>
-        ) : (
-          <LoadingPlaceholder rounded={true} />
-        )}
-      </ImageContainer>
-      <UserInfoContainer>
-        {userInfo ? <DisplayName>{userInfo.displayName}</DisplayName> : <LoadingPlaceholder />}
-        {userInfo ? <Type>{userInfo.type}</Type> : <LoadingPlaceholder />}
-      </UserInfoContainer>
+      <Left>
+        <ImageContainer>
+          {userInfo ? (
+            <ImageWrapper>
+              <StatusIndicator statusColor={userInfo.status.color} />
+              <Image src={userInfo.profile_image} />
+            </ImageWrapper>
+          ) : (
+            <LoadingPlaceholder rounded={true} />
+          )}
+        </ImageContainer>
+        <UserInfoContainer>
+          {userInfo ? <DisplayName>{userInfo.displayName}</DisplayName> : <LoadingPlaceholder />}
+          {userInfo ? <Type>{userInfo.type}</Type> : <LoadingPlaceholder />}
+        </UserInfoContainer>
+      </Left>
+      <Right>
+        <PositionedMenu
+          items={[
+            { title: 'Foo', cb: logFoo },
+            { title: 'Bar', cb: logBar },
+          ]}
+        >
+          <StyledFontAwesomeIcon icon={faEllipsis} />
+        </PositionedMenu>
+      </Right>
     </Container>
   );
 };

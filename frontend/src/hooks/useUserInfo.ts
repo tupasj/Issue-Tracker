@@ -26,7 +26,6 @@ export const useUserInfo = (userEmail: string) => {
       const userStatusColor = getUserStatusColor(userInfo.status);
       const status = { status: userInfo.status, color: userStatusColor };
       setFullUserInfo({ ...userInfo, ...userDisplayName, status });
-      console.log('fullUserInfo: ', fullUserInfo);
     }
   }, [userInfo, userDisplayName]);
 
