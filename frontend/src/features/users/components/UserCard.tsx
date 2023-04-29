@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { PositionedMenu } from '@/components';
+import { useState } from 'react';
 import { userContext } from '@/context/UserContext';
 import { useUserInfo } from '@/hooks';
+import { PositionedMenu } from '@/components/UI';
 import { LoadingPlaceholder } from '@/elements';
+import { UserModal } from './UserModal';
 
 const Container = styled.div`
   display: flex;
@@ -95,15 +97,13 @@ const StatusIndicator = styled.div<StatusIndicatorProps>`
 `;
 
 export const UserCard = () => {
+  const [modalOpen, setModalOpen] = useState(false);
   const { email } = userContext();
   const userInfo = useUserInfo(email);
 
-  const logFoo = () => {
-    console.log('foo');
-  };
-
-  const logBar = () => {
-    console.log('bar');
+  const handleOpen = () => {
+    console.log('userInfo: ', userInfo);
+    setModalOpen(true);
   };
 
   return (
@@ -125,15 +125,11 @@ export const UserCard = () => {
         </UserInfoContainer>
       </Left>
       <Right>
-        <PositionedMenu
-          items={[
-            { title: 'Foo', cb: logFoo },
-            { title: 'Bar', cb: logBar },
-          ]}
-        >
+        <PositionedMenu items={[{ title: 'View info', cb: handleOpen }]}>
           <StyledFontAwesomeIcon icon={faEllipsis} />
         </PositionedMenu>
       </Right>
+      <UserModal open={modalOpen} handleClose={() => setModalOpen(false)} userInfo={userInfo} />
     </Container>
   );
 };
