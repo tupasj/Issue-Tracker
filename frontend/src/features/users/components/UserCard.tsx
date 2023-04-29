@@ -2,11 +2,10 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import { userContext } from '@/context/UserContext';
-import { useUserInfo } from '@/hooks';
 import { PositionedMenu } from '@/components/UI';
 import { LoadingPlaceholder } from '@/elements';
 import { UserModal } from './UserModal';
+import { getUserStatusColor } from '@/utils';
 
 const Container = styled.div`
   display: flex;
@@ -81,7 +80,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 `;
 
 type StatusIndicatorProps = {
-  statusColor: string;
+  statusColor: any;
 };
 
 const StatusIndicator = styled.div<StatusIndicatorProps>`
@@ -96,13 +95,14 @@ const StatusIndicator = styled.div<StatusIndicatorProps>`
   background-color: ${(props) => props.statusColor};
 `;
 
-export const UserCard = () => {
+type Props = {
+  user: any;
+};
+
+export const UserCard = ({ user }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { email } = userContext();
-  const userInfo = useUserInfo(email);
 
   const handleOpen = () => {
-    console.log('userInfo: ', userInfo);
     setModalOpen(true);
   };
 
@@ -110,18 +110,18 @@ export const UserCard = () => {
     <Container>
       <Left>
         <ImageContainer>
-          {userInfo ? (
+          {user ? (
             <ImageWrapper>
-              <StatusIndicator statusColor={userInfo.status.color} />
-              <Image src={userInfo.profile_image} />
+              <StatusIndicator statusColor={getUserStatusColor(user.status)} />
+              <Image src={user.profile_image} />
             </ImageWrapper>
           ) : (
             <LoadingPlaceholder rounded={true} />
           )}
         </ImageContainer>
         <UserInfoContainer>
-          {userInfo ? <DisplayName>{userInfo.displayName}</DisplayName> : <LoadingPlaceholder />}
-          {userInfo ? <Type>{userInfo.type}</Type> : <LoadingPlaceholder />}
+          {user ? <DisplayName>{user.display_name}</DisplayName> : <LoadingPlaceholder />}
+          {user ? <Type>{user.type}</Type> : <LoadingPlaceholder />}
         </UserInfoContainer>
       </Left>
       <Right>
@@ -129,7 +129,7 @@ export const UserCard = () => {
           <StyledFontAwesomeIcon icon={faEllipsis} />
         </PositionedMenu>
       </Right>
-      <UserModal open={modalOpen} handleClose={() => setModalOpen(false)} userInfo={userInfo} />
+      <UserModal open={modalOpen} handleClose={() => setModalOpen(false)} userInfo={user} />
     </Container>
   );
 };

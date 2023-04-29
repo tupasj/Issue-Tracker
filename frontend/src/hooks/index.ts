@@ -5,3 +5,4 @@ export * from './useMilestoneIssues';
 export * from './usePriorityChartData';
 export * from './useStatusChartData';
 export * from './useUserInfo';
+export * from './useUsers';

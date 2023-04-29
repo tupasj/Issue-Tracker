@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { BasicModal } from '@/components';
-import { capitalizeFirstLetter } from '@/utils';
+import { capitalizeFirstLetter } from '@/utils/stringUtils';
+import { getUserStatusColor } from '@/utils/userUtils';
 
 const Container = styled.div`
   display: flex;
@@ -8,7 +9,6 @@ const Container = styled.div`
   padding: 14px;
   border-radius: 4px;
   background-color: var(--white);
-  cursor: pointer;
   &:hover {
     background-color: var(--extra-light-gray);
   }
@@ -27,6 +27,7 @@ const FlexVertical = styled.div`
 `;
 
 const Bold = styled.span`
+  padding-top: 8px;
   font-weight: 600;
 `;
 
@@ -51,7 +52,7 @@ const Image = styled.img`
 `;
 
 type StatusIndicatorProps = {
-  statusColor: string;
+  statusColor: any;
 };
 
 const StatusIndicator = styled.div<StatusIndicatorProps>`
@@ -100,29 +101,39 @@ export const UserModal = ({ open, handleClose, userInfo }: Props) => {
             <Flex>
               <ImageContainer>
                 <ImageWrapper>
-                  <StatusIndicator statusColor={userInfo.status.color} />
+                  <StatusIndicator statusColor={getUserStatusColor(userInfo.status)} />
                   <Image src={userInfo.profile_image} />
                 </ImageWrapper>
               </ImageContainer>
               <UserInfoContainer>
-                <DisplayName>{userInfo.displayName}</DisplayName>
+                <DisplayName>{userInfo.display_name}</DisplayName>
                 <Type>{userInfo.type}</Type>
               </UserInfoContainer>
             </Flex>
-            <FlexVertical>
-              <div>
+            <Flex>
+              <FlexVertical>
                 <Bold>Status: </Bold>
-                {capitalizeFirstLetter(userInfo.status.status)}
-              </div>
-              <div>
+                {capitalizeFirstLetter(userInfo.status)}
                 <Bold>Email: </Bold>
                 {userInfo.email}
-              </div>
-              <div>
-                <Bold>Phone number: </Bold>
-                {userInfo.phone_number}
-              </div>
-            </FlexVertical>
+                {userInfo.phone_number && (
+                  <>
+                    <Bold>Phone number: </Bold>
+                    {userInfo.phone_number}
+                  </>
+                )}
+              </FlexVertical>
+              <FlexVertical>
+                {userInfo.username && (
+                  <>
+                    <Bold>Username: </Bold>
+                    {userInfo.username}
+                  </>
+                )}
+                <Bold>Name: </Bold>
+                {`${userInfo.first_name} ${userInfo.last_name}`}
+              </FlexVertical>
+            </Flex>
           </>
         )}
       </Container>

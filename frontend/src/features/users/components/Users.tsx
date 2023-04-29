@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useState } from 'react';
 import { UserCards } from './UserCards';
 import { UserSearchbar } from './UserSearchbar';
 
@@ -20,8 +19,6 @@ const SearchbarContainer = styled.div`
 `;
 
 export const Users = () => {
-  const [users, setUsers] = useState();
-
   return (
     <Container>
       <SearchbarContainer>
