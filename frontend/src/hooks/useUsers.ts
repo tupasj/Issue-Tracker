@@ -17,8 +17,6 @@ export const useUsers = (currentProject: any) => {
   useEffect(() => {
     if (users[0]) {
       setIsLoading(false);
-
-      console.log('users: ', users);
     }
   }, [users]);
 

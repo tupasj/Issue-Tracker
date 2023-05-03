@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { projectsContext } from '@/context';
-import { useUsers } from '@/hooks';
 import { UserCard } from './UserCard';
 
 const Container = styled.div`
@@ -12,15 +10,14 @@ const Container = styled.div`
   overflow: scroll;
 `;
 
-export const UserCards = () => {
-  const { currentProject } = projectsContext();
-  const users = useUsers(currentProject);
+type Props = {
+  users: any[];
+};
 
+export const UserCards = ({ users }: Props) => {
   return (
     <Container>
-      {users.users.map((user: any) => (
-        <UserCard key={user.email} user={user} />
-      ))}
+      {users && users.map((user: any) => <UserCard key={user.email} user={user} />)}
     </Container>
   );
 };

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import { getUsers } from '../api';
 
 const Container = styled.div`
   display: flex;
@@ -27,22 +28,23 @@ const Input = styled.input`
 `;
 
 type Props = {
-  users?: any[];
-  setUsers?: React.Dispatch<React.SetStateAction<any>>;
+  users: any[];
+  setUsers: React.Dispatch<React.SetStateAction<any>>;
+  currentProject?: any;
 };
 
-export const UserSearchbar = ({ users, setUsers }: Props) => {
+export const UserSearchbar = ({ users, setUsers, currentProject }: Props) => {
   const [inputText, setInputText] = useState('');
 
-  const handleSubmit = () => {
-    // setUsers(users.filter((user: any) => user.display_name.includes(inputText)));
-    console.log('new users: ', users);
-  };
+  const handleSubmit = async (e: any) => {
+    const enterKey = e.keyCode === 13;
+    const click = e.type === 'click';
 
-  const handleKeydownSubmit = (e: any) => {
-    if (e.keyCode === 13) {
-      //   setUsers(users.filter((user: any) => user.display_name.includes(inputText)));
-      console.log('new users: ', users);
+    if (enterKey || click) {
+      const retrievedUsers = await getUsers(currentProject);
+      const inputTextIgnoreCase = new RegExp(inputText, 'i');
+      // Filter for display name that passes the regex test
+      setUsers(retrievedUsers.filter((user: any) => inputTextIgnoreCase.test(user.display_name)));
     }
   };
 
@@ -53,7 +55,7 @@ export const UserSearchbar = ({ users, setUsers }: Props) => {
         type="text"
         placeholder="Search someone..."
         onChange={(e) => setInputText(e.target.value)}
-        onKeyDown={(e) => handleKeydownSubmit(e)}
+        onKeyDown={(e) => handleSubmit(e)}
       />
     </Container>
   );

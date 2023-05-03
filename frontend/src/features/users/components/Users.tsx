@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import { projectsContext } from '@/context';
+import { getUsers } from '../api';
 import { UserCards } from './UserCards';
 import { UserSearchbar } from './UserSearchbar';
 
@@ -19,12 +22,24 @@ const SearchbarContainer = styled.div`
 `;
 
 export const Users = () => {
+  const [users, setUsers] = useState<any[]>([]);
+  const { currentProject } = projectsContext();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const retrievedUsers = await getUsers(currentProject);
+      setUsers(retrievedUsers);
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
     <Container>
       <SearchbarContainer>
-        <UserSearchbar />
+        <UserSearchbar users={users} setUsers={setUsers} currentProject={currentProject} />
       </SearchbarContainer>
-      <UserCards />
+      <UserCards users={users} />
     </Container>
   );
 };
