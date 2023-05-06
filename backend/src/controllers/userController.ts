@@ -1,57 +1,50 @@
 import { Request, Response } from 'express';
-import { db, QueryTypes } from '../config/database';
+import bcrypt from 'bcrypt';
 import { User } from '../models/User';
 import { UserDisplayName } from '../models/UserDisplayName';
-import bcrypt from 'bcrypt';
 import {
   generateTokens,
   refreshToken,
   deleteRefreshToken,
 } from '../utils/jwtUtils';
+import {
+  DBCreateUser,
+  DBCreateUserDisplayName,
+  DBGetUserInfo,
+  DBUpdateUserDisplayName,
+} from '../utils/database/userQueries';
 
 const getUserInfo = async (req: Request, res: Response) => {
   const { email } = req.params;
 
   try {
-    const user: any = await User.findOne({
-      where: { email },
-      attributes: { exclude: ['password'] },
-    });
-    if (!user) {
-      throw new Error('Invalid credentials');
-    }
-
+    const user = await DBGetUserInfo(email);
     res.status(200).json(user);
   } catch (error: any) {
-    console.log('error: ', error);
     res.status(400).json({ message: error.message });
   }
 };
 
 const createUser = async (req: Request, res: Response) => {
   const { email, password, first_name, last_name } = req.body;
+  let user: any;
 
-  let userDisplayName;
   try {
-    userDisplayName = await UserDisplayName.create({
-      display_name: `${first_name} ${last_name}`,
-    });
+    user = await DBCreateUser(email, password, first_name, last_name);
+    const tokens = generateTokens({ email: email });
+    res.cookie('jwt', tokens, { httpOnly: true });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
+    return;
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user: any = await User.create({
-      email,
-      password: hashedPassword,
+    const userDisplayName = await DBCreateUserDisplayName(
       first_name,
-      last_name,
-    });
+      last_name
+    );
     user.setUserDisplayName(userDisplayName);
-    const tokens = generateTokens({ email: email });
-    res.cookie('jwt', tokens, { httpOnly: true });
-    res.status(201);
+    res.status(201).end();
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -61,12 +54,7 @@ const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const user: any = await User.findOne({
-      where: { email },
-    });
-    if (!user) {
-      throw new Error('Invalid credentials');
-    }
+    const user = await DBGetUserInfo(email);
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
@@ -126,19 +114,7 @@ const updateUserDisplayName = async (req: Request, res: Response) => {
   const { displayNameSelection } = req.body;
 
   try {
-    const user: any = await User.findOne({ where: { email } });
-    if (displayNameSelection === 'username') {
-      await UserDisplayName.update(
-        { display_name: user.username },
-        { where: { userEmail: email } }
-      );
-    } else if (displayNameSelection === 'name') {
-      const fullName = `${user.first_name} ${user.last_name}`;
-      await UserDisplayName.update(
-        { display_name: fullName },
-        { where: { userEmail: email } }
-      );
-    }
+    await DBUpdateUserDisplayName(email, displayNameSelection);
     res.status(200).end();
   } catch (error: any) {
     res.status(400).json({ message: error.message });

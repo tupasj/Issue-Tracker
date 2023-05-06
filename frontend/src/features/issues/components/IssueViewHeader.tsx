@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faForward, faCircleCheck, faGears } from '@fortawesome/free-solid-svg-icons';
-import { IssueViewModalContent } from './IssueViewModalContent';
+import { IssueViewModalContent } from './IssueViewOptionsModal';
 import { convertTimestamp } from '@/utils/issueUtils';
 import { BasicModal } from '@/components/UI';
 import { IssuePriority } from './IssuePriority';

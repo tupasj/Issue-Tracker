@@ -162,6 +162,24 @@ const getUserIssues = async (req: Request, res: Response) => {
   }
 };
 
+const getIssueLabels = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+
+  try {
+    const issue: any = await Issue.findOne({
+      where: {
+        issue_number: issueNumber,
+        projectCode: projectCode,
+      },
+    });
+    const issueLabels = await issue.getLabels();
+
+    res.status(200).json(issueLabels);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const updateIssueLabels = async (req: Request, res: Response) => {
   const { issueNumber, projectCode } = req.params;
   const { email, labelNames } = req.body;
@@ -208,6 +226,33 @@ const updateIssuePriority = async (req: Request, res: Response) => {
         projectCode: projectCode,
       },
     });
+    res.status(200).json(updatedIssue);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateIssueTitle = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+  const { title } = req.body;
+
+  try {
+    await Issue.update(
+      { title },
+      {
+        where: {
+          issue_number: issueNumber,
+          projectCode: projectCode,
+        },
+      }
+    );
+    const updatedIssue = await Issue.findOne({
+      where: {
+        issue_number: issueNumber,
+        projectCode: projectCode,
+      },
+    });
+
     res.status(200).json(updatedIssue);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -352,8 +397,10 @@ export {
   createIssue,
   getProjectIssues,
   getUserIssues,
+  getIssueLabels,
   updateIssueLabels,
   updateIssuePriority,
+  updateIssueTitle,
   updateIssueMilestone,
   removeIssueMilestone,
   deleteIssue,

@@ -43,6 +43,13 @@ const getUserIssues = async (email: string, openStatus?: string) => {
   }
 };
 
+const getIssueLabels = async (issueNumber: number, currentProject: any) => {
+  try {
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const updateIssueLabels = async (
   issueNumber: number,
   currentProject: any,
@@ -77,6 +84,18 @@ const updateIssuePriority = async (issueNumber: number, currentProject: any, pri
     const updatedIssue = await axiosInstance.patch(
       `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/priority`,
       { priority }
+    );
+    return updatedIssue.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+const updateIssueTitle = async (issueNumber: number, currentProject: any, title: string) => {
+  try {
+    const updatedIssue = await axiosInstance.patch(
+      `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/priority`,
+      { title }
     );
     return updatedIssue.data;
   } catch (error: any) {
@@ -123,6 +142,7 @@ export {
   getIssues,
   getUserIssues,
   updateIssueLabels,
+  updateIssueTitle,
   updateIssueOpenStatus,
   updateIssuePriority,
   updateIssueMilestone,

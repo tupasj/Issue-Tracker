@@ -6,8 +6,10 @@ import {
 import { addLabels, getDefaultLabels } from '../controllers/labelController';
 import {
   getUserIssues,
+  getIssueLabels,
   updateIssueLabels,
   updateIssuePriority,
+  updateIssueTitle,
   deleteIssue,
   getIssueUsers,
   assignIssueUsers,
@@ -19,11 +21,17 @@ import {
 const router = express.Router();
 
 router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode/labels')
+  .get(getIssueLabels);
+router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode')
   .delete(deleteIssue);
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/priority')
   .patch(updateIssuePriority);
+router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode/title')
+  .patch(updateIssueTitle);
 
 router.route('/user/email=:email/issues/:openStatus?').get(getUserIssues);
 router

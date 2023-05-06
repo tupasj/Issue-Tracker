@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { projectsContext } from '@/context';
-import { updateIssuePriority, deleteIssue } from '@/features/issues';
+import { updateIssuePriority, updateIssueTitle, deleteIssue } from '@/features/issues';
 import { Button } from '@/elements';
 import { BasicSelect } from '@/components/UI';
 
@@ -56,13 +56,18 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
   const navigate = useNavigate();
 
   const handleSubmitTitle = async () => {
-    console.log('title: ', title);
+    const updatedIssue = await updateIssueTitle(issueNumberInt, currentProject, title);
+    const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
+    console.log('updatedIssues: ', updatedIssues);
+    // setIssues(updatedIssues);
+    setTitle('');
   };
 
   const handleSubmitPriority = async () => {
     const updatedIssue = await updateIssuePriority(issueNumberInt, currentProject, priority);
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
-    setIssues(updatedIssues);
+    console.log('updatedIssues: ', updatedIssues);
+    // setIssues(updatedIssues);
   };
 
   const handleDeleteIssue = async () => {
