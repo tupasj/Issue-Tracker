@@ -1,11 +1,22 @@
 import { Request, Response } from 'express';
-import { db, QueryTypes } from '../config/database';
+import { db } from '../config/database';
 import { Issue } from '../models/Issue';
 import { User } from '../models/User';
-import { Project } from '../models/Project';
 import { UserDisplayName } from '../models/UserDisplayName';
 import { Label } from '../models/Label';
-import { Milestone } from '../models/Milestone';
+import {
+  DBCreateIssue,
+  DBGetIssue,
+  DBUpdateIssuePriority,
+  DBUpdateIssueTitle,
+  DBUpdateIssueMilestoneId,
+  DBDeleteIssue,
+} from '../utils/database/issueQueries';
+import { DBGetUser } from '../utils/database/userQueries';
+import { DBGetLabels } from '../utils/database/labelQueries';
+import { DBGetUserDisplayName } from '../utils/database/userDisplayNameQueries';
+import { DBGetMilestone } from '../utils/database/milestoneQueries';
+import { DBGetProject } from '../utils/database/projectQueries';
 
 const getLabelObjects = async (labelNames: string[]) => {
   const labelObjects: any[] = [];
@@ -29,65 +40,26 @@ const createIssue = async (req: Request, res: Response) => {
     req.body;
 
   try {
-    const project: any = await Project.findOne({ where: { code } });
-    const user: any = await User.findOne({ where: { email } });
-    const queryResult: any = await db.query(
-      `SELECT MAX(issue_number) FROM issues WHERE "projectCode"='${code}';`,
-      { type: QueryTypes.SELECT }
-    );
-    const latestIssueNumber: number = queryResult[0].max;
+    const issue = await DBCreateIssue(code, email, title, priority);
 
-    const newIssue: any = await Issue.create({
-      title,
-      priority,
-      issue_number: latestIssueNumber + 1,
-    });
-
-    await project.addIssue(newIssue);
-    await user.addIssue(newIssue);
-
-    const issue: any = await Issue.findOne({
-      where: {
-        projectCode: code,
-        issue_number: latestIssueNumber + 1,
-      },
-    });
-
-    // For each string element in labels array, get the corresponding label object from database
-    const labelObjects: any[] = [];
-    for (let i = 0; i < labels.length; i++) {
-      const label = await Label.findOne({
-        where: {
-          name: labels[i],
-        },
-      });
-      labelObjects.push(label);
-    }
-    // Make Issues and Label association and attach labels property to response object
+    // Add labels object array as a property of issue
+    const labelObjects = await DBGetLabels(labels);
     await issue.addLabels(labelObjects);
     issue.setDataValue('labels', labelObjects);
 
-    // Attach display_name property to response object
-    const userDisplayName: any = await UserDisplayName.findOne({
-      where: { userEmail: email },
-    });
+    // Add display_name string as a property of issue
+    const userDisplayName = await DBGetUserDisplayName(email);
     issue.setDataValue('postedBy', userDisplayName.display_name);
 
-    // Add assignees to issue
+    // Add assignees object array as a property of issue
     for (let i = 0; i < assignees.length; i++) {
-      const user = await User.findOne({
-        where: {
-          email: assignees[i].email,
-        },
-      });
+      const user = await DBGetUser(assignees[i].email);
       await issue.addUser(user);
     }
 
-    // Add milestone
+    // Add milestone object as a property of issue
     if (currentMilestone) {
-      const milestone: any = await Milestone.findOne({
-        where: { id: currentMilestone.id },
-      });
+      const milestone = await DBGetMilestone(currentMilestone);
       await milestone.addIssue(issue);
       issue.setDataValue('milestone', milestone);
     }
@@ -103,7 +75,7 @@ const getProjectIssues = async (req: Request, res: Response) => {
   const { isOpen } = req.query;
 
   try {
-    const project: any = await Project.findOne({ where: { code } });
+    const project = await DBGetProject(code);
 
     let projectIssues;
     if (openStatus) {
@@ -147,9 +119,7 @@ const getUserIssues = async (req: Request, res: Response) => {
     // Add postedBy and labels properties to each element in userIssues array
     for (let i = 0; i < userIssues.length; i++) {
       const user = await userIssues[i].getUsers();
-      const userDisplayName: any = await UserDisplayName.findOne({
-        where: { userEmail: user[0].email },
-      });
+      const userDisplayName: any = await DBGetUserDisplayName(user[0].email);
       userIssues[i].setDataValue('postedBy', userDisplayName.display_name);
       const issueLabels = await userIssues[i].getLabels();
       userIssues[i].setDataValue('labels', issueLabels);
@@ -166,12 +136,7 @@ const getIssueLabels = async (req: Request, res: Response) => {
   const { issueNumber, projectCode } = req.params;
 
   try {
-    const issue: any = await Issue.findOne({
-      where: {
-        issue_number: issueNumber,
-        projectCode: projectCode,
-      },
-    });
+    const issue = await DBGetIssue(issueNumber, projectCode);
     const issueLabels = await issue.getLabels();
 
     res.status(200).json(issueLabels);
@@ -185,19 +150,12 @@ const updateIssueLabels = async (req: Request, res: Response) => {
   const { email, labelNames } = req.body;
 
   try {
-    const issue: any = await Issue.findOne({
-      where: {
-        issue_number: issueNumber,
-        projectCode: projectCode,
-      },
-    });
+    const issue = await DBGetIssue(issueNumber, projectCode);
     const issueLabelObjects = await getLabelObjects(labelNames);
     await issue.setLabels(issueLabelObjects);
     issue.setDataValue('labels', issueLabelObjects);
 
-    const userDisplayName: any = await UserDisplayName.findOne({
-      where: { userEmail: email },
-    });
+    const userDisplayName: any = await DBGetUserDisplayName(email);
     issue.setDataValue('postedBy', userDisplayName.display_name);
 
     res.status(200).json(issue);
@@ -211,21 +169,11 @@ const updateIssuePriority = async (req: Request, res: Response) => {
   const { priority } = req.body;
 
   try {
-    await Issue.update(
-      { priority },
-      {
-        where: {
-          issue_number: issueNumber,
-          projectCode: projectCode,
-        },
-      }
+    const updatedIssue = await DBUpdateIssuePriority(
+      issueNumber,
+      projectCode,
+      priority
     );
-    const updatedIssue = await Issue.findOne({
-      where: {
-        issue_number: issueNumber,
-        projectCode: projectCode,
-      },
-    });
     res.status(200).json(updatedIssue);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -237,22 +185,11 @@ const updateIssueTitle = async (req: Request, res: Response) => {
   const { title } = req.body;
 
   try {
-    await Issue.update(
-      { title },
-      {
-        where: {
-          issue_number: issueNumber,
-          projectCode: projectCode,
-        },
-      }
+    const updatedIssue = await DBUpdateIssueTitle(
+      issueNumber,
+      projectCode,
+      title
     );
-    const updatedIssue = await Issue.findOne({
-      where: {
-        issue_number: issueNumber,
-        projectCode: projectCode,
-      },
-    });
-
     res.status(200).json(updatedIssue);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -267,30 +204,14 @@ const updateIssueMilestone = async (req: Request, res: Response) => {
     if (milestoneId === 9999) {
       // get current milestone
       // remove association
-      const issue: any = await Issue.findOne({
-        where: {
-          issue_number: issueNumber,
-          projectCode: projectCode,
-        },
-      });
-
+      const issue = await DBGetIssue(issueNumber, projectCode);
       res.status(200).end();
     }
-    await Issue.update(
-      { milestoneId },
-      {
-        where: {
-          issue_number: issueNumber,
-          projectCode: projectCode,
-        },
-      }
+    const updatedIssue = await DBUpdateIssueMilestoneId(
+      issueNumber,
+      projectCode,
+      milestoneId
     );
-    const updatedIssue = await Issue.findOne({
-      where: {
-        issue_number: issueNumber,
-        projectCode: projectCode,
-      },
-    });
     res.status(200).json(updatedIssue);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -301,10 +222,10 @@ const removeIssueMilestone = async (req: Request, res: Response) => {
   const { issueNumber, projectCode } = req.params;
 
   try {
-    const queryResult: any = await db.query(
+    await db.query(
       `UPDATE issues SET "milestoneId" = null WHERE "projectCode"='${projectCode}' AND issue_number=${issueNumber};`
     );
-    console.log('queryResult: ', queryResult);
+
     res.status(200).end();
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -315,12 +236,7 @@ const deleteIssue = async (req: Request, res: Response) => {
   const { issueNumber, projectCode } = req.params;
 
   try {
-    await Issue.destroy({
-      where: {
-        issue_number: issueNumber,
-        projectCode: projectCode,
-      },
-    });
+    await DBDeleteIssue(issueNumber, projectCode);
     res.status(200).end();
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -332,19 +248,11 @@ const assignIssueUsers = async (req: Request, res: Response) => {
   const { assignees } = req.body;
 
   try {
-    const issue: any = await Issue.findOne({
-      where: {
-        issue_number: issueNumber,
-        projectCode: projectCode,
-      },
-    });
+    const issue: any = await DBGetIssue(issueNumber, projectCode);
 
     for (let i = 0; i < assignees.length; i++) {
-      const user = await User.findOne({
-        where: {
-          email: assignees[i].email,
-        },
-      });
+      const user = await DBGetUser(assignees[i].email);
+
       await issue.addUser(user);
     }
 
@@ -358,12 +266,7 @@ const getIssueUsers = async (req: Request, res: Response) => {
   const { issueNumber, projectCode } = req.params;
 
   try {
-    const issue: any = await Issue.findOne({
-      where: {
-        issue_number: issueNumber,
-        projectCode: projectCode,
-      },
-    });
+    const issue: any = await DBGetIssue(issueNumber, projectCode);
     const issueUsers: any[] = await issue.getUsers({
       attributes: {
         exclude: ['password'],

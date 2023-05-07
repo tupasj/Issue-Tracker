@@ -7,18 +7,17 @@ import {
   refreshToken,
   deleteRefreshToken,
 } from '../utils/jwtUtils';
+import { DBCreateUser, DBGetUser } from '../utils/database/userQueries';
 import {
-  DBCreateUser,
   DBCreateUserDisplayName,
-  DBGetUserInfo,
   DBUpdateUserDisplayName,
-} from '../utils/database/userQueries';
+} from '../utils/database/userDisplayNameQueries';
 
 const getUserInfo = async (req: Request, res: Response) => {
   const { email } = req.params;
 
   try {
-    const user = await DBGetUserInfo(email);
+    const user = await DBGetUser(email);
     res.status(200).json(user);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -54,7 +53,7 @@ const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const user = await DBGetUserInfo(email);
+    const user = await DBGetUser(email);
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
