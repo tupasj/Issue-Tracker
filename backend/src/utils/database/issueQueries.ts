@@ -2,6 +2,7 @@ import { db, QueryTypes } from '../../config/database';
 import { Issue } from '../../models/Issue';
 import { Project } from '../../models/Project';
 import { User } from '../../models/User';
+import { DBGetUserDisplayName } from './userDisplayNameQueries';
 
 const DBCreateIssue = async (
   code: string,
@@ -16,11 +17,13 @@ const DBCreateIssue = async (
     { type: QueryTypes.SELECT }
   );
   const latestIssueNumber: number = queryResult[0].max;
+  const postedBy = await DBGetUserDisplayName(email);
 
   const issue: any = await Issue.create({
     title,
     priority,
     issue_number: latestIssueNumber + 1,
+    postedBy: postedBy.display_name,
   });
 
   await project.addIssue(issue);

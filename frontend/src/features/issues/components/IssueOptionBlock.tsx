@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 import { IssueOptionItems } from './IssueOptionItems';
 
 const Option = styled.div`
@@ -33,6 +33,7 @@ type Props = {
   handleSubmit?: (...params: any) => Promise<void>;
   changes: any;
   labels?: any[];
+  assignees?: any[];
 };
 
 export const IssueOptionBlock = ({
@@ -42,6 +43,7 @@ export const IssueOptionBlock = ({
   handleSubmit,
   changes,
   labels,
+  assignees,
 }: Props) => {
   const [editingActive, setEditingActive] = useState(false);
 
@@ -70,6 +72,7 @@ export const IssueOptionBlock = ({
               emptyTextPlaceholder={emptyTextPlaceholder}
               changes={changes}
               labels={labels}
+              assignees={assignees}
             />
           </OptionContent>
         )}

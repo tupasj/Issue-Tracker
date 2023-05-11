@@ -26,6 +26,17 @@ const getIssues = async (currentProject: any, openStatus?: string) => {
   }
 };
 
+const getIssueUsers = async (issueNumber: number, currentProject: any) => {
+  try {
+    const issueUsersResponse = await axiosInstance.get(
+      `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/users`
+    );
+    return issueUsersResponse.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const getUserIssues = async (email: string, openStatus?: string) => {
   try {
     let userIssuesResponse;
@@ -38,13 +49,6 @@ const getUserIssues = async (email: string, openStatus?: string) => {
       userIssuesResponse = await axiosInstance.get(`/issues/user/email=${email}/issues`);
     }
     return userIssuesResponse.data;
-  } catch (error: any) {
-    axiosErrorHandler(error);
-  }
-};
-
-const getIssueLabels = async (issueNumber: number, currentProject: any) => {
-  try {
   } catch (error: any) {
     axiosErrorHandler(error);
   }
@@ -140,6 +144,7 @@ const deleteIssue = async (issueNumber: number, currentProject: any) => {
 export {
   createIssue,
   getIssues,
+  getIssueUsers,
   getUserIssues,
   updateIssueLabels,
   updateIssueTitle,

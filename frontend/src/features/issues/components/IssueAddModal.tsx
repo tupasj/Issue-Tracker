@@ -101,6 +101,8 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
     if (commentTextContent !== '') {
       addComment(newIssue.issue_number);
     }
+
+    console.log('newIssue: ', newIssue);
   };
 
   useEffect(() => {

@@ -42,22 +42,18 @@ const createIssue = async (req: Request, res: Response) => {
   try {
     const issue = await DBCreateIssue(code, email, title, priority);
 
-    // Add labels object array as a property of issue
-    const labelObjects = await DBGetLabels(labels);
-    await issue.addLabels(labelObjects);
-    issue.setDataValue('labels', labelObjects);
-
-    // Add display_name string as a property of issue
-    const userDisplayName = await DBGetUserDisplayName(email);
-    issue.setDataValue('postedBy', userDisplayName.display_name);
-
-    // Add assignees object array as a property of issue
+    // Associate each assignee user to the issue
     for (let i = 0; i < assignees.length; i++) {
       const user = await DBGetUser(assignees[i].email);
       await issue.addUser(user);
     }
 
-    // Add milestone object as a property of issue
+    // Add labels property
+    const labelObjects = await DBGetLabels(labels);
+    await issue.addLabels(labelObjects);
+    issue.setDataValue('labels', labelObjects);
+
+    // Add milestone property
     if (currentMilestone) {
       const milestone = await DBGetMilestone(currentMilestone);
       await milestone.addIssue(issue);

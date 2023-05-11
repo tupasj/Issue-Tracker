@@ -5,7 +5,7 @@ import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { BasicSelect, MultiSelect, MultiSelectObjects } from '@/components/UI';
 import { updateIssueLabels, updateIssueMilestone, removeIssueMilestone } from '@/features/issues';
 import { getMilestone, getMilestones } from '@/features/milestones';
-import { getUsers } from '@/features/users';
+import { getIssueUsers } from '../api';
 import { IssueOptionBlock } from './IssueOptionBlock';
 
 const Container = styled.div``;
@@ -30,7 +30,7 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
   ];
   const [projectMilestones, setProjectMilestones] = useState<any[]>([]);
   const [currentMilestone, setcurrentMilestone] = useState<any>();
-  const [assignees, setAssignees] = useState<string[]>([]);
+  const [assignees, setAssignees] = useState<any[]>([]);
   const [projectUsers, setProjectUsers] = useState<any[]>([]);
   const { email } = userContext();
   const { currentProject } = projectsContext();
@@ -62,21 +62,25 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
       setcurrentMilestone(milestone);
       setProjectMilestones(milestoneSelections);
     };
-    const fetchUsers = async () => {
-      const users = await getUsers(currentProject);
-      setProjectUsers(users);
+    const fetchAssignees = async () => {
+      const assignees = await getIssueUsers(issueNumber, currentProject);
+      setAssignees(assignees);
     };
 
     setLabelNames(labelNamesArray);
     fetchMilestones();
-    fetchUsers();
+    fetchAssignees();
   }, []);
+
+  useEffect(() => {
+    console.log('assignees: ', assignees);
+  }, [assignees]);
 
   return (
     <Container>
       <IssueOptionBlock
         title="Milestone"
-        emptyTextPlaceholder="No milestone assigned"
+        emptyTextPlaceholder="No milestone"
         handleSubmit={handleMilestoneSubmit}
         changes={currentMilestone}
       >
@@ -90,7 +94,7 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
       </IssueOptionBlock>
       <IssueOptionBlock
         title="Labels"
-        emptyTextPlaceholder="No labels added"
+        emptyTextPlaceholder="No labels"
         handleSubmit={handleLabelSubmit}
         changes={labelNames}
         labels={labels}
@@ -104,9 +108,10 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
       </IssueOptionBlock>
       <IssueOptionBlock
         title="Assignees"
-        emptyTextPlaceholder="No users assigned to this Issue"
+        emptyTextPlaceholder="No assignees"
         handleSubmit={handleAssigneeSubmit}
         changes={projectUsers}
+        assignees={assignees}
       >
         <MultiSelectObjects
           label="assignees"

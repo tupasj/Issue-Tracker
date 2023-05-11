@@ -12,9 +12,10 @@ const LabelsContainer = styled.div``;
 const AssigneesContainer = styled.div``;
 
 type ItemProps = {
-  changes: any;
+  changes?: any;
   emptyTextPlaceholder: string;
   labels?: any[];
+  assignees?: any[];
 };
 
 const Milestones = ({ changes, emptyTextPlaceholder }: ItemProps) => {
@@ -50,8 +51,10 @@ const Labels = ({ emptyTextPlaceholder, labels }: ItemProps) => {
   );
 };
 
-const Assignees = () => {
-  return <AssigneesContainer>assignees</AssigneesContainer>;
+const Assignees = ({ emptyTextPlaceholder, assignees }: ItemProps) => {
+  return (
+    <AssigneesContainer>{assignees![0] ? <div>Assignees</div> : <div>idk</div>}</AssigneesContainer>
+  );
 };
 
 type Props = {
@@ -59,9 +62,16 @@ type Props = {
   emptyTextPlaceholder: string;
   changes: any;
   labels?: any[];
+  assignees?: any[];
 };
 
-export const IssueOptionItems = ({ title, emptyTextPlaceholder, changes, labels }: Props) => {
+export const IssueOptionItems = ({
+  title,
+  emptyTextPlaceholder,
+  changes,
+  labels,
+  assignees,
+}: Props) => {
   let items;
   if (title === 'Milestone') {
     items = <Milestones emptyTextPlaceholder={emptyTextPlaceholder} changes={changes} />;
@@ -70,7 +80,7 @@ export const IssueOptionItems = ({ title, emptyTextPlaceholder, changes, labels 
       <Labels emptyTextPlaceholder={emptyTextPlaceholder} changes={changes} labels={labels} />
     );
   } else if (title === 'Assignees') {
-    items = <Assignees />;
+    items = <Assignees emptyTextPlaceholder={emptyTextPlaceholder} assignees={assignees} />;
   }
 
   return <Container>{items}</Container>;

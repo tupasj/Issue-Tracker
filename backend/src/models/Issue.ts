@@ -24,6 +24,10 @@ const Issue = db.define('issue', {
     type: DataTypes.STRING,
     defaultValue: 'none',
   },
+  postedBy: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 export { Issue };

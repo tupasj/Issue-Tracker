@@ -37,9 +37,15 @@ export const Dashboard = () => {
 
     if (currentProject) {
       fetchIssues();
-      fetchUserIssues();
+      // fetchUserIssues();
     }
   }, [currentProject]);
+
+  useEffect(() => {
+    if (allIssues) {
+      console.log('allIssues: ', allIssues);
+    }
+  }, [allIssues]);
 
   return (
     <>
