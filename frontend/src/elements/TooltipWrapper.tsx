@@ -1,30 +1,38 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const Container = styled.span``;
+const Container = styled.div`
+  position: relative;
+`;
 
-const Tooltip = styled.span`
+const TooltipContainer = styled.div`
   position: absolute;
-  top: 25px;
-  left: 22px;
+  padding: 4px;
   color: white;
-  background-color: black;
+  background-color: var(--medium-gray);
   cursor: text;
+  z-index: 1;
+  border-radius: 4px;
 `;
 
 type Props = {
   text: string;
+  additionalText?: string;
   children: React.ReactNode;
 };
 
-export const TooltipWrapper = ({ text, children }: Props) => {
+export const TooltipWrapper = ({ text, additionalText, children }: Props) => {
   const [hoverActive, setHoverActive] = useState(false);
-  const overflowLength = 23;
 
   return (
     <Container onMouseOver={() => setHoverActive(true)} onMouseLeave={() => setHoverActive(false)}>
       {children}
-      {hoverActive && text.length >= overflowLength && <Tooltip>{text}</Tooltip>}
+      {hoverActive && (
+        <TooltipContainer>
+          <div>{text}</div>
+          <div>{additionalText}</div>
+        </TooltipContainer>
+      )}
     </Container>
   );
 };

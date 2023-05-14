@@ -4,8 +4,8 @@ import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { PositionedMenu } from '@/components/UI';
 import { LoadingPlaceholder } from '@/elements';
+import { UserProfileImage } from './UserProfileImage';
 import { UserModal } from './UserModal';
-import { getUserStatusColor } from '@/utils';
 
 const Container = styled.div`
   display: flex;
@@ -33,28 +33,6 @@ const Right = styled.div`
   padding-right: 12px;
 `;
 
-const ImageContainer = styled.div`
-  padding: 4px;
-  align-self: center;
-  margin-left: 10px;
-  margin-right: 4px;
-  height: 36px;
-  width: 36px;
-  text-align: center;
-  border: 1px solid var(--light-gray);
-  border-radius: 50%;
-  background-color: var(--white);
-  cursor: pointer;
-`;
-
-const Image = styled.img`
-  width: 36px;
-`;
-
-const ImageWrapper = styled.div`
-  position: relative;
-`;
-
 const UserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -79,22 +57,6 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   color: var(--black);
 `;
 
-type StatusIndicatorProps = {
-  statusColor: any;
-};
-
-const StatusIndicator = styled.div<StatusIndicatorProps>`
-  display: inherit;
-  position: absolute;
-  bottom: 2px;
-  left: -5px;
-  height: 10px;
-  width: 10px;
-  border: 1px solid var(--light-gray);
-  border-radius: 50%;
-  background-color: ${(props) => props.statusColor};
-`;
-
 type Props = {
   user: any;
 };
@@ -109,16 +71,7 @@ export const UserCard = ({ user }: Props) => {
   return (
     <Container>
       <Left>
-        <ImageContainer>
-          {user ? (
-            <ImageWrapper>
-              <StatusIndicator statusColor={getUserStatusColor(user.status)} />
-              <Image src={user.profile_image} />
-            </ImageWrapper>
-          ) : (
-            <LoadingPlaceholder rounded={true} />
-          )}
-        </ImageContainer>
+        <UserProfileImage user={user} />
         <UserInfoContainer>
           {user ? <DisplayName>{user.display_name}</DisplayName> : <LoadingPlaceholder />}
           {user ? <Type>{user.type}</Type> : <LoadingPlaceholder />}

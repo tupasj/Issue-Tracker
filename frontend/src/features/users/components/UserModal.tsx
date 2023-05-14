@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { BasicModal } from '@/components';
 import { capitalizeFirstLetter } from '@/utils/stringUtils';
-import { getUserStatusColor } from '@/utils/userUtils';
+import { UserProfileImage } from './UserProfileImage';
 
 const Container = styled.div`
   display: flex;
@@ -29,42 +29,6 @@ const FlexVertical = styled.div`
 const Bold = styled.span`
   padding-top: 8px;
   font-weight: 600;
-`;
-
-const ImageContainer = styled.div`
-  padding: 4px;
-  align-self: center;
-  height: 36px;
-  width: 36px;
-  text-align: center;
-  border: 1px solid var(--light-gray);
-  border-radius: 50%;
-  background-color: var(--white);
-  cursor: pointer;
-`;
-
-const ImageWrapper = styled.div`
-  position: relative;
-`;
-
-const Image = styled.img`
-  width: 36px;
-`;
-
-type StatusIndicatorProps = {
-  statusColor: any;
-};
-
-const StatusIndicator = styled.div<StatusIndicatorProps>`
-  display: inherit;
-  position: absolute;
-  bottom: 2px;
-  left: -5px;
-  height: 10px;
-  width: 10px;
-  border: 1px solid var(--light-gray);
-  border-radius: 50%;
-  background-color: ${(props) => props.statusColor};
 `;
 
 const UserInfoContainer = styled.div`
@@ -99,12 +63,7 @@ export const UserModal = ({ open, handleClose, userInfo }: Props) => {
         {userInfo && (
           <>
             <Flex>
-              <ImageContainer>
-                <ImageWrapper>
-                  <StatusIndicator statusColor={getUserStatusColor(userInfo.status)} />
-                  <Image src={userInfo.profile_image} />
-                </ImageWrapper>
-              </ImageContainer>
+              <UserProfileImage user={userInfo} />
               <UserInfoContainer>
                 <DisplayName>{userInfo.display_name}</DisplayName>
                 <Type>{userInfo.type}</Type>

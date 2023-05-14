@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignsPost } from '@fortawesome/free-solid-svg-icons';
-import { Label } from '@/elements/Label';
+import { UserProfileImage } from '@/features/users';
+import { Label, TooltipWrapper } from '@/elements';
 
 const Container = styled.div``;
 
@@ -10,6 +11,11 @@ const MilestonesContainer = styled.div``;
 const LabelsContainer = styled.div``;
 
 const AssigneesContainer = styled.div``;
+
+const AssigneesWrapper = styled.div`
+  display: flex;
+  gap: 4px;
+`;
 
 type ItemProps = {
   changes?: any;
@@ -53,7 +59,19 @@ const Labels = ({ emptyTextPlaceholder, labels }: ItemProps) => {
 
 const Assignees = ({ emptyTextPlaceholder, assignees }: ItemProps) => {
   return (
-    <AssigneesContainer>{assignees![0] ? <div>Assignees</div> : <div>idk</div>}</AssigneesContainer>
+    <AssigneesContainer>
+      {assignees![0] ? (
+        <AssigneesWrapper>
+          {assignees!.map((assignee: any) => (
+            <TooltipWrapper text={assignee.email} additionalText="">
+              <UserProfileImage key={assignee.email} user={assignee} />
+            </TooltipWrapper>
+          ))}
+        </AssigneesWrapper>
+      ) : (
+        <div>{emptyTextPlaceholder}</div>
+      )}
+    </AssigneesContainer>
   );
 };
 

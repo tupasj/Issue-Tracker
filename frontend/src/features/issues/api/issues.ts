@@ -119,6 +119,19 @@ const updateIssueMilestone = async (issueNumber: number, currentProject: any, mi
   }
 };
 
+const updateIssueAssignees = async (issueNumber: number, currentProject: any, assignees: any[]) => {
+  try {
+    const updatedIssueAssignees = await axiosInstance.put(
+      `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/assignees`,
+      { assignees }
+    );
+
+    return updatedIssueAssignees.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const removeIssueMilestone = async (issueNumber: number, currentProject: any) => {
   try {
     const removeIssueMilestoneResponse = await axiosInstance.delete(
@@ -151,6 +164,7 @@ export {
   updateIssueOpenStatus,
   updateIssuePriority,
   updateIssueMilestone,
+  updateIssueAssignees,
   removeIssueMilestone,
   deleteIssue,
 };

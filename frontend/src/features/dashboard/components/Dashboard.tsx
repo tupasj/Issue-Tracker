@@ -37,7 +37,7 @@ export const Dashboard = () => {
 
     if (currentProject) {
       fetchIssues();
-      // fetchUserIssues();
+      fetchUserIssues();
     }
   }, [currentProject]);
 

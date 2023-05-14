@@ -3,7 +3,13 @@ import { useState, useEffect } from 'react';
 import { userContext, projectsContext } from '@/context';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
 import { BasicSelect, MultiSelect, MultiSelectObjects } from '@/components/UI';
-import { updateIssueLabels, updateIssueMilestone, removeIssueMilestone } from '@/features/issues';
+import {
+  updateIssueLabels,
+  updateIssueMilestone,
+  updateIssueAssignees,
+  removeIssueMilestone,
+} from '@/features/issues';
+import { getUsers } from '@/features/users';
 import { getMilestone, getMilestones } from '@/features/milestones';
 import { getIssueUsers } from '../api';
 import { IssueOptionBlock } from './IssueOptionBlock';
@@ -50,7 +56,7 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
   };
 
   const handleAssigneeSubmit = async () => {
-    // update assignees for current issue
+    await updateIssueAssignees(issueNumber, currentProject, assignees);
   };
 
   useEffect(() => {
@@ -62,6 +68,10 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
       setcurrentMilestone(milestone);
       setProjectMilestones(milestoneSelections);
     };
+    const fetchProjectUsers = async () => {
+      const projectUsers = await getUsers(currentProject);
+      setProjectUsers(projectUsers);
+    };
     const fetchAssignees = async () => {
       const assignees = await getIssueUsers(issueNumber, currentProject);
       setAssignees(assignees);
@@ -69,6 +79,7 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
 
     setLabelNames(labelNamesArray);
     fetchMilestones();
+    fetchProjectUsers();
     fetchAssignees();
   }, []);
 
@@ -110,7 +121,7 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
         title="Assignees"
         emptyTextPlaceholder="No assignees"
         handleSubmit={handleAssigneeSubmit}
-        changes={projectUsers}
+        changes={assignees}
         assignees={assignees}
       >
         <MultiSelectObjects

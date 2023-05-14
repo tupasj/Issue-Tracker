@@ -1,7 +1,6 @@
 import { db, QueryTypes } from '../../config/database';
 import { Issue } from '../../models/Issue';
 import { Project } from '../../models/Project';
-import { User } from '../../models/User';
 import { DBGetUserDisplayName } from './userDisplayNameQueries';
 
 const DBCreateIssue = async (
@@ -11,7 +10,6 @@ const DBCreateIssue = async (
   priority: string
 ) => {
   const project: any = await Project.findOne({ where: { code } });
-  const user: any = await User.findOne({ where: { email } });
   const queryResult: any = await db.query(
     `SELECT MAX(issue_number) FROM issues WHERE "projectCode"='${code}';`,
     { type: QueryTypes.SELECT }
@@ -27,7 +25,6 @@ const DBCreateIssue = async (
   });
 
   await project.addIssue(issue);
-  await user.addIssue(issue);
 
   return issue;
 };
@@ -96,6 +93,19 @@ const DBUpdateIssueMilestoneId = async (
   return updatedIssue;
 };
 
+const DBUpdateIssueAssignees = async (
+  issueNumber: string,
+  projectCode: string,
+  assignees: any[]
+) => {
+  const issue: any = await DBGetIssue(issueNumber, projectCode);
+
+  await issue.removeUsers();
+  for (let i = 0; i < assignees.length; i++) {
+    await issue.addUser(assignees[i].email);
+  }
+};
+
 const DBDeleteIssue = async (issueNumber: string, projectCode: string) => {
   await Issue.destroy({
     where: {
@@ -111,5 +121,6 @@ export {
   DBUpdateIssuePriority,
   DBUpdateIssueTitle,
   DBUpdateIssueMilestoneId,
+  DBUpdateIssueAssignees,
   DBDeleteIssue,
 };

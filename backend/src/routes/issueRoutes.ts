@@ -10,6 +10,7 @@ import {
   updateIssueLabels,
   updateIssuePriority,
   updateIssueTitle,
+  updateIssueAssignees,
   deleteIssue,
   getIssueUsers,
   assignIssueUsers,
@@ -32,6 +33,9 @@ router
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/title')
   .patch(updateIssueTitle);
+router
+  .route('/issueNumber=:issueNumber/projectCode=:projectCode/assignees')
+  .put(updateIssueAssignees);
 
 router.route('/user/email=:email/issues/:openStatus?').get(getUserIssues);
 router

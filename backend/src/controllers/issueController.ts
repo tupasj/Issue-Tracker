@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { db } from '../config/database';
 import { Issue } from '../models/Issue';
 import { User } from '../models/User';
-import { UserDisplayName } from '../models/UserDisplayName';
 import { Label } from '../models/Label';
 import {
   DBCreateIssue,
@@ -10,6 +9,7 @@ import {
   DBUpdateIssuePriority,
   DBUpdateIssueTitle,
   DBUpdateIssueMilestoneId,
+  DBUpdateIssueAssignees,
   DBDeleteIssue,
 } from '../utils/database/issueQueries';
 import { DBGetUser } from '../utils/database/userQueries';
@@ -80,13 +80,8 @@ const getProjectIssues = async (req: Request, res: Response) => {
       projectIssues = await project.getIssues();
     }
 
-    // Add postedBy and labels properties to each element in projectIssues array
+    // Add labels property
     for (let i = 0; i < projectIssues.length; i++) {
-      const user = await projectIssues[i].getUsers();
-      const userDisplayName: any = await UserDisplayName.findOne({
-        where: { userEmail: user[0].email },
-      });
-      projectIssues[i].setDataValue('postedBy', userDisplayName.display_name);
       const issueLabels = await projectIssues[i].getLabels();
       projectIssues[i].setDataValue('labels', issueLabels);
     }
@@ -187,6 +182,19 @@ const updateIssueTitle = async (req: Request, res: Response) => {
       title
     );
     res.status(200).json(updatedIssue);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateIssueAssignees = async (req: Request, res: Response) => {
+  const { issueNumber, projectCode } = req.params;
+  const { assignees } = req.body;
+
+  try {
+    await DBUpdateIssueAssignees(issueNumber, projectCode, assignees);
+
+    res.status(200).json();
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -301,6 +309,7 @@ export {
   updateIssuePriority,
   updateIssueTitle,
   updateIssueMilestone,
+  updateIssueAssignees,
   removeIssueMilestone,
   deleteIssue,
   assignIssueUsers,
