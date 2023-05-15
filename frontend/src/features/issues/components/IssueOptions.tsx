@@ -56,7 +56,8 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
   };
 
   const handleAssigneeSubmit = async () => {
-    await updateIssueAssignees(issueNumber, currentProject, assignees);
+    const updatedAssignees = await updateIssueAssignees(issueNumber, currentProject, assignees);
+    setAssignees(updatedAssignees);
   };
 
   useEffect(() => {
@@ -123,6 +124,7 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
         handleSubmit={handleAssigneeSubmit}
         changes={assignees}
         assignees={assignees}
+        setState={setAssignees}
       >
         <MultiSelectObjects
           label="assignees"

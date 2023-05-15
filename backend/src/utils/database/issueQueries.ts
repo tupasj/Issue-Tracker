@@ -40,6 +40,24 @@ const DBGetIssue = async (issueNumber: string, projectCode: string) => {
   return issue;
 };
 
+const DBGetIssueUsers = async (issueNumber: string, projectCode: string) => {
+  const issue: any = await DBGetIssue(issueNumber, projectCode);
+  const issueUsers: any[] = await issue.getUsers({
+    attributes: {
+      exclude: ['password'],
+    },
+  });
+
+  for (let i = 0; i < issueUsers.length; i++) {
+    const userDisplayName: any = await DBGetUserDisplayName(
+      issueUsers[i].email
+    );
+    issueUsers[i].setDataValue('display_name', userDisplayName.display_name);
+  }
+
+  return issueUsers;
+};
+
 const DBUpdateIssuePriority = async (
   issueNumber: string,
   projectCode: string,
@@ -100,7 +118,10 @@ const DBUpdateIssueAssignees = async (
 ) => {
   const issue: any = await DBGetIssue(issueNumber, projectCode);
 
-  await issue.removeUsers();
+  await db.query(`DELETE FROM "UserIssues";`, {
+    type: QueryTypes.DELETE,
+  });
+
   for (let i = 0; i < assignees.length; i++) {
     await issue.addUser(assignees[i].email);
   }
@@ -118,6 +139,7 @@ const DBDeleteIssue = async (issueNumber: string, projectCode: string) => {
 export {
   DBCreateIssue,
   DBGetIssue,
+  DBGetIssueUsers,
   DBUpdateIssuePriority,
   DBUpdateIssueTitle,
   DBUpdateIssueMilestoneId,

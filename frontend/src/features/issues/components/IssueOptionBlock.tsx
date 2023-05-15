@@ -34,6 +34,7 @@ type Props = {
   changes: any;
   labels?: any[];
   assignees?: any[];
+  setState?: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export const IssueOptionBlock = ({
@@ -44,10 +45,19 @@ export const IssueOptionBlock = ({
   changes,
   labels,
   assignees,
+  setState,
 }: Props) => {
   const [editingActive, setEditingActive] = useState(false);
 
+  const startEdit = () => {
+    if (assignees) {
+      setState!([]);
+    }
+    setEditingActive(true);
+  };
+
   const confirmChanges = (changes: any) => {
+    console.log('changes: ', changes);
     handleSubmit?.(changes);
     setEditingActive(false);
   };
@@ -59,7 +69,7 @@ export const IssueOptionBlock = ({
         {editingActive ? (
           <StyledFontAwesomeIcon icon={faCheck} onClick={() => confirmChanges(changes)} />
         ) : (
-          <StyledFontAwesomeIcon icon={faPenToSquare} onClick={() => setEditingActive(true)} />
+          <StyledFontAwesomeIcon icon={faPenToSquare} onClick={startEdit} />
         )}
       </FlexContainer>
       <>

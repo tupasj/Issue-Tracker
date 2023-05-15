@@ -6,6 +6,7 @@ import { Label } from '../models/Label';
 import {
   DBCreateIssue,
   DBGetIssue,
+  DBGetIssueUsers,
   DBUpdateIssuePriority,
   DBUpdateIssueTitle,
   DBUpdateIssueMilestoneId,
@@ -193,8 +194,9 @@ const updateIssueAssignees = async (req: Request, res: Response) => {
 
   try {
     await DBUpdateIssueAssignees(issueNumber, projectCode, assignees);
+    const issueUsers = await DBGetIssueUsers(issueNumber, projectCode);
 
-    res.status(200).json();
+    res.status(200).json(issueUsers);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
