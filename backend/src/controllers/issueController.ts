@@ -277,6 +277,13 @@ const getIssueUsers = async (req: Request, res: Response) => {
       },
     });
 
+    for (let i = 0; i < issueUsers.length; i++) {
+      const userDisplayName: any = await DBGetUserDisplayName(
+        issueUsers[i].email
+      );
+      issueUsers[i].setDataValue('display_name', userDisplayName.display_name);
+    }
+
     res.status(200).json(issueUsers);
   } catch (error: any) {
     res.status(400).json({ message: error.message });

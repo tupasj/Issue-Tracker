@@ -63,7 +63,11 @@ const Assignees = ({ emptyTextPlaceholder, assignees }: ItemProps) => {
       {assignees![0] ? (
         <AssigneesWrapper>
           {assignees!.map((assignee: any) => (
-            <TooltipWrapper text={assignee.email} additionalText="">
+            <TooltipWrapper
+              key={assignee.email}
+              text={assignee.display_name}
+              additionalText={`(${assignee.email})`}
+            >
               <UserProfileImage key={assignee.email} user={assignee} />
             </TooltipWrapper>
           ))}
