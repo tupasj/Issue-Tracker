@@ -90,8 +90,10 @@ export const MilestoneView = ({ milestones, setMilestones }: Props) => {
 
   const handleDeleteMilestone = async () => {
     const milestoneIdInt = parseInt(milestoneId as string);
-    await deleteMilestone(currentProject, milestoneIdInt);
-    navigate('/app/milestones/open');
+    const response: any = await deleteMilestone(currentProject, milestoneIdInt);
+    if (response.status === 200) {
+      navigate('/app/milestones/open');
+    }
   };
 
   return (

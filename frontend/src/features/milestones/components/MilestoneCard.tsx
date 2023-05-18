@@ -64,9 +64,17 @@ export const MilestoneCard = ({ id, title }: Props) => {
     openMilestoneIssues.isLoading &&
     closedMilestoneIssues.isLoading;
   const noIssues = !allMilestoneIssues.isLoading && allMilestoneIssues.milestoneIssues.length === 0;
-  const completionPercentage =
-    (closedMilestoneIssues.milestoneIssues.length / allMilestoneIssues.milestoneIssues.length) *
-    100;
+
+  const getCompletionPercentage = (noIssues: boolean) => {
+    if (noIssues) {
+      return 0;
+    } else {
+      return (
+        (closedMilestoneIssues.milestoneIssues.length / allMilestoneIssues.milestoneIssues.length) *
+        100
+      );
+    }
+  };
 
   return (
     <Container
@@ -76,11 +84,11 @@ export const MilestoneCard = ({ id, title }: Props) => {
         <FontAwesomeIcon icon={faSignsPost} /> {title}
       </Title>
       <ProgressBarContainer>
-        <MilestoneProgressBar percentage={completionPercentage} />
+        <MilestoneProgressBar percentage={getCompletionPercentage(noIssues)} />
         <IssueInfo>
           {!loading && !noIssues ? (
             <>
-              <div>{completionPercentage}% complete</div>
+              <div>{getCompletionPercentage(noIssues)}% complete</div>
               <div>{openMilestoneIssues.milestoneIssues.length} open</div>
               <div>{closedMilestoneIssues.milestoneIssues.length} closed</div>
             </>

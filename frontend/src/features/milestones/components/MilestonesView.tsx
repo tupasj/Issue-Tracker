@@ -41,6 +41,7 @@ type Props = {
 
 export const MilestonesView = ({ milestones, setMilestones }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [loadingMilestones, setLoadingMilestones] = useState(false);
   let { milestonesOpenStatus }: any = useParams();
   let location = useLocation();
   const { currentProject } = projectsContext();
@@ -51,8 +52,10 @@ export const MilestonesView = ({ milestones, setMilestones }: Props) => {
 
   useEffect(() => {
     const fetchMilestones = async () => {
+      setLoadingMilestones(true);
       const retrievedMilestones = await getMilestones(currentProject, milestonesOpenStatus);
       setMilestones(retrievedMilestones);
+      setLoadingMilestones(false);
     };
 
     fetchMilestones();
@@ -65,7 +68,11 @@ export const MilestonesView = ({ milestones, setMilestones }: Props) => {
         <Button onClick={() => setModalOpen(true)}>Add Milestone</Button>
       </MilestonesHeader>
       <MilestonesContainer>
-        {milestones[0] ? <MilestoneCards milestones={milestones} /> : <NoMilestonesFound />}
+        {milestones[0] && !loadingMilestones ? (
+          <MilestoneCards milestones={milestones} />
+        ) : (
+          <NoMilestonesFound />
+        )}
       </MilestonesContainer>
       <MilestoneAddModal
         modalOpen={modalOpen}
