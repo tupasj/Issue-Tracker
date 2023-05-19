@@ -67,6 +67,13 @@ const updateUserStatus = async (email: string, payload: any) => {
   }
 };
 
+const removeUserFromProject = async (email: string, code: string) => {
+  try {
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 export {
   getUserInfo,
   getUsers,
@@ -76,4 +83,5 @@ export {
   updateUserPhoneNumber,
   updateUserUsername,
   updateUserStatus,
+  removeUserFromProject,
 };

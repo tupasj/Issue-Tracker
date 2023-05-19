@@ -6,6 +6,7 @@ import { PositionedMenu } from '@/components/UI';
 import { LoadingPlaceholder } from '@/elements';
 import { UserProfileImage } from './UserProfileImage';
 import { UserModal } from './UserModal';
+import { UserModalRemove } from './UserModalRemove';
 
 const Container = styled.div`
   display: flex;
@@ -62,11 +63,20 @@ type Props = {
 };
 
 export const UserCard = ({ user }: Props) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [userInfoModalOpen, setUserInfoModalOpen] = useState(false);
+  const [removeUserModalOpen, setRemoveUserModalOpen] = useState(false);
 
   const handleOpen = () => {
-    setModalOpen(true);
+    setUserInfoModalOpen(true);
   };
+  const handleOpenRemoveUserModal = () => {
+    setRemoveUserModalOpen(true);
+  };
+
+  const menuItems = [
+    { title: 'View info', cb: handleOpen },
+    { title: 'Remove user', cb: handleOpenRemoveUserModal },
+  ];
 
   return (
     <Container>
@@ -78,11 +88,20 @@ export const UserCard = ({ user }: Props) => {
         </UserInfoContainer>
       </Left>
       <Right>
-        <PositionedMenu items={[{ title: 'View info', cb: handleOpen }]}>
+        <PositionedMenu items={menuItems}>
           <StyledFontAwesomeIcon icon={faEllipsis} />
         </PositionedMenu>
       </Right>
-      <UserModal open={modalOpen} handleClose={() => setModalOpen(false)} userInfo={user} />
+      <UserModal
+        open={userInfoModalOpen}
+        handleClose={() => setUserInfoModalOpen(false)}
+        userInfo={user}
+      />
+      <UserModalRemove
+        open={removeUserModalOpen}
+        handleClose={() => setRemoveUserModalOpen(false)}
+        userInfo={user}
+      />
     </Container>
   );
 };

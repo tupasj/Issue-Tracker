@@ -84,10 +84,6 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
     fetchAssignees();
   }, []);
 
-  useEffect(() => {
-    console.log('assignees: ', assignees);
-  }, [assignees]);
-
   return (
     <Container>
       <IssueOptionBlock
