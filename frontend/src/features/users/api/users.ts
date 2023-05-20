@@ -67,6 +67,14 @@ const updateUserStatus = async (email: string, payload: any) => {
   }
 };
 
+const updateUserType = async (email: string, payload: any) => {
+  try {
+    await axiosInstance.patch(`/user/email=${email}/type`, payload);
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const removeUserFromProject = async (email: string, code: string) => {
   try {
     await axiosInstance.delete(`/projects/code=${code}/user/email=${email}`);
@@ -84,5 +92,6 @@ export {
   updateUserPhoneNumber,
   updateUserUsername,
   updateUserStatus,
+  updateUserType,
   removeUserFromProject,
 };

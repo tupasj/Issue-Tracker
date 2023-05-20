@@ -12,12 +12,14 @@ const Container = styled.div`
 
 type Props = {
   users: any[];
+  setUsers: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const UserCards = ({ users }: Props) => {
+export const UserCards = ({ users, setUsers }: Props) => {
   return (
     <Container>
-      {users && users.map((user: any) => <UserCard key={user.email} user={user} />)}
+      {users &&
+        users.map((user: any) => <UserCard key={user.email} user={user} setUsers={setUsers} />)}
     </Container>
   );
 };

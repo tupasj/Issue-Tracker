@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { projectsContext } from '@/context';
 import { BasicModal } from '@/components';
 import { Button } from '@/elements';
-import { getUsers, removeUserFromProject } from '../api';
+import { getUsers, updateUserType } from '../api';
 
 const Container = styled.div`
   display: flex;
@@ -39,11 +39,12 @@ type Props = {
   setUsers: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const UserModalRemove = ({ open, handleClose, userInfo, setUsers }: Props) => {
+export const UserModalPromote = ({ open, handleClose, userInfo, setUsers }: Props) => {
   const { currentProject } = projectsContext();
 
-  const handleDelete = async () => {
-    await removeUserFromProject(userInfo.email, currentProject.code);
+  const handleClick = async () => {
+    const payload = { type: 'admin' };
+    await updateUserType(userInfo.email, payload);
     const users = await getUsers(currentProject);
     setUsers(users);
   };
@@ -51,13 +52,12 @@ export const UserModalRemove = ({ open, handleClose, userInfo, setUsers }: Props
   return (
     <BasicModal modalOpen={open} handleClose={handleClose}>
       <Container>
-        <Heading>Remove user from project</Heading>
+        <Heading>Promote user to admin</Heading>
         <NormalText>
-          Are you sure you want to remove the user <Bold>{userInfo.display_name}</Bold> from the
-          project?
+          Are you sure you want to promote <Bold>{userInfo.display_name}</Bold> to an admin user?
         </NormalText>
-        <Button color="var(--red)" hoverColor="var(--dark-red)" onClick={handleDelete}>
-          Remove user
+        <Button color="var(--green)" hoverColor="var(--dark-green)" onClick={handleClick}>
+          Promote to admin
         </Button>
       </Container>
     </BasicModal>

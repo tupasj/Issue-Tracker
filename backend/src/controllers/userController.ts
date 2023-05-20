@@ -156,6 +156,18 @@ const updateUserStatus = async (req: Request, res: Response) => {
   }
 };
 
+const updateUserType = async (req: Request, res: Response) => {
+  const { email } = req.params;
+  const { type } = req.body;
+
+  try {
+    await User.update({ type }, { where: { email } });
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const deleteUser = async (req: Request, res: Response) => {
   const { email } = req.params;
 
@@ -186,6 +198,7 @@ export {
   updateUserUsername,
   updateUserPhoneNumber,
   updateUserStatus,
+  updateUserType,
   deleteUser,
   logoutUser,
   refreshUserToken,

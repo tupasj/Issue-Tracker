@@ -7,6 +7,7 @@ import { LoadingPlaceholder } from '@/elements';
 import { UserProfileImage } from './UserProfileImage';
 import { UserModal } from './UserModal';
 import { UserModalRemove } from './UserModalRemove';
+import { UserModalPromote } from './UserModalPromote';
 
 const Container = styled.div`
   display: flex;
@@ -60,11 +61,13 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 
 type Props = {
   user: any;
+  setUsers: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const UserCard = ({ user }: Props) => {
+export const UserCard = ({ user, setUsers }: Props) => {
   const [userInfoModalOpen, setUserInfoModalOpen] = useState(false);
   const [removeUserModalOpen, setRemoveUserModalOpen] = useState(false);
+  const [promoteUserModalOpen, setPromoteUserModalOpen] = useState(false);
 
   const handleOpen = () => {
     setUserInfoModalOpen(true);
@@ -72,9 +75,13 @@ export const UserCard = ({ user }: Props) => {
   const handleOpenRemoveUserModal = () => {
     setRemoveUserModalOpen(true);
   };
+  const handleOpenPromoteUserModal = () => {
+    setPromoteUserModalOpen(true);
+  };
 
   const menuItems = [
     { title: 'View info', cb: handleOpen },
+    { title: 'Make admin', cb: handleOpenPromoteUserModal },
     { title: 'Remove user', cb: handleOpenRemoveUserModal },
   ];
 
@@ -97,10 +104,17 @@ export const UserCard = ({ user }: Props) => {
         handleClose={() => setUserInfoModalOpen(false)}
         userInfo={user}
       />
+      <UserModalPromote
+        open={promoteUserModalOpen}
+        handleClose={() => setPromoteUserModalOpen(false)}
+        userInfo={user}
+        setUsers={setUsers}
+      />
       <UserModalRemove
         open={removeUserModalOpen}
         handleClose={() => setRemoveUserModalOpen(false)}
         userInfo={user}
+        setUsers={setUsers}
       />
     </Container>
   );

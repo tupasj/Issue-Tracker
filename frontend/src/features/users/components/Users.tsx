@@ -39,7 +39,7 @@ export const Users = () => {
       <SearchbarContainer>
         <UserSearchbar users={users} setUsers={setUsers} currentProject={currentProject} />
       </SearchbarContainer>
-      <UserCards users={users} />
+      <UserCards users={users} setUsers={setUsers} />
     </Container>
   );
 };
