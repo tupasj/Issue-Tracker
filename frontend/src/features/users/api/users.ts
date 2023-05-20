@@ -69,6 +69,7 @@ const updateUserStatus = async (email: string, payload: any) => {
 
 const removeUserFromProject = async (email: string, code: string) => {
   try {
+    await axiosInstance.delete(`/projects/code=${code}/user/email=${email}`);
   } catch (error: any) {
     axiosErrorHandler(error);
   }

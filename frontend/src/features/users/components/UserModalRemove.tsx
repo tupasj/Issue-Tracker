@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+import { projectsContext } from '@/context';
 import { BasicModal } from '@/components';
 import { Button } from '@/elements';
+import { removeUserFromProject } from '../api';
 
 const Container = styled.div`
   display: flex;
@@ -37,8 +39,11 @@ type Props = {
 };
 
 export const UserModalRemove = ({ open, handleClose, userInfo }: Props) => {
+  const { currentProject } = projectsContext();
+
   const handleDelete = async () => {
-    console.log('userInfo: ', userInfo);
+    await removeUserFromProject(userInfo.email, currentProject.code);
+    console.log('deleted');
   };
 
   return (
