@@ -84,16 +84,16 @@ export const MilestoneCard = ({ id, title }: Props) => {
         <FontAwesomeIcon icon={faSignsPost} /> {title}
       </Title>
       <ProgressBarContainer>
-        <MilestoneProgressBar percentage={getCompletionPercentage(noIssues)} />
+        {!loading && !noIssues && (
+          <MilestoneProgressBar percentage={getCompletionPercentage(noIssues)} />
+        )}
         <IssueInfo>
-          {!loading && !noIssues ? (
+          {!loading && !noIssues && (
             <>
               <div>{getCompletionPercentage(noIssues)}% complete</div>
               <div>{openMilestoneIssues.milestoneIssues.length} open</div>
               <div>{closedMilestoneIssues.milestoneIssues.length} closed</div>
             </>
-          ) : (
-            <p>no issues</p>
           )}
         </IssueInfo>
       </ProgressBarContainer>

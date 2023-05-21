@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { userContext, projectsContext } from '@/context';
 import { Input } from '@/components/Form';
-import { joinProject, deleteProject } from '@/features/projects';
+import { joinProject, removeProjectUser } from '@/features/projects';
 import { Formik, Form } from 'formik';
 import { SubformSubmitButton } from '@/components/Form';
 
@@ -66,7 +66,7 @@ export const SettingsProjects = ({ submitButtonRef, setChangesApplied }: Props) 
     const projectToLeave = projects.filter((project: any) => project.name == projectName);
 
     if (projectName !== '' && projectToLeave[0]) {
-      const updatedProjects = await deleteProject(projectToLeave, email);
+      const updatedProjects = await removeProjectUser(projectToLeave, email);
       setProjects(updatedProjects);
       setValidNameText(`Left project '${projectToLeave[0].name}'.`);
       setChangesApplied(true);
@@ -76,7 +76,6 @@ export const SettingsProjects = ({ submitButtonRef, setChangesApplied }: Props) 
   };
 
   const handleSubmit = () => {
-    console.log('SettingsProjects submit');
     validationActive = true;
   };
 

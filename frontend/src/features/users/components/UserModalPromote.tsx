@@ -32,6 +32,15 @@ const Bold = styled.span`
   font-weight: 600;
 `;
 
+const List = styled.ul`
+  padding-left: 25%;
+  padding-right: 25%;
+  padding-top: 12px;
+  text-align: start;
+  line-height: 1.25;
+  list-style-type: disc;
+`;
+
 type Props = {
   open: boolean;
   handleClose: () => void;
@@ -55,6 +64,12 @@ export const UserModalPromote = ({ open, handleClose, userInfo, setUsers }: Prop
         <Heading>Promote user to admin</Heading>
         <NormalText>
           Are you sure you want to promote <Bold>{userInfo.display_name}</Bold> to an admin user?
+          Admins can:
+          <List>
+            <li>Delete Issues</li>
+            <li>Create, edit, and delete milestones</li>
+            <li>Delete projects</li>
+          </List>
         </NormalText>
         <Button color="var(--green)" hoverColor="var(--dark-green)" onClick={handleClick}>
           Promote to admin

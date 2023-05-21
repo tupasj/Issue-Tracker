@@ -34,13 +34,8 @@ const getMilestoneIssues = async (req: Request, res: Response) => {
       milestoneIssues = await milestone[0].getIssues();
     }
 
-    // Add postedBy and labels properties to each element in milestoneIssues array
+    // Add postedBy and property to each element in milestoneIssues array
     for (let i = 0; i < milestoneIssues.length; i++) {
-      const user = await milestoneIssues[i].getUsers();
-      const userDisplayName: any = await UserDisplayName.findOne({
-        where: { userEmail: user[0].email },
-      });
-      milestoneIssues[i].setDataValue('postedBy', userDisplayName.display_name);
       const issueLabels = await milestoneIssues[i].getLabels();
       milestoneIssues[i].setDataValue('labels', issueLabels);
     }

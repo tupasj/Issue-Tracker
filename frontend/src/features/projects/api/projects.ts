@@ -30,7 +30,16 @@ const joinProject = async (projectCode: string, email: string) => {
   }
 };
 
-const deleteProject = async (projectToLeave: any, email: string) => {
+const deleteProject = async (projectCode: string) => {
+  try {
+    const response = await axiosInstance.delete(`/projects/code=${projectCode}`);
+    return response;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
+const removeProjectUser = async (projectToLeave: any, email: string) => {
   try {
     const updatedProjects = await axiosInstance.delete(
       `/projects/code=${projectToLeave[0].code}/user/email=${email}`
@@ -41,4 +50,4 @@ const deleteProject = async (projectToLeave: any, email: string) => {
   }
 };
 
-export { createProject, getProjects, joinProject, deleteProject };
+export { createProject, getProjects, joinProject, deleteProject, removeProjectUser };
