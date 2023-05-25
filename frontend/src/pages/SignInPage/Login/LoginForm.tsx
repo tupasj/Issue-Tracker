@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { login } from '@/features/auth';
+import { getProjects } from '@/features/projects';
 import { Input } from '@/components/Form';
+import { ProjectPrompt } from '../ProjectPrompt';
 
 const FormWrapper = styled.div`
   display: flex;
@@ -40,10 +42,20 @@ interface FormValues {
 }
 
 type Props = {
+  userEmail: string | null;
   setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentProject: React.Dispatch<React.SetStateAction<any | null>>;
+  noUserProjects: boolean;
+  setNoUserProjects: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const LoginForm = ({ setUserEmail }: Props) => {
+export const LoginForm = ({
+  userEmail,
+  setUserEmail,
+  setCurrentProject,
+  noUserProjects,
+  setNoUserProjects,
+}: Props) => {
   const [notificationText, setNotificationText] = useState('');
   const navigate = useNavigate();
 
@@ -65,44 +77,55 @@ export const LoginForm = ({ setUserEmail }: Props) => {
       email: values.email,
       password: values.password,
     };
-    const loginResponse = await login(userCredentials);
+    setUserEmail(userCredentials.email);
 
-    if (loginResponse.tokens) {
-      setUserEmail(userCredentials.email);
-      navigate('/app/dashboard');
-    } else {
-      setNotificationText(loginResponse.response.data.message);
+    const userProjects = await getProjects(userCredentials.email);
+    if (userProjects.length > 0) {
+      const loginResponse = await login(userCredentials);
+      if (loginResponse.tokens) {
+        navigate('/app/dashboard');
+      } else {
+        setNotificationText(loginResponse.response.data.message);
+      }
+    } else if (userProjects.length <= 0) {
+      setNoUserProjects(true);
     }
   };
 
   let validationActive = false;
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      validateOnBlur={validationActive}
-      validateOnChange={validationActive}
-      onSubmit={(values, { resetForm }) => {
-        onSubmit(values);
-        resetForm();
-      }}
-    >
-      <Form>
-        <FormWrapper>
-          <NotificationTextContainer>{notificationText}</NotificationTextContainer>
-          <Input stacked={true} type="email" id="email" name="email" placeholder="Email" />
-          <Input
-            stacked={true}
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password"
-          />
-          <LoginButton type="submit" onClick={() => (validationActive = true)}>
-            Log In
-          </LoginButton>
-        </FormWrapper>
-      </Form>
-    </Formik>
+    <>
+      {noUserProjects ? (
+        <ProjectPrompt userEmail={userEmail} setCurrentProject={setCurrentProject} />
+      ) : (
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          validateOnBlur={validationActive}
+          validateOnChange={validationActive}
+          onSubmit={(values, { resetForm }) => {
+            onSubmit(values);
+            resetForm();
+          }}
+        >
+          <Form>
+            <FormWrapper>
+              <NotificationTextContainer>{notificationText}</NotificationTextContainer>
+              <Input stacked={true} type="email" id="email" name="email" placeholder="Email" />
+              <Input
+                stacked={true}
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+              />
+              <LoginButton type="submit" onClick={() => (validationActive = true)}>
+                Log In
+              </LoginButton>
+            </FormWrapper>
+          </Form>
+        </Formik>
+      )}
+    </>
   );
 };

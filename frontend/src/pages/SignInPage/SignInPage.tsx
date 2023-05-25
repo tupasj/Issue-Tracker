@@ -21,7 +21,11 @@ export const SignInPage = ({ form, userEmail, setUserEmail, setCurrentProject }:
   if (form === 'login') {
     return (
       <Container>
-        <LoginFormContainer setUserEmail={setUserEmail} />
+        <LoginFormContainer
+          userEmail={userEmail}
+          setUserEmail={setUserEmail}
+          setCurrentProject={setCurrentProject}
+        />
       </Container>
     );
   } else if (form === 'signup') {

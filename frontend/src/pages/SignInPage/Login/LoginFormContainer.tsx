@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginForm } from '@/pages/SignInPage';
 
@@ -38,21 +39,36 @@ const SwitchFormMessage = styled.div`
 `;
 
 type Props = {
+  userEmail: string | null;
   setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentProject: React.Dispatch<React.SetStateAction<any | null>>;
 };
 
-export const LoginFormContainer = ({ setUserEmail }: Props) => {
+export const LoginFormContainer = ({ userEmail, setUserEmail, setCurrentProject }: Props) => {
+  const [noUserProjects, setNoUserProjects] = useState(false);
   const navigate = useNavigate();
 
   return (
     <FormContainer>
-      <Title>Welcome to Issue Tracker</Title>
-      <SignInMessage>Sign in to your account</SignInMessage>
-      <LoginForm setUserEmail={setUserEmail} />
-      <SwitchFormMessage>
-        Don't have an account?{' '}
-        <SwitchFormLink onClick={() => navigate(`/register`)}>Register now</SwitchFormLink>
-      </SwitchFormMessage>
+      {!noUserProjects && (
+        <>
+          <Title>Welcome to Issue Tracker</Title>
+          <SignInMessage>Sign in to your account</SignInMessage>
+        </>
+      )}
+      <LoginForm
+        userEmail={userEmail}
+        setUserEmail={setUserEmail}
+        setCurrentProject={setCurrentProject}
+        noUserProjects={noUserProjects}
+        setNoUserProjects={setNoUserProjects}
+      />
+      {!noUserProjects && (
+        <SwitchFormMessage>
+          Don't have an account?{' '}
+          <SwitchFormLink onClick={() => navigate(`/register`)}>Register now</SwitchFormLink>
+        </SwitchFormMessage>
+      )}
     </FormContainer>
   );
 };

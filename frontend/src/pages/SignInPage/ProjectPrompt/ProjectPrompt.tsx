@@ -76,6 +76,8 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
   const navigate = useNavigate();
 
   const handleAddProject = async () => {
+    console.log('projectName: ', projectName);
+    console.log('userEmail: ', userEmail);
     const updatedProjects = await createProject(projectName, userEmail);
 
     if (updatedProjects) {
@@ -100,7 +102,7 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
   return (
     <FormContainer>
       <ProjectPromptContainer>
-        <MainText>Signup successful!</MainText>
+        <MainText>You currently have no projects.</MainText>
         <NotificationBox>{notificationText}</NotificationBox>
         <Text>Start by creating a new project.</Text>
         <InputGroup>

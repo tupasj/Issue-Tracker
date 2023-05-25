@@ -55,7 +55,7 @@ const createIssue = async (req: Request, res: Response) => {
     issue.setDataValue('labels', labelObjects);
 
     // Add milestone property
-    if (currentMilestone) {
+    if (currentMilestone && currentMilestone.id !== 9999) {
       const milestone = await DBGetMilestone(currentMilestone);
       await milestone.addIssue(issue);
       issue.setDataValue('milestone', milestone);

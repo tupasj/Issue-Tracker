@@ -41,11 +41,11 @@ export const Dashboard = () => {
     }
   }, [currentProject]);
 
-  useEffect(() => {
-    if (allIssues) {
-      console.log('allIssues: ', allIssues);
-    }
-  }, [allIssues]);
+  // useEffect(() => {
+  //   if (allIssues) {
+  //     console.log('allIssues: ', allIssues);
+  //   }
+  // }, [allIssues]);
 
   return (
     <>

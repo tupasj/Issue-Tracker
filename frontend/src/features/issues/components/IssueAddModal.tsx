@@ -77,10 +77,6 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
     await createComment(issueNumber, email, payload);
   };
 
-  const addAssignees = async () => {
-    // await axiosInstance.put(`/issues/issueNumber=:issueNumber/projectCode=:projectCode/users`);
-  };
-
   const createNewIssue = async (e: any) => {
     e.preventDefault();
     const milestone = currentMilestone === 'none' ? null : currentMilestone;
@@ -101,8 +97,6 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
     if (commentTextContent !== '') {
       addComment(newIssue.issue_number);
     }
-
-    console.log('newIssue: ', newIssue);
   };
 
   useEffect(() => {
