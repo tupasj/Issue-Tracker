@@ -8,13 +8,13 @@ const authorize = async (req: any, res: any, next: any) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     try {
-      // Get token from header
+      // Get token from header. Return error if there is no token.
       token = req.headers.authorization.split(' ')[1];
       if (!token) {
         return res.status(401).json({ message: 'Access token is missing.' });
       }
 
-      // Verify the access token and extract the payload
+      // Verify the access token and extract the payload. Return an error if the user is not an admin.
       // @ts-expect-error
       const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 

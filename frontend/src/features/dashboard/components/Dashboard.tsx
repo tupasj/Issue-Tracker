@@ -21,7 +21,7 @@ export const Dashboard = () => {
   const overallStatusChartData = useStatusChartData(allIssues);
   const personalStatusChartData = useStatusChartData(userIssues);
   const { currentProject } = projectsContext();
-  const { email } = userContext();
+  const { email, displayName, profileImage, status, type } = userContext();
 
   useEffect(() => {
     const fetchIssues = async () => {

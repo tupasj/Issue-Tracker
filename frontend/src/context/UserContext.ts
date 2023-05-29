@@ -8,6 +8,8 @@ export interface UserContextInterface {
   setProfileImage: React.Dispatch<React.SetStateAction<string>>;
   status: any;
   setStatus: React.Dispatch<React.SetStateAction<any>>;
+  type: string;
+  setType: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const UserContext = createContext<UserContextInterface | null>(null);

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { projectsContext } from '@/context';
+import { projectsContext, userContext } from '@/context';
 import { BasicModal } from '@/components';
 import { Button } from '@/elements';
 import { getUsers, updateUserType } from '../api';
@@ -50,13 +50,17 @@ type Props = {
 
 export const UserModalPromote = ({ open, handleClose, userInfo, setUsers }: Props) => {
   const { currentProject } = projectsContext();
+  const { setType } = userContext();
 
   const handleClick = async () => {
     const payload = { type: 'admin' };
-    await updateUserType(userInfo.email, payload);
-    const users = await getUsers(currentProject);
-    setUsers(users);
-    handleClose();
+    const response = await updateUserType(userInfo.email, payload);
+    if (response.status === 200) {
+      setType('admin');
+      const users = await getUsers(currentProject);
+      setUsers(users);
+      handleClose();
+    }
   };
 
   return (

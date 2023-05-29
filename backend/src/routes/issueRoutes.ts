@@ -18,6 +18,7 @@ import {
   updateIssueMilestone,
   removeIssueMilestone,
 } from '../controllers/issueController';
+import { authorize } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ router
   .get(getIssueLabels);
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode')
-  .delete(deleteIssue);
+  .delete(authorize, deleteIssue);
 router
   .route('/issueNumber=:issueNumber/projectCode=:projectCode/priority')
   .patch(updateIssuePriority);

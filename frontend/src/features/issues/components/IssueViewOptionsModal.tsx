@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { makeUpdatedIssues } from '@/utils/issueUtils';
-import { projectsContext } from '@/context';
+import { projectsContext, userContext } from '@/context';
 import { updateIssuePriority, updateIssueTitle, deleteIssue } from '@/features/issues';
 import { Button } from '@/elements';
 import { BasicSelect } from '@/components/UI';
@@ -51,6 +51,7 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
   const [priority, setPriority] = useState('');
   const items = ['none', 'high', 'medium', 'low'];
   const { currentProject } = projectsContext();
+  const { type } = userContext();
   let { issueNumber } = useParams() as any;
   const issueNumberInt = parseInt(issueNumber);
   const navigate = useNavigate();
@@ -95,10 +96,14 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
         />
         <button onClick={handleSubmitPriority}>Confirm</button>
       </InputWrapper>
-      <H3>Delete Issue</H3>
-      <Button onClick={handleDeleteIssue} color="var(--red)" hoverColor="var(--dark-red)">
-        Delete Issue <FontAwesomeIcon icon={faTrash} />
-      </Button>
+      {type === 'admin' && (
+        <>
+          <H3>Delete Issue</H3>
+          <Button onClick={handleDeleteIssue} color="var(--red)" hoverColor="var(--dark-red)">
+            Delete Issue <FontAwesomeIcon icon={faTrash} />
+          </Button>
+        </>
+      )}
     </Container>
   );
 };

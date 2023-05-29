@@ -35,6 +35,7 @@ export const AppPage = ({
   const [imageURL, setImageURL] = useState('');
   const [userDisplayName, setUserDisplayName] = useState('');
   const [userStatus, setUserStatus] = useState();
+  const [userType, setUserType] = useState('');
   const definedUserContext: UserContextInterface = {
     email: userEmail,
     displayName: userDisplayName,
@@ -43,6 +44,8 @@ export const AppPage = ({
     setProfileImage: setImageURL,
     status: userStatus,
     setStatus: setUserStatus,
+    type: userType,
+    setType: setUserType,
   };
 
   useEffect(() => {
@@ -52,6 +55,7 @@ export const AppPage = ({
       const status = { status: userInfo.status, color: userStatusColor };
       setUserStatus(status as any);
       setImageURL(userInfo.profile_image);
+      setUserType(userInfo.type);
     };
     const fetchUserDisplayName = async () => {
       const userDisplayName = await getUserDisplayName(userEmail as string);
