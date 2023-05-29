@@ -30,7 +30,7 @@ const createUser = async (req: Request, res: Response) => {
 
   try {
     user = await DBCreateUser(email, password, first_name, last_name);
-    const tokens = generateTokens({ email: email });
+    const tokens = generateTokens({ email: email, type: 'regular' });
     res.cookie('jwt', tokens, { httpOnly: true });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -57,7 +57,7 @@ const loginUser = async (req: Request, res: Response) => {
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
-      const tokens = generateTokens({ email: email });
+      const tokens = generateTokens({ email: email, type: user.type });
       const userInfoObject = {
         email,
         tokens,

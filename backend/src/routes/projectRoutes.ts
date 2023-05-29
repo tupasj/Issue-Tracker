@@ -17,6 +17,7 @@ import {
   updateMilestone,
   deleteMilestone,
 } from '../controllers/milestoneController';
+import { authorize } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -39,7 +40,7 @@ router
 
 router
   .route('/code=:code/milestones/:openStatus?')
-  .post(createMilestone)
+  .post(authorize, createMilestone)
   .get(getProjectMilestones);
 router
   .route('/code=:code/milestone/id=:id/:openStatus?')

@@ -1,16 +1,33 @@
 import jwt from 'jsonwebtoken';
 
-const authenticateToken = (req: any, res: any, next: any) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) return res.sendStatus(401);
+const authorize = async (req: any, res: any, next: any) => {
+  let token;
 
-  // @ts-expect-error
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendSatus(403);
-    req.user = user;
-    next();
-  });
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      // Get token from header
+      token = req.headers.authorization.split(' ')[1];
+      if (!token) {
+        return res.status(401).json({ message: 'Access token is missing.' });
+      }
+
+      // Verify the access token and extract the payload
+      // @ts-expect-error
+      const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+      if (user.type !== 'admin') {
+        return res.status(403).json({ message: 'Access forbidden.' });
+      }
+
+      // Move to the next middleware or route handler as no errors have occured at this point
+      next();
+    } catch (error) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+  }
 };
 
-export { authenticateToken };
+export { authorize };

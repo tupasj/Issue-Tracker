@@ -69,7 +69,8 @@ const updateUserStatus = async (email: string, payload: any) => {
 
 const updateUserType = async (email: string, payload: any) => {
   try {
-    await axiosInstance.patch(`/user/email=${email}/type`, payload);
+    const response = await axiosInstance.patch(`/user/email=${email}/type`, payload);
+    return response.data;
   } catch (error: any) {
     axiosErrorHandler(error);
   }

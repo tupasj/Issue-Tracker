@@ -56,6 +56,7 @@ export const UserModalPromote = ({ open, handleClose, userInfo, setUsers }: Prop
     await updateUserType(userInfo.email, payload);
     const users = await getUsers(currentProject);
     setUsers(users);
+    handleClose();
   };
 
   return (

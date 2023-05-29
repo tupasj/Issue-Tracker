@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 import { storeRefreshToken } from './mongoDbUtils';
 import refreshTokenModel from '../models/refreshToken';
 
-const generateAccessToken = (userEmail: object): string | undefined => {
+const generateAccessToken = (payload: object): string | undefined => {
   try {
-    return jwt.sign(userEmail, process.env.ACCESS_TOKEN_SECRET as string, {
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, {
       expiresIn: '6h',
     });
   } catch (error: any) {
@@ -13,9 +13,9 @@ const generateAccessToken = (userEmail: object): string | undefined => {
   }
 };
 
-const generateRefreshToken = (userEmail: object): string | undefined => {
+const generateRefreshToken = (payload: object): string | undefined => {
   try {
-    return jwt.sign(userEmail, process.env.REFRESH_TOKEN_SECRET as string);
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET as string);
   } catch (error: any) {
     console.log('generateRefreshToken error: ', error.message);
   }
@@ -49,9 +49,9 @@ const deleteRefreshToken = async (req: Request, res: Response) => {
   }
 };
 
-const generateTokens = (userEmail: object) => {
-  const accessToken = generateAccessToken(userEmail);
-  const refreshToken = generateRefreshToken(userEmail);
+const generateTokens = (payload: object) => {
+  const accessToken = generateAccessToken(payload);
+  const refreshToken = generateRefreshToken(payload);
   if (typeof refreshToken === 'string') {
     storeRefreshToken(refreshToken);
   }
