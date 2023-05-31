@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCurrentMilestone } from '@/utils/milestoneUtils';
-import { projectsContext } from '@/context';
+import { projectsContext, userContext } from '@/context';
 import { useMilestoneIssues } from '@/hooks';
 import { IssuesView } from '@/features/issues';
 import { Divider } from '@/elements';
@@ -72,6 +72,7 @@ export const MilestoneView = ({ milestones, setMilestones }: Props) => {
   let { milestoneId } = useParams();
   let navigate = useNavigate();
   const { currentProject } = projectsContext();
+  const { type } = userContext();
   const currentMilestone = getCurrentMilestone(milestones, milestoneId);
   const id = parseInt(milestoneId as string);
   const allMilestoneIssues = useMilestoneIssues(currentProject, id);
@@ -105,10 +106,12 @@ export const MilestoneView = ({ milestones, setMilestones }: Props) => {
         </TitleWrapper>
         <ProgressbarContainer>
           <MilestoneProgressBar percentage={completionPercentage} />
-          <div>
-            <Edit onClick={() => setEditModalOpen(true)}>Edit</Edit>{' '}
-            <Delete onClick={() => setDeleteModalOpen(true)}>Delete</Delete>
-          </div>
+          {type === 'admin' && (
+            <div>
+              <Edit onClick={() => setEditModalOpen(true)}>Edit</Edit>{' '}
+              <Delete onClick={() => setDeleteModalOpen(true)}>Delete</Delete>
+            </div>
+          )}
         </ProgressbarContainer>
       </TitleSection>
       <Divider />

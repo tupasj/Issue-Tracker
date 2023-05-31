@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { projectsContext } from '@/context';
+import { projectsContext, userContext } from '@/context';
 import { Button } from '@/elements';
 import { getMilestones } from '../api';
 import { MilestoneCards } from './MilestoneCards';
@@ -45,6 +45,7 @@ export const MilestonesView = ({ milestones, setMilestones }: Props) => {
   let { milestonesOpenStatus }: any = useParams();
   let location = useLocation();
   const { currentProject } = projectsContext();
+  const { type } = userContext();
 
   const handleClose = () => {
     setModalOpen(false);
@@ -65,7 +66,7 @@ export const MilestonesView = ({ milestones, setMilestones }: Props) => {
     <Container>
       <MilestonesHeader>
         <MilestoneSwitch milestones={milestones} />
-        <Button onClick={() => setModalOpen(true)}>Add Milestone</Button>
+        {type === 'admin' && <Button onClick={() => setModalOpen(true)}>Add Milestone</Button>}
       </MilestonesHeader>
       <MilestonesContainer>
         {milestones[0] && !loadingMilestones ? (

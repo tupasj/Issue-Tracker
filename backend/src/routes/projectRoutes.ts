@@ -25,7 +25,7 @@ router.route('/').post(createProject);
 router
   .route('/code=:code')
   .get(getProject)
-  .delete(deleteProject)
+  .delete(authorize, deleteProject)
   .put(joinProject);
 router.route('/code=:code/users').get(getProjectUsers);
 
@@ -45,7 +45,7 @@ router
 router
   .route('/code=:code/milestone/id=:id/:openStatus?')
   .get(getMilestoneIssues)
-  .patch(updateMilestone)
-  .delete(deleteMilestone);
+  .patch(authorize, updateMilestone)
+  .delete(authorize, deleteMilestone);
 
 export default router;

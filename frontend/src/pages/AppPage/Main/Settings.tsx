@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState, useRef } from 'react';
+import { userContext } from '@/context';
 import { SettingsAdditional } from './SettingsAdditional';
 import { SettingsPersonalization } from './SettingsPersonalization';
 import { SettingsProjects } from './SettingsProjects';
@@ -67,6 +68,7 @@ export const Settings = () => {
   const projectsRef: any = useRef(null);
   const personalizationRef: any = useRef(null);
   const additionalRef: any = useRef(null);
+  const { type } = userContext();
 
   const handleClick = () => {
     projectsRef.current.click();
@@ -82,11 +84,15 @@ export const Settings = () => {
         submitButtonRef={personalizationRef}
       />
       <SettingsAdditional setChangesApplied={setChangesApplied} submitButtonRef={additionalRef} />
-      <H2>Danger zone</H2>
-      <H3>Delete this project</H3>
-      <DeleteProjectButton type="button" onClick={() => setModalOpen(true)}>
-        Delete project
-      </DeleteProjectButton>
+      {type === 'admin' && (
+        <>
+          <H2>Danger zone</H2>
+          <H3>Delete this project</H3>
+          <DeleteProjectButton type="button" onClick={() => setModalOpen(true)}>
+            Delete project
+          </DeleteProjectButton>
+        </>
+      )}
       <SubmitButtonContainer>
         <SubmitButton type="submit" onClick={handleClick}>
           Save changes
