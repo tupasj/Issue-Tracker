@@ -69,9 +69,9 @@ export const MilestoneCard = ({ id, title }: Props) => {
     if (noIssues) {
       return 0;
     } else {
-      return (
+      return Math.floor(
         (closedMilestoneIssues.milestoneIssues.length / allMilestoneIssues.milestoneIssues.length) *
-        100
+          100
       );
     }
   };

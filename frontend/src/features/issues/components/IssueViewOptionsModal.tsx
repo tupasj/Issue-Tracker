@@ -61,7 +61,6 @@ export const IssueViewOptionsModal = ({ issues, setIssues, headerInfo, setHeader
   const handleSubmitTitle = async () => {
     const updatedIssue = await updateIssueTitle(issueNumberInt, currentProject, title);
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
-    console.log('updatedIssues: ', updatedIssues);
     setIssues(updatedIssues);
     setHeaderInfo({ title: title, priority: headerInfo.priority });
     setTitle('');
@@ -70,8 +69,6 @@ export const IssueViewOptionsModal = ({ issues, setIssues, headerInfo, setHeader
   const handleSubmitPriority = async () => {
     const updatedIssue = await updateIssuePriority(issueNumberInt, currentProject, priority);
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
-    console.log('updatedIssues: ', updatedIssues);
-    console.log('priority: ', priority);
     setIssues(updatedIssues);
     setHeaderInfo({ title: headerInfo.title, priority: priority });
     setPriority('');

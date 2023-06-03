@@ -117,9 +117,7 @@ const DBUpdateIssueAssignees = async (
 ) => {
   const issue: any = await DBGetIssue(issueNumber, projectCode);
 
-  await db.query(`DELETE FROM "UserIssues";`, {
-    type: QueryTypes.DELETE,
-  });
+  await issue.setUsers([]);
 
   for (let i = 0; i < assignees.length; i++) {
     await issue.addUser(assignees[i].email);

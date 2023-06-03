@@ -61,10 +61,12 @@ const updateIssueLabels = async (
   email: string
 ) => {
   try {
+    console.log('labelNames: ', labelNames);
     const updatedIssue = await axiosInstance.patch(
       `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/labels`,
       { labelNames, email }
     );
+    console.log('updatedIssue.data: ', updatedIssue.data);
     return updatedIssue.data;
   } catch (error: any) {
     axiosErrorHandler(error);
