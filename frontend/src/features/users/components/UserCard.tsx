@@ -88,7 +88,7 @@ export const UserCard = ({ user, setUsers }: Props) => {
   return (
     <Container>
       <Left>
-        <UserProfileImage user={user} />
+        <UserProfileImage user={user} size="70" />
         <UserInfoContainer>
           {user ? <DisplayName>{user.display_name}</DisplayName> : <LoadingPlaceholder />}
           {user ? <Type>{user.type}</Type> : <LoadingPlaceholder />}

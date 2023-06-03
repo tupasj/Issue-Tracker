@@ -26,20 +26,19 @@ const CommentBottom = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  padding: 4px;
   margin-left: 10px;
   margin-right: 4px;
-  height: 32px;
-  width: 32px;
+  width: 50px;
   text-align: center;
-  border: 1px solid var(--light-gray);
+  border: 2px solid var(--light-gray);
   border-radius: 50%;
   background-color: var(--white);
   cursor: pointer;
 `;
 
 const Image = styled.img`
-  width: 32px;
+  width: 100%;
+  border-radius: 50%;
 `;
 
 const Bold = styled.span`
@@ -61,11 +60,13 @@ export const Comments = ({ comments }: Props) => {
         comments.map((comment: any) => {
           return (
             <CommentContainer key={comment.id}>
-              <ImageContainer>
-                {comment.profile_image && (
-                  <Image src={comment.profile_image} alt="user profile image" />
-                )}
-              </ImageContainer>
+              <div>
+                <ImageContainer>
+                  {comment.profile_image && (
+                    <Image src={comment.profile_image} alt="user profile image" />
+                  )}
+                </ImageContainer>
+              </div>
               <Comment>
                 <CommentTop>
                   <Bold>{comment.display_name}</Bold>

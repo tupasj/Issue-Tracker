@@ -16,7 +16,7 @@ const Container = styled.div`
 
 const Flex = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 22px;
   padding-bottom: 18px;
 `;
 
@@ -34,20 +34,8 @@ const Bold = styled.span`
 const UserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 2px;
   width: 100%;
-`;
-
-const DisplayName = styled.div`
-  font-weight: 600;
-  line-height: 1.5;
-  cursor: pointer;
-  &:hover {
-    color: var(--blue);
-  }
-`;
-
-const Type = styled.div`
-  color: var(--light-medium-gray);
 `;
 
 type Props = {
@@ -63,18 +51,20 @@ export const UserModal = ({ open, handleClose, userInfo }: Props) => {
         {userInfo && (
           <>
             <Flex>
-              <UserProfileImage user={userInfo} />
+              <UserProfileImage user={userInfo} size="120" hideStatus />
               <UserInfoContainer>
-                <DisplayName>{userInfo.display_name}</DisplayName>
-                <Type>{userInfo.type}</Type>
+                <Bold>Display name: </Bold>
+                {userInfo.display_name}
+                <Bold>User type: </Bold>
+                {userInfo.type}
               </UserInfoContainer>
             </Flex>
             <Flex>
               <FlexVertical>
+                <Bold>Name: </Bold>
+                {`${userInfo.first_name} ${userInfo.last_name}`}
                 <Bold>Status: </Bold>
                 {capitalizeFirstLetter(userInfo.status)}
-                <Bold>Email: </Bold>
-                {userInfo.email}
                 {userInfo.phone_number && (
                   <>
                     <Bold>Phone number: </Bold>
@@ -89,8 +79,8 @@ export const UserModal = ({ open, handleClose, userInfo }: Props) => {
                     {userInfo.username}
                   </>
                 )}
-                <Bold>Name: </Bold>
-                {`${userInfo.first_name} ${userInfo.last_name}`}
+                <Bold>Email: </Bold>
+                {userInfo.email}
               </FlexVertical>
             </Flex>
           </>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faForward, faCircleCheck, faGears } from '@fortawesome/free-solid-svg-icons';
-import { IssueViewModalContent } from './IssueViewOptionsModal';
+import { IssueViewOptionsModal } from './IssueViewOptionsModal';
 import { convertTimestamp } from '@/utils/issueUtils';
 import { BasicModal } from '@/components/UI';
 import { IssuePriority } from './IssuePriority';
@@ -98,7 +98,7 @@ export const IssueViewHeader = ({ issues, setIssues, currentIssue }: Props) => {
         </AdditionalInfo>
       </TitleSecondaryContainer>
       <BasicModal modalOpen={modalOpen} handleClose={() => setModalOpen(false)}>
-        <IssueViewModalContent issues={issues} setIssues={setIssues} />
+        <IssueViewOptionsModal issues={issues} setIssues={setIssues} />
       </BasicModal>
     </Container>
   );

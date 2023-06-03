@@ -98,7 +98,7 @@ const updateIssuePriority = async (issueNumber: number, currentProject: any, pri
 const updateIssueTitle = async (issueNumber: number, currentProject: any, title: string) => {
   try {
     const updatedIssue = await axiosInstance.patch(
-      `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/priority`,
+      `/issues/issueNumber=${issueNumber}/projectCode=${currentProject.code}/title`,
       { title }
     );
     return updatedIssue.data;

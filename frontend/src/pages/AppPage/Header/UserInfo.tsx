@@ -22,10 +22,10 @@ const ImageContainer = styled.div`
 
 const Image = styled.img`
   position: relative;
-  top: 1px;
-  margin: -1px;
   width: 42px;
   border-radius: 50%;
+  top: 1px;
+  margin: -1px;
 `;
 
 const ImageWrapper = styled.div`

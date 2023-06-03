@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { createProject, joinProject } from '@/features/projects';
+import { updateUserType } from '@/features/users';
 
 const FormContainer = styled.div`
   display: flex;
@@ -77,6 +78,7 @@ export const ProjectPrompt = ({ userEmail, setCurrentProject }: Props) => {
 
   const handleAddProject = async () => {
     const updatedProjects = await createProject(projectName, userEmail);
+    await updateUserType(userEmail, { type: 'admin' });
 
     if (updatedProjects) {
       setCurrentProject(updatedProjects[0]);

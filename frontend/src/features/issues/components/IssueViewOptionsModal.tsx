@@ -46,7 +46,7 @@ type Props = {
   setIssues: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
+export const IssueViewOptionsModal = ({ issues, setIssues }: Props) => {
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('');
   const items = ['none', 'high', 'medium', 'low'];
@@ -60,7 +60,7 @@ export const IssueViewModalContent = ({ issues, setIssues }: Props) => {
     const updatedIssue = await updateIssueTitle(issueNumberInt, currentProject, title);
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
     console.log('updatedIssues: ', updatedIssues);
-    // setIssues(updatedIssues);
+    setIssues(updatedIssues);
     setTitle('');
   };
 
