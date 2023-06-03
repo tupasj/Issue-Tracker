@@ -67,9 +67,17 @@ type Props = {
   issues: any[];
   setIssues: React.Dispatch<React.SetStateAction<any>>;
   currentIssue: any;
+  headerInfo: any;
+  setHeaderInfo: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssueViewHeader = ({ issues, setIssues, currentIssue }: Props) => {
+export const IssueViewHeader = ({
+  issues,
+  setIssues,
+  currentIssue,
+  headerInfo,
+  setHeaderInfo,
+}: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const formattedTime = convertTimestamp(currentIssue.createdAt);
 
@@ -77,7 +85,7 @@ export const IssueViewHeader = ({ issues, setIssues, currentIssue }: Props) => {
     <Container>
       <TitleContainer>
         <div>
-          <Title>{currentIssue.title}</Title>
+          <Title>{headerInfo.title}</Title>
           <SecondaryText>#{currentIssue.issue_number}</SecondaryText>
         </div>
         <StyledFontAwesomeIcon icon={faGears} onClick={() => setModalOpen(true)} />
@@ -93,12 +101,17 @@ export const IssueViewHeader = ({ issues, setIssues, currentIssue }: Props) => {
           </IssueOpenStatus>
         )}
         <AdditionalInfo>
-          Priority: <IssuePriority priority={currentIssue.priority} /> | Posted by{' '}
+          Priority: <IssuePriority priority={headerInfo.priority} /> | Posted by{' '}
           <Username>{currentIssue.postedBy}</Username> on {formattedTime}
         </AdditionalInfo>
       </TitleSecondaryContainer>
       <BasicModal modalOpen={modalOpen} handleClose={() => setModalOpen(false)}>
-        <IssueViewOptionsModal issues={issues} setIssues={setIssues} />
+        <IssueViewOptionsModal
+          issues={issues}
+          setIssues={setIssues}
+          headerInfo={headerInfo}
+          setHeaderInfo={setHeaderInfo}
+        />
       </BasicModal>
     </Container>
   );

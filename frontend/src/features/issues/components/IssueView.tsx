@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { issuesContext } from '@/context';
 import { getCurrentIssue } from '@/utils/issueUtils';
@@ -29,13 +30,29 @@ export const IssueView = () => {
   let { issueNumber } = useParams();
   const { issues, setIssues } = issuesContext();
   const currentIssue = getCurrentIssue(issues, issueNumber);
+  const [headerInfo, setHeaderInfo] = useState({
+    title: currentIssue.title,
+    priority: currentIssue.priority,
+  });
 
   return (
     <Container>
-      <IssueViewHeader issues={issues} setIssues={setIssues} currentIssue={currentIssue} />
+      <IssueViewHeader
+        issues={issues}
+        setIssues={setIssues}
+        currentIssue={currentIssue}
+        headerInfo={headerInfo}
+        setHeaderInfo={setHeaderInfo}
+      />
       <Divider />
       <CommentsAndOptionsFlexContainer>
-        <IssueViewMain issues={issues} setIssues={setIssues} currentIssue={currentIssue} />
+        <IssueViewMain
+          issues={issues}
+          setIssues={setIssues}
+          currentIssue={currentIssue}
+          headerInfo={headerInfo}
+          setHeaderInfo={setHeaderInfo}
+        />
         <OptionsWrapper>
           <IssueOptions
             labels={currentIssue.labels}

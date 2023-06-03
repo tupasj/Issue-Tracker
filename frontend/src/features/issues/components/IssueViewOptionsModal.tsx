@@ -44,9 +44,11 @@ const H3 = styled.h3`
 type Props = {
   issues: any[];
   setIssues: React.Dispatch<React.SetStateAction<any>>;
+  headerInfo: any;
+  setHeaderInfo: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssueViewOptionsModal = ({ issues, setIssues }: Props) => {
+export const IssueViewOptionsModal = ({ issues, setIssues, headerInfo, setHeaderInfo }: Props) => {
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('');
   const items = ['none', 'high', 'medium', 'low'];
@@ -61,6 +63,7 @@ export const IssueViewOptionsModal = ({ issues, setIssues }: Props) => {
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
     console.log('updatedIssues: ', updatedIssues);
     setIssues(updatedIssues);
+    setHeaderInfo({ title: title, priority: headerInfo.priority });
     setTitle('');
   };
 
@@ -68,7 +71,10 @@ export const IssueViewOptionsModal = ({ issues, setIssues }: Props) => {
     const updatedIssue = await updateIssuePriority(issueNumberInt, currentProject, priority);
     const updatedIssues = makeUpdatedIssues(issues, updatedIssue);
     console.log('updatedIssues: ', updatedIssues);
-    // setIssues(updatedIssues);
+    console.log('priority: ', priority);
+    setIssues(updatedIssues);
+    setHeaderInfo({ title: headerInfo.title, priority: priority });
+    setPriority('');
   };
 
   const handleDeleteIssue = async () => {

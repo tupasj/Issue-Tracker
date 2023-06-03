@@ -63,7 +63,7 @@ const DBUpdateIssuePriority = async (
   projectCode: string,
   priority: string
 ) => {
-  await Issue.update(
+  const updatedIssue = await Issue.update(
     { priority },
     {
       where: {
@@ -72,7 +72,6 @@ const DBUpdateIssuePriority = async (
       },
     }
   );
-  const updatedIssue = await DBGetIssue(issueNumber, projectCode);
   return updatedIssue;
 };
 

@@ -40,13 +40,11 @@ const Milestones = ({ changes, emptyTextPlaceholder }: ItemProps) => {
 };
 
 const Labels = ({ emptyTextPlaceholder, labels }: ItemProps) => {
-  const labelsArray = labels as any;
-
   return (
     <LabelsContainer>
-      {labelsArray[0] ? (
+      {labels![0] ? (
         <div>
-          {labelsArray.map((item: any) => (
+          {labels!.map((item: any) => (
             <Label key={item.name} name={item.name} color={item.color} />
           ))}
         </div>
@@ -68,7 +66,7 @@ const Assignees = ({ emptyTextPlaceholder, assignees }: ItemProps) => {
               text={assignee.display_name}
               additionalText={`(${assignee.email})`}
             >
-              <UserProfileImage key={assignee.email} user={assignee} />
+              <UserProfileImage key={assignee.email} user={assignee} size="50" />
             </TooltipWrapper>
           ))}
         </AssigneesWrapper>

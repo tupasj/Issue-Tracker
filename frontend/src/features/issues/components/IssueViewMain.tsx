@@ -55,9 +55,17 @@ type Props = {
   issues: any[];
   setIssues: React.Dispatch<React.SetStateAction<any>>;
   currentIssue: any;
+  headerInfo: any;
+  setHeaderInfo: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const IssueViewMain = ({ issues, setIssues, currentIssue }: Props) => {
+export const IssueViewMain = ({
+  issues,
+  setIssues,
+  currentIssue,
+  headerInfo,
+  setHeaderInfo,
+}: Props) => {
   const [comments, setComments] = useState<any[]>([]);
   const [commentText, setCommentText] = useState('');
   const { email } = userContext();
