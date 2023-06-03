@@ -86,8 +86,7 @@ export const SignupForm = ({ signedUp, setSignedUp, setUserEmail }: Props) => {
 
     if (registerResponse.status === 200) {
       setSignedUp(true);
-    } else {
-      setSignedUp(false);
+    } else if (registerResponse.status !== 200) {
       setSignUpError(true);
     }
   };

@@ -10,21 +10,22 @@ const Container = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  padding: 4px;
   align-self: center;
   margin-left: 10px;
   margin-right: 4px;
-  height: 36px;
-  width: 36px;
   text-align: center;
-  border: 1px solid var(--light-gray);
+  border: 2px solid var(--light-gray);
   border-radius: 50%;
   background-color: var(--white);
   cursor: pointer;
 `;
 
 const Image = styled.img`
-  width: 36px;
+  position: relative;
+  top: 1px;
+  margin: -1px;
+  width: 42px;
+  border-radius: 50%;
 `;
 
 const ImageWrapper = styled.div`
@@ -41,6 +42,7 @@ const StatusIndicator = styled.div.attrs((props: { statusColor: string }) => pro
   border: 1px solid var(--light-gray);
   border-radius: 50%;
   background-color: ${(props) => props.statusColor};
+  z-index: 1;
 `;
 
 export const UserInfo = () => {

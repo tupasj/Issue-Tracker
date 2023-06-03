@@ -79,16 +79,20 @@ export const LoginForm = ({
     };
     setUserEmail(userCredentials.email);
 
-    const userProjects = await getProjects(userCredentials.email);
-    if (userProjects.length > 0) {
-      const loginResponse = await login(userCredentials);
-      if (loginResponse.tokens) {
-        navigate('/app/dashboard');
-      } else {
-        setNotificationText(loginResponse.response.data.message);
+    try {
+      const userProjects = await getProjects(userCredentials.email);
+      if (userProjects.length > 0) {
+        const loginResponse = await login(userCredentials);
+        if (loginResponse.tokens) {
+          navigate('/app/dashboard');
+        } else {
+          setNotificationText(loginResponse.response.data.message);
+        }
+      } else if (userProjects.length <= 0) {
+        setNoUserProjects(true);
       }
-    } else if (userProjects.length <= 0) {
-      setNoUserProjects(true);
+    } catch (error: any) {
+      setNotificationText('Invalid credentials');
     }
   };
 

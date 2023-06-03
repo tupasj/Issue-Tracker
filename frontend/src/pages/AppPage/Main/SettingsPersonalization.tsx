@@ -72,8 +72,6 @@ export const SettingsPersonalization = ({ submitButtonRef, setChangesApplied }: 
 
   const handleSubmit = async (values: any) => {
     if (imageSelection || values.displayNameSelection) {
-      console.log('SettingsPersonalization submit');
-      console.log('values: ', values);
       await changeProfileImage();
       await changeUserDisplayName(values);
     }
