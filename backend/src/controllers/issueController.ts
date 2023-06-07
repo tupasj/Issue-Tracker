@@ -69,14 +69,20 @@ const createIssue = async (req: Request, res: Response) => {
 
 const getProjectIssues = async (req: Request, res: Response) => {
   const { code, openStatus } = req.params;
-  const { isOpen } = req.query;
+  const { isOpen, userEmail } = req.query;
 
   try {
     const project = await DBGetProject(code);
 
     let projectIssues;
     if (openStatus) {
-      projectIssues = await project.getIssues({ where: { is_open: isOpen } });
+      if (userEmail) {
+        projectIssues = await project.getIssues({
+          where: { is_open: isOpen, postedByEmail: userEmail },
+        });
+      } else {
+        projectIssues = await project.getIssues({ where: { is_open: isOpen } });
+      }
     } else {
       projectIssues = await project.getIssues();
     }

@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { usePriorityChartData, useLabelChartData, useStatusChartData } from '@/hooks';
 import { projectsContext, userContext } from '@/context';
 import { Chart } from './Chart';
-import { getIssues, getUserIssues } from '@/features/issues';
+import { getProjectIssues } from '@/features/projects';
+import { getIssues } from '@/features/issues';
 import { NoIssuesNotification } from './NoIssuesNotification';
 
 const Container = styled.div`
@@ -30,7 +31,9 @@ export const Dashboard = () => {
       setIssuesLoading(false);
     };
     const fetchUserIssues = async () => {
-      const userIssues = await getUserIssues(email);
+      const userIssuesOpen = await getProjectIssues(currentProject.code, 'true', email);
+      const userIssuesClosed = await getProjectIssues(currentProject.code, 'false', email);
+      const userIssues = userIssuesOpen.concat(userIssuesClosed);
       setUserIssues(userIssues);
       setIssuesLoading(false);
     };
@@ -40,12 +43,6 @@ export const Dashboard = () => {
       fetchUserIssues();
     }
   }, [currentProject]);
-
-  // useEffect(() => {
-  //   if (allIssues) {
-  //     console.log('allIssues: ', allIssues);
-  //   }
-  // }, [allIssues]);
 
   return (
     <>

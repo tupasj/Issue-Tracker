@@ -28,6 +28,9 @@ const Issue = db.define('issue', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  postedByEmail: {
+    type: DataTypes.STRING,
+  },
 });
 
 export { Issue };

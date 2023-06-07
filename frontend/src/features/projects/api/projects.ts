@@ -19,6 +19,17 @@ const getProjects = async (email: string) => {
   }
 };
 
+const getProjectIssues = async (projectCode: string, isOpen: string, userEmail: string) => {
+  try {
+    const projectIssues = await axiosInstance.get(
+      `/projects/code=${projectCode}/issues/:openStatus?isOpen=${isOpen}&userEmail=${userEmail}`
+    );
+    return projectIssues.data;
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 const joinProject = async (projectCode: string, email: string) => {
   try {
     const projectJoined = await axiosInstance.put(`/projects/code=${projectCode}`, {
@@ -50,4 +61,11 @@ const removeProjectUser = async (projectToLeave: any, email: string) => {
   }
 };
 
-export { createProject, getProjects, joinProject, deleteProject, removeProjectUser };
+export {
+  createProject,
+  getProjects,
+  getProjectIssues,
+  joinProject,
+  deleteProject,
+  removeProjectUser,
+};

@@ -22,6 +22,7 @@ const DBCreateIssue = async (
     priority,
     issue_number: latestIssueNumber + 1,
     postedBy: postedBy.display_name,
+    postedByEmail: email,
   });
 
   await project.addIssue(issue);
