@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
+import ShortUniqueId from 'short-unique-id';
+import { Op } from '../config/database';
 import { Project } from '../models/Project';
 import { User } from '../models/User';
 import { Issue } from '../models/Issue';
+import { Milestone } from '../models/Milestone';
 import { UserDisplayName } from '../models/UserDisplayName';
-import ShortUniqueId from 'short-unique-id';
 
 const createProject = async (req: Request, res: Response) => {
   const { projectName, email } = req.body;
@@ -153,6 +155,32 @@ const getProjectUsers = async (req: Request, res: Response) => {
   }
 };
 
+const clearDemoProject = async (req: Request, res: Response) => {
+  try {
+    await Issue.destroy({
+      where: {
+        issue_number: {
+          [Op.gt]: 9,
+        },
+        projectCode: 'r0A3xG3i',
+      },
+    });
+
+    await Milestone.destroy({
+      where: {
+        id: {
+          [Op.gt]: 2,
+        },
+        projectCode: 'r0A3xG3i',
+      },
+    });
+
+    res.status(200).end();
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export {
   createProject,
   joinProject,
@@ -162,4 +190,5 @@ export {
   removeUserFromProject,
   updateProjectIssue,
   getProjectUsers,
+  clearDemoProject,
 };

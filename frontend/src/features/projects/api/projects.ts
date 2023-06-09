@@ -61,6 +61,15 @@ const removeProjectUser = async (projectToLeave: any, email: string) => {
   }
 };
 
+const clearDemoProject = async () => {
+  try {
+    const res = await axiosInstance.delete('/projects/clearDemoProject');
+    console.log('res: ', res);
+  } catch (error: any) {
+    axiosErrorHandler(error);
+  }
+};
+
 export {
   createProject,
   getProjects,
@@ -68,4 +77,5 @@ export {
   joinProject,
   deleteProject,
   removeProjectUser,
+  clearDemoProject,
 };

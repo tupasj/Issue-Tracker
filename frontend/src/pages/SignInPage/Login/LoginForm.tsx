@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { login } from '@/features/auth';
-import { getProjects } from '@/features/projects';
+import { getProjects, clearDemoProject } from '@/features/projects';
 import { Input } from '@/components/Form';
 import { ProjectPrompt } from '../ProjectPrompt';
 
@@ -80,6 +80,9 @@ export const LoginForm = ({
     setUserEmail(userCredentials.email);
 
     try {
+      if (userCredentials.email === 'johndoe@gmail.com') {
+        await clearDemoProject();
+      }
       const userProjects = await getProjects(userCredentials.email);
       if (userProjects.length > 0) {
         const loginResponse = await login(userCredentials);

@@ -9,6 +9,7 @@ import {
   removeUserFromProject,
   updateProjectIssue,
   getProjectUsers,
+  clearDemoProject,
 } from '../controllers/projectController';
 import {
   createMilestone,
@@ -47,5 +48,7 @@ router
   .get(getMilestoneIssues)
   .patch(authorize, updateMilestone)
   .delete(authorize, deleteMilestone);
+
+router.route('/clearDemoProject').delete(clearDemoProject);
 
 export default router;
