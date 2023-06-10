@@ -65,6 +65,7 @@ const ChangesNotification = styled.span`
 export const Settings = () => {
   const [changesApplied, setChangesApplied] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteNotification, setDeleteNotification] = useState('');
   const projectsRef: any = useRef(null);
   const personalizationRef: any = useRef(null);
   const additionalRef: any = useRef(null);
@@ -74,6 +75,11 @@ export const Settings = () => {
     projectsRef.current.click();
     personalizationRef.current.click();
     additionalRef.current.click();
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setDeleteNotification('');
   };
 
   return (
@@ -99,7 +105,12 @@ export const Settings = () => {
         </SubmitButton>
         {changesApplied && <ChangesNotification>Changes applied</ChangesNotification>}
       </SubmitButtonContainer>
-      <SettingsModalDeleteProject open={modalOpen} handleClose={() => setModalOpen(false)} />
+      <SettingsModalDeleteProject
+        open={modalOpen}
+        handleClose={handleClose}
+        deleteNotification={deleteNotification}
+        setDeleteNotification={setDeleteNotification}
+      />
     </Container>
   );
 };

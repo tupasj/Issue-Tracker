@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import { projectsContext } from '@/context';
 import { PositionedMenu } from '@/components/UI';
 import { LoadingPlaceholder } from '@/elements';
 import { UserProfileImage } from './UserProfileImage';
@@ -68,6 +69,7 @@ export const UserCard = ({ user, setUsers }: Props) => {
   const [userInfoModalOpen, setUserInfoModalOpen] = useState(false);
   const [removeUserModalOpen, setRemoveUserModalOpen] = useState(false);
   const [promoteUserModalOpen, setPromoteUserModalOpen] = useState(false);
+  const { currentProject } = projectsContext();
 
   const handleOpen = () => {
     setUserInfoModalOpen(true);
@@ -79,11 +81,18 @@ export const UserCard = ({ user, setUsers }: Props) => {
     setPromoteUserModalOpen(true);
   };
 
-  const menuItems = [
-    { title: 'View info', cb: handleOpen },
-    { title: 'Make admin', cb: handleOpenPromoteUserModal },
-    { title: 'Remove user', cb: handleOpenRemoveUserModal },
-  ];
+  // Prevent deletion of demo project items
+  const menuItems =
+    currentProject.code === 'r0A3xG3i'
+      ? [
+          { title: 'View info', cb: handleOpen },
+          { title: 'Make admin', cb: handleOpenPromoteUserModal },
+        ]
+      : [
+          { title: 'View info', cb: handleOpen },
+          { title: 'Make admin', cb: handleOpenPromoteUserModal },
+          { title: 'Remove user', cb: handleOpenRemoveUserModal },
+        ];
 
   return (
     <Container>

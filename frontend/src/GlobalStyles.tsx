@@ -73,6 +73,7 @@ const Styles = createGlobalStyle`
 	--yellow: #FBBF24;
 	--blue: #1D4ED8;
 	--light-blue: #3B82F6;
+	--dark-purple: #473099;
 }
 html {
 	box-sizing: border-box;

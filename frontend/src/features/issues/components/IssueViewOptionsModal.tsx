@@ -41,14 +41,28 @@ const H3 = styled.h3`
   font-style: italic;
 `;
 
+const Notification = styled.div`
+  padding-top: 6px;
+  font-style: italic;
+`;
+
 type Props = {
   issues: any[];
   setIssues: React.Dispatch<React.SetStateAction<any>>;
   headerInfo: any;
   setHeaderInfo: React.Dispatch<React.SetStateAction<any>>;
+  deleteNotification: string;
+  setDeleteNotification: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const IssueViewOptionsModal = ({ issues, setIssues, headerInfo, setHeaderInfo }: Props) => {
+export const IssueViewOptionsModal = ({
+  issues,
+  setIssues,
+  headerInfo,
+  setHeaderInfo,
+  deleteNotification,
+  setDeleteNotification,
+}: Props) => {
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('');
   const items = ['none', 'high', 'medium', 'low'];
@@ -75,9 +89,15 @@ export const IssueViewOptionsModal = ({ issues, setIssues, headerInfo, setHeader
   };
 
   const handleDeleteIssue = async () => {
-    const deleteResponse: any = await deleteIssue(issueNumber, currentProject);
-    if (deleteResponse.status === 200) {
-      navigate('/app/issues/open');
+    // Prevent deletion of demo project items
+    if (currentProject.code !== 'r0A3xG3i') {
+      const deleteResponse: any = await deleteIssue(issueNumber, currentProject);
+      if (deleteResponse.status === 200) {
+        navigate('/app/issues/open');
+      }
+    } else {
+      setDeleteNotification(`Can't delete demo project items. Make a new project to test
+      out all the features!`);
     }
   };
 
@@ -105,6 +125,7 @@ export const IssueViewOptionsModal = ({ issues, setIssues, headerInfo, setHeader
           <Button onClick={handleDeleteIssue} color="var(--red)" hoverColor="var(--dark-red)">
             Delete Issue <FontAwesomeIcon icon={faTrash} />
           </Button>
+          <Notification>{deleteNotification}</Notification>
         </>
       )}
     </Container>

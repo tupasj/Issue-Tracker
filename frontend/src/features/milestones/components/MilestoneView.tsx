@@ -69,6 +69,7 @@ type Props = {
 export const MilestoneView = ({ milestones, setMilestones }: Props) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteNotification, setDeleteNotification] = useState('');
   let { milestoneId } = useParams();
   let navigate = useNavigate();
   const { currentProject } = projectsContext();
@@ -87,13 +88,20 @@ export const MilestoneView = ({ milestones, setMilestones }: Props) => {
 
   const handleDeleteModalClose = async () => {
     setDeleteModalOpen(false);
+    setDeleteNotification('');
   };
 
   const handleDeleteMilestone = async () => {
-    const milestoneIdInt = parseInt(milestoneId as string);
-    const response: any = await deleteMilestone(currentProject, milestoneIdInt);
-    if (response.status === 200) {
-      navigate('/app/milestones/open');
+    // Prevent deletion of demo project items
+    if (currentProject.code !== 'r0A3xG3i') {
+      const milestoneIdInt = parseInt(milestoneId as string);
+      const response: any = await deleteMilestone(currentProject, milestoneIdInt);
+      if (response.status === 200) {
+        navigate('/app/milestones/open');
+      }
+    } else {
+      setDeleteNotification(`Can't delete demo project items. Make a new project to test
+      out all the features!`);
     }
   };
 
@@ -126,6 +134,7 @@ export const MilestoneView = ({ milestones, setMilestones }: Props) => {
         modalOpen={deleteModalOpen}
         handleClose={handleDeleteModalClose}
         handleDelete={handleDeleteMilestone}
+        deleteNotification={deleteNotification}
       />
     </Container>
   );

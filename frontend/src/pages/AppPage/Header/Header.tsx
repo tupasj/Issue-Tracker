@@ -21,7 +21,7 @@ const StyledLink = styled(Link)`
   &:link,
   :visited,
   :active {
-    color: var(--black);
+    color: var(--dark-purple);
   }
 `;
 

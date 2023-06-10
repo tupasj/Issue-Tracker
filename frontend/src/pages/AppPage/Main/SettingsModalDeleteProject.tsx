@@ -33,18 +33,36 @@ const Bold = styled.span`
   font-weight: 600;
 `;
 
+const Notification = styled.div`
+  padding-top: 6px;
+  font-style: italic;
+`;
+
 type Props = {
   open: boolean;
   handleClose: () => void;
+  deleteNotification: string;
+  setDeleteNotification: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const SettingsModalDeleteProject = ({ open, handleClose }: Props) => {
+export const SettingsModalDeleteProject = ({
+  open,
+  handleClose,
+  deleteNotification,
+  setDeleteNotification,
+}: Props) => {
   const { currentProject } = projectsContext();
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    await deleteProject(currentProject.code);
-    navigate('/sign-in');
+    // Prevent deletion of demo project items
+    if (currentProject.code !== 'r0A3xG3i') {
+      await deleteProject(currentProject.code);
+      navigate('/sign-in');
+    } else {
+      setDeleteNotification(`Can't delete demo project items. Make a new project to test
+          out all the features!`);
+    }
   };
 
   return (
@@ -57,6 +75,7 @@ export const SettingsModalDeleteProject = ({ open, handleClose }: Props) => {
         <Button color="var(--red)" hoverColor="var(--dark-red)" onClick={handleDelete}>
           Delete project
         </Button>
+        <Notification>{deleteNotification}</Notification>
       </Container>
     </BasicModal>
   );

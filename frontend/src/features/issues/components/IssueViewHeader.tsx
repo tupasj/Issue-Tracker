@@ -79,7 +79,13 @@ export const IssueViewHeader = ({
   setHeaderInfo,
 }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteNotification, setDeleteNotification] = useState('');
   const formattedTime = convertTimestamp(currentIssue.createdAt);
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setDeleteNotification('');
+  };
 
   return (
     <Container>
@@ -105,12 +111,14 @@ export const IssueViewHeader = ({
           <Username>{currentIssue.postedBy}</Username> on {formattedTime}
         </AdditionalInfo>
       </TitleSecondaryContainer>
-      <BasicModal modalOpen={modalOpen} handleClose={() => setModalOpen(false)}>
+      <BasicModal modalOpen={modalOpen} handleClose={handleClose}>
         <IssueViewOptionsModal
           issues={issues}
           setIssues={setIssues}
           headerInfo={headerInfo}
           setHeaderInfo={setHeaderInfo}
+          deleteNotification={deleteNotification}
+          setDeleteNotification={setDeleteNotification}
         />
       </BasicModal>
     </Container>

@@ -9,6 +9,7 @@ import { NoIssuesNotification } from './NoIssuesNotification';
 
 const Container = styled.div`
   display: grid;
+  gap: 12px;
   grid-template-columns: 1fr 1fr;
   height: 90%;
 `;
@@ -36,6 +37,7 @@ export const Dashboard = () => {
       const userIssues = userIssuesOpen.concat(userIssuesClosed);
       setUserIssues(userIssues);
       setIssuesLoading(false);
+      console.log('userIssues: ', userIssues);
     };
 
     if (currentProject) {

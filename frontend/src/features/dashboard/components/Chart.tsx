@@ -3,9 +3,12 @@ import { PieChart, Pie, Cell } from 'recharts';
 import { Key } from './Key';
 import { LoadingPlaceholder } from '@/elements';
 
-const Container = styled.div``;
+const Container = styled.div`
+  box-shadow: 0px 0px 1px 1px var(--light-gray);
+`;
 
 const Title = styled.div`
+  padding-top: 18px;
   text-align: center;
   font-weight: 600;
 `;
@@ -13,6 +16,8 @@ const Title = styled.div`
 const FlexContainer = styled.div`
   display: flex;
   gap: 8px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const NoDataContainer = styled.div`

@@ -12,13 +12,24 @@ const Text = styled.div`
   padding-bottom: 8px;
 `;
 
+const Notification = styled.div`
+  padding-top: 6px;
+  font-style: italic;
+`;
+
 type Props = {
   modalOpen: any;
   handleClose: () => void;
   handleDelete: () => void;
+  deleteNotification: string;
 };
 
-export const MilestoneDeleteModal = ({ modalOpen, handleClose, handleDelete }: Props) => {
+export const MilestoneDeleteModal = ({
+  modalOpen,
+  handleClose,
+  handleDelete,
+  deleteNotification,
+}: Props) => {
   return (
     <BasicModal modalOpen={modalOpen} handleClose={handleClose}>
       <Container>
@@ -29,6 +40,7 @@ export const MilestoneDeleteModal = ({ modalOpen, handleClose, handleDelete }: P
         <Button color="var(--red)" hoverColor="var(--dark-red)" onClick={handleDelete}>
           Delete Milestone
         </Button>
+        <Notification>{deleteNotification}</Notification>
       </Container>
     </BasicModal>
   );

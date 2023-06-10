@@ -21,7 +21,7 @@ const CurrentProject = styled.div`
   padding-left: 14px;
   padding-right: 14px;
   justify-content: center;
-  background-color: #f7faf9;
+  background-color: var(--extra-light-gray);
   border-radius: 8px;
   border: 2px solid rgba(0, 0, 0, 0.25);
 `;
@@ -41,7 +41,7 @@ const DropdownContainer = styled.div`
   border-width: 2px;
   border-color: rgba(0, 0, 0, 0.25);
   border-style: solid;
-  background-color: #f7faf9;
+  background-color: var(--extra-light-gray);
   z-index: -1;
 `;
 

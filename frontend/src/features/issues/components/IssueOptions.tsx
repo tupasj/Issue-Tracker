@@ -57,6 +57,7 @@ export const IssueOptions = ({ labels, issueNumber, issues, setIssues }: Props) 
 
   const handleAssigneeSubmit = async () => {
     const updatedAssignees = await updateIssueAssignees(issueNumber, currentProject, assignees);
+    console.log('updatedAssignees: ', updatedAssignees);
     setAssignees(updatedAssignees);
   };
 
