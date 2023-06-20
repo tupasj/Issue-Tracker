@@ -52,6 +52,10 @@ table {
 
 const Styles = createGlobalStyle`
 :root {
+	--breakpoint-small: 640px;
+	--breakpoint-medium: 768px;
+	--breakpoint-large: 1024px;
+	--breakpoint-extra-large: 1280px;
     --gainsboro: #D8DBE2;
     --light-steel-blue: #A9BCD0;
     --cadet-blue: #58A4B0;

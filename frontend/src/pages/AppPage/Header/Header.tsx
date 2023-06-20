@@ -6,17 +6,18 @@ import { UserInfo } from '@/pages/AppPage/Header';
 import { ProjectsDropdown } from '@/features/projects';
 
 const Container = styled.header`
-  grid-area: header;
-  position: relative;
-  z-index: 2;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  z-index: 2;
+  @media (max-width: 640px) {
+    background-color: orange;
+  }
 `;
 
 const StyledLink = styled(Link)`
-  position: absolute;
   left: 22px;
   &:link,
   :visited,

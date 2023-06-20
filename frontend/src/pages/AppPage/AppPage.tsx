@@ -8,13 +8,14 @@ import { Main } from '@/pages/AppPage';
 import { getUserStatusColor } from '@/utils/userUtils';
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: 5.5% 94.5%;
-  grid-template-areas:
-    'header header'
-    'sidebar main';
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+`;
+
+const MainArea = styled.div`
+  display: flex;
+  flex: 1 1 auto;
 `;
 
 type Props = {
@@ -73,8 +74,10 @@ export const AppPage = ({
           value={{ currentProject, setCurrentProject, projects, setProjects }}
         >
           <Header />
-          <Sidebar />
-          <Main />
+          <MainArea>
+            <Sidebar />
+            <Main />
+          </MainArea>
         </ProjectsContext.Provider>
       </UserContext.Provider>
     </Container>

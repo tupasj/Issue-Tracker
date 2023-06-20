@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { usePriorityChartData, useLabelChartData, useStatusChartData } from '@/hooks';
 import { projectsContext, userContext } from '@/context';
 import { Chart } from './Chart';
-import { getProjectIssues } from '@/features/projects';
+import { getUserIssues } from '@/features/issues';
 import { getIssues } from '@/features/issues';
 import { NoIssuesNotification } from './NoIssuesNotification';
 
@@ -11,7 +11,7 @@ const Container = styled.div`
   display: grid;
   gap: 12px;
   grid-template-columns: 1fr 1fr;
-  height: 90%;
+  height: 100%;
 `;
 
 export const Dashboard = () => {
@@ -32,12 +32,11 @@ export const Dashboard = () => {
       setIssuesLoading(false);
     };
     const fetchUserIssues = async () => {
-      const userIssuesOpen = await getProjectIssues(currentProject.code, 'true', email);
-      const userIssuesClosed = await getProjectIssues(currentProject.code, 'false', email);
+      const userIssuesOpen = await getUserIssues(email, 'true');
+      const userIssuesClosed = await getUserIssues(email, 'false');
       const userIssues = userIssuesOpen.concat(userIssuesClosed);
       setUserIssues(userIssues);
       setIssuesLoading(false);
-      console.log('userIssues: ', userIssues);
     };
 
     if (currentProject) {

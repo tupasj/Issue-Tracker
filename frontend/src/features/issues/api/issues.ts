@@ -37,17 +37,11 @@ const getIssueUsers = async (issueNumber: number, currentProject: any) => {
   }
 };
 
-const getUserIssues = async (email: string, openStatus?: string) => {
+const getUserIssues = async (email: string, openStatus: string) => {
   try {
-    let userIssuesResponse;
-    if (openStatus) {
-      const isOpenBool = openStatus === 'open' ? 'true' : 'false';
-      userIssuesResponse = await axiosInstance.get(
-        `/issues/user/email=${email}/issues/:openStatus?isOpen=${isOpenBool}`
-      );
-    } else {
-      userIssuesResponse = await axiosInstance.get(`/issues/user/email=${email}/issues`);
-    }
+    const userIssuesResponse = await axiosInstance.get(
+      `/issues/user/email=${email}/issues/:openStatus?isOpen=${openStatus}`
+    );
     return userIssuesResponse.data;
   } catch (error: any) {
     axiosErrorHandler(error);

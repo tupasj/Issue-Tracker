@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Container = styled.aside`
-  grid-area: sidebar;
   box-shadow: 1px 0px 1px 0px rgba(0, 0, 0, 0.15);
+  width: 175px;
 `;
 
 const StyledLink = styled(Link)`
@@ -16,6 +16,7 @@ const StyledLink = styled(Link)`
   &:hover {
     background-color: #cecece;
   }
+  z-index: 1;
 `;
 
 const Links = styled.div`

@@ -3,7 +3,6 @@ import { userContext } from '@/context/UserContext';
 import { UserInfoDropDown } from '@/pages/AppPage/Header';
 
 const Container = styled.div`
-  position: absolute;
   right: 22px;
   display: flex;
   align-items: center;

@@ -9,7 +9,7 @@ import { Users } from '@/features/users';
 import { Settings } from './Settings';
 
 const Container = styled.main`
-  grid-area: main;
+  flex: 1 1 auto;
   padding: 22px;
 `;
 

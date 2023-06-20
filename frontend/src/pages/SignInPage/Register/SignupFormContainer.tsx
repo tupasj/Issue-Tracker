@@ -20,7 +20,9 @@ const FormContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 550px;
+  margin: 12px !important;
+  width: 100%;
+  max-width: 550px;
   height: 500px;
   border-radius: 12px;
   background-color: var(--white);
