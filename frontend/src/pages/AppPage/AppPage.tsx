@@ -16,6 +16,9 @@ const Container = styled.div`
 const MainArea = styled.div`
   display: flex;
   flex: 1 1 auto;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 type Props = {

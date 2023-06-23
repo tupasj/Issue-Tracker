@@ -2,27 +2,42 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Container = styled.aside`
-  box-shadow: 1px 0px 1px 0px rgba(0, 0, 0, 0.15);
   width: 175px;
+  box-shadow: 1px 0px 1px 0px rgba(0, 0, 0, 0.15);
+  @media (max-width: 768px) {
+    width: auto;
+  }
 `;
 
 const StyledLink = styled(Link)`
   display: block;
   padding: 10px;
-  margin-bottom: 18px;
   border-radius: 2px;
   text-decoration: none;
   color: var(--black);
+  z-index: 1;
   &:hover {
     background-color: #cecece;
   }
-  z-index: 1;
+  @media (min-width: 768px) {
+    margin-bottom: 18px;
+  }
 `;
 
 const Links = styled.div`
-  height: 250px;
-  padding: 12px;
-  padding-top: 50px;
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px;
+    box-shadow: 1px 0px 1px 0px rgba(0, 0, 0, 0.15);
+  }
+  @media (min-width: 768px) {
+    padding: 12px;
+    padding-top: 50px;
+    height: 250px;
+  }
 `;
 
 export const Sidebar = () => {

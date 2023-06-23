@@ -12,9 +12,6 @@ const Container = styled.header`
   box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.15);
   padding: 12px;
   z-index: 2;
-  @media (max-width: 640px) {
-    background-color: orange;
-  }
 `;
 
 const StyledLink = styled(Link)`
