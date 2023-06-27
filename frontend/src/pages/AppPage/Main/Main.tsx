@@ -10,7 +10,8 @@ import { Settings } from './Settings';
 
 const Container = styled.main`
   flex: 1 1 auto;
-  padding: 22px;
+  padding: 18px;
+}
 `;
 
 export const Main = () => {

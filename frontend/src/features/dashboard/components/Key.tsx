@@ -7,6 +7,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: start;
   gap: 4px;
+  width: 125px;
 `;
 
 const FlexContainer = styled.div`

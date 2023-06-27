@@ -8,10 +8,11 @@ import { getIssues } from '@/features/issues';
 import { NoIssuesNotification } from './NoIssuesNotification';
 
 const Container = styled.div`
-  display: grid;
-  gap: 12px;
-  grid-template-columns: 1fr 1fr;
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
 `;
 
 export const Dashboard = () => {
