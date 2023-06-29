@@ -8,16 +8,6 @@ import { getUsers } from '@/features/users';
 import { getMilestones } from '@/features/milestones';
 import { BasicModal, BasicSelect, MultiSelect, MultiSelectObjects } from '@/components/UI';
 
-const modalStyling = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: '#ffffff',
-  boxShadow: 4,
-};
-
 const Container = styled.div`
   display: flex;
   gap: 8px;
@@ -71,6 +61,20 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
   const [currentMilestone, setcurrentMilestone] = useState<any>();
   const { email } = userContext();
   const { currentProject } = projectsContext();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [modalWidth, setModalWidth] = useState(400);
+
+  useEffect(() => {
+    if (windowWidth <= 768) {
+      setModalWidth(355);
+    }
+
+    const handleResizeWindow = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResizeWindow);
+    return () => {
+      window.removeEventListener('resize', handleResizeWindow);
+    };
+  }, [windowWidth]);
 
   const addComment = async (issueNumber: number) => {
     const payload = { text_content: commentTextContent, code: currentProject.code };
@@ -119,6 +123,16 @@ export const IssueAddModal = ({ open, handleClose, issues, setIssues }: Props) =
       setcurrentMilestone('none');
     }
   }, [open]);
+
+  const modalStyling = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: modalWidth,
+    bgcolor: '#ffffff',
+    boxShadow: 4,
+  };
 
   return (
     <BasicModal modalOpen={open} handleClose={handleClose} styling={modalStyling}>
