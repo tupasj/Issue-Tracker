@@ -12,6 +12,9 @@ const Container = styled.div`
   border-radius: 4px;
   background-color: var(--white);
   width: 25%;
+  @media (max-width: 640px) {
+    width: 57%;
+  }
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`

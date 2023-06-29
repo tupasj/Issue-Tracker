@@ -8,9 +8,14 @@ const Container = styled.div`
   align-items: center;
 `;
 
+const DisplayNameContainer = styled.div`
+  text-align: right;
+  line-height: 1.25;
+`;
+
 const ImageContainer = styled.div`
   align-self: center;
-  margin-left: 10px;
+  margin-left: 8px;
   margin-right: 4px;
   text-align: center;
   border: 2px solid var(--light-gray);
@@ -49,7 +54,7 @@ export const UserInfo = () => {
 
   return (
     <Container>
-      <p>{displayName && displayName}</p>
+      {displayName && <DisplayNameContainer>{displayName}</DisplayNameContainer>}
       <ImageContainer>
         {profileImage && (
           <ImageWrapper>

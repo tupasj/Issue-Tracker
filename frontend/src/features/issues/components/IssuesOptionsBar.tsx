@@ -20,6 +20,27 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding-left: 4px;
 `;
 
+const Flex = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const FlexVertical = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+`;
+
+const SearchBarWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  @media (max-width: 640px) {
+    justify-content: start;
+  }
+`;
+
 type Props = {
   issues: any[];
   setIssues: React.Dispatch<React.SetStateAction<any>>;
@@ -34,13 +55,19 @@ export const IssuesOptionsBar = ({ issues, setIssues, milestoneId }: Props) => {
 
   return (
     <Container>
-      <IssueSwitch issues={issues} milestoneId={milestoneId} />
-      <IssueSearchbar issues={issues} setIssues={setIssues} />
-      {!milestoneId && (
-        <Button onClick={handleOpen}>
-          Add Issue <StyledFontAwesomeIcon icon={faPlus} />
-        </Button>
-      )}
+      <FlexVertical>
+        <SearchBarWrapper>
+          <IssueSearchbar issues={issues} setIssues={setIssues} />
+        </SearchBarWrapper>
+        <Flex>
+          <IssueSwitch issues={issues} milestoneId={milestoneId} />
+          {!milestoneId && (
+            <Button onClick={handleOpen}>
+              Add Issue <StyledFontAwesomeIcon icon={faPlus} />
+            </Button>
+          )}
+        </Flex>
+      </FlexVertical>
       <IssueAddModal issues={issues} open={open} handleClose={handleClose} setIssues={setIssues} />
     </Container>
   );

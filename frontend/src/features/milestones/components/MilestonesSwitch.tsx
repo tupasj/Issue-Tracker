@@ -19,6 +19,7 @@ const SwitchLeft = styled.span<any>`
   border-right-width: 1px;
   padding: 4px;
   font-size: 0.75rem;
+  text-align: center;
   cursor: pointer;
   &:hover {
     text-decoration: underline;
@@ -34,6 +35,7 @@ const SwitchRight = styled.span<any>`
   border-left-width: 1px;
   padding: 4px;
   font-size: 0.75rem;
+  text-align: center;
   cursor: pointer;
   &:hover {
     text-decoration: underline;

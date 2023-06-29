@@ -27,6 +27,9 @@ const Title = styled.div`
   &:hover {
     color: var(--blue);
   }
+  @media (max-width: 640px) {
+    font-size: 0.92rem;
+  }
 `;
 
 const IssueInfo = styled.div`
@@ -34,7 +37,9 @@ const IssueInfo = styled.div`
   justify-content: center;
   align-items: center;
   gap: 12px;
-  width: 254px;
+  @media (max-width: 640px) {
+    font-size: 0.92rem;
+  }
 `;
 
 const ProgressBarContainer = styled.div`
@@ -43,7 +48,6 @@ const ProgressBarContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 6px;
-  width: 254px;
 `;
 
 type Props = {

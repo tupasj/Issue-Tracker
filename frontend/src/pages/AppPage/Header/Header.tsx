@@ -9,6 +9,7 @@ const Container = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6px;
   box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.15);
   padding: 12px;
   z-index: 2;
