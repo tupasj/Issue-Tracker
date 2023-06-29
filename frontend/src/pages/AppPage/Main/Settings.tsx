@@ -6,7 +6,11 @@ import { SettingsPersonalization } from './SettingsPersonalization';
 import { SettingsProjects } from './SettingsProjects';
 import { SettingsModalDeleteProject } from './SettingsModalDeleteProject';
 
-const Container = styled.div``;
+const Container = styled.div`
+  @media (max-width: 768px) {
+    padding-left: 5%;
+  }
+`;
 
 const H2 = styled.h2`
   padding-top: 22px;
