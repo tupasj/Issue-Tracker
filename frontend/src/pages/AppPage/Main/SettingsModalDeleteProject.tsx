@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { projectsContext } from '@/context';
-import { BasicModal } from '@/components';
+import { ResponsiveModal } from '@/components';
 import { Button } from '@/elements';
 import { deleteProject } from '@/features/projects';
 
@@ -66,7 +66,7 @@ export const SettingsModalDeleteProject = ({
   };
 
   return (
-    <BasicModal modalOpen={open} handleClose={handleClose}>
+    <ResponsiveModal modalOpen={open} handleClose={handleClose}>
       <Container>
         <Heading>Delete project</Heading>
         <NormalText>
@@ -77,6 +77,6 @@ export const SettingsModalDeleteProject = ({
         </Button>
         <Notification>{deleteNotification}</Notification>
       </Container>
-    </BasicModal>
+    </ResponsiveModal>
   );
 };

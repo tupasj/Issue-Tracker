@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { projectsContext, userContext } from '@/context';
-import { BasicModal } from '@/components';
+import { ResponsiveModal } from '@/components';
 import { Button } from '@/elements';
 import { getUsers, updateUserType } from '../api';
 
@@ -64,7 +64,7 @@ export const UserModalPromote = ({ open, handleClose, userInfo, setUsers }: Prop
   };
 
   return (
-    <BasicModal modalOpen={open} handleClose={handleClose}>
+    <ResponsiveModal modalOpen={open} handleClose={handleClose}>
       <Container>
         <Heading>Promote user to admin</Heading>
         <NormalText>
@@ -80,6 +80,6 @@ export const UserModalPromote = ({ open, handleClose, userInfo, setUsers }: Prop
           Promote to admin
         </Button>
       </Container>
-    </BasicModal>
+    </ResponsiveModal>
   );
 };

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { BasicModal } from '@/components';
+import { ResponsiveModal } from '@/components';
 import { capitalizeFirstLetter } from '@/utils/stringUtils';
 import { UserProfileImage } from './UserProfileImage';
 
@@ -46,7 +46,7 @@ type Props = {
 
 export const UserModal = ({ open, handleClose, userInfo }: Props) => {
   return (
-    <BasicModal modalOpen={open} handleClose={handleClose}>
+    <ResponsiveModal modalOpen={open} handleClose={handleClose}>
       <Container>
         {userInfo && (
           <>
@@ -86,6 +86,6 @@ export const UserModal = ({ open, handleClose, userInfo }: Props) => {
           </>
         )}
       </Container>
-    </BasicModal>
+    </ResponsiveModal>
   );
 };

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { BasicModal } from '@/components/UI';
+import { ResponsiveModal } from '@/components/UI';
 import { Button } from '@/elements';
 
 const Container = styled.div`
@@ -31,7 +31,7 @@ export const MilestoneDeleteModal = ({
   deleteNotification,
 }: Props) => {
   return (
-    <BasicModal modalOpen={modalOpen} handleClose={handleClose}>
+    <ResponsiveModal modalOpen={modalOpen} handleClose={handleClose}>
       <Container>
         <Text>
           Are you sure you want to delete this Milestone? Note that only the Milestone will be
@@ -42,6 +42,6 @@ export const MilestoneDeleteModal = ({
         </Button>
         <Notification>{deleteNotification}</Notification>
       </Container>
-    </BasicModal>
+    </ResponsiveModal>
   );
 };

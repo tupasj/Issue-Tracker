@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faForward, faCircleCheck, faGears } from '@fortawesome/free-solid-svg-icons';
 import { IssueViewOptionsModal } from './IssueViewOptionsModal';
 import { convertTimestamp } from '@/utils/issueUtils';
-import { BasicModal } from '@/components/UI';
+import { ResponsiveModal } from '@/components/UI';
 import { IssuePriority } from './IssuePriority';
 
 const Container = styled.span``;
@@ -111,7 +111,7 @@ export const IssueViewHeader = ({
           <Username>{currentIssue.postedBy}</Username> on {formattedTime}
         </AdditionalInfo>
       </TitleSecondaryContainer>
-      <BasicModal modalOpen={modalOpen} handleClose={handleClose}>
+      <ResponsiveModal modalOpen={modalOpen} handleClose={handleClose}>
         <IssueViewOptionsModal
           issues={issues}
           setIssues={setIssues}
@@ -120,7 +120,7 @@ export const IssueViewHeader = ({
           deleteNotification={deleteNotification}
           setDeleteNotification={setDeleteNotification}
         />
-      </BasicModal>
+      </ResponsiveModal>
     </Container>
   );
 };

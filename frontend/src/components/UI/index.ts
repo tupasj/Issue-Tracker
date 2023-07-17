@@ -3,3 +3,4 @@ export * from './BasicModal';
 export * from './BasicSelect';
 export * from './MultiSelect';
 export * from './MultiSelectObjects';
+export * from './ResponsiveModal';

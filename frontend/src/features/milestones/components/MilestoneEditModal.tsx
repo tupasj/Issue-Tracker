@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { projectsContext } from '@/context';
-import { BasicModal } from '@/components/UI';
+import { ResponsiveModal } from '@/components/UI';
 import { Button } from '@/elements';
 import { getCurrentMilestone, makeUpdatedMilestones } from '@/utils/milestoneUtils';
 import { updateMilestone } from '../api';
@@ -70,7 +70,7 @@ export const MilestoneEditModal = ({
   };
 
   return (
-    <BasicModal modalOpen={modalOpen} handleClose={handleClose}>
+    <ResponsiveModal modalOpen={modalOpen} handleClose={handleClose}>
       <Container>
         <H2>Edit Milestone</H2>
         <H3>Title</H3>
@@ -92,6 +92,6 @@ export const MilestoneEditModal = ({
           Save changes
         </Button>
       </Container>
-    </BasicModal>
+    </ResponsiveModal>
   );
 };

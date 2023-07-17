@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { projectsContext } from '@/context';
 import { createMilestone } from '../api';
 import { Button } from '@/elements';
-import { BasicModal } from '@/components/UI';
+import { ResponsiveModal } from '@/components/UI';
 
 const Container = styled.div`
   height: 275px;
@@ -59,7 +59,7 @@ export const MilestoneAddModal = ({ modalOpen, handleClose, milestones, setMiles
   };
 
   return (
-    <BasicModal modalOpen={modalOpen} handleClose={handleClose}>
+    <ResponsiveModal modalOpen={modalOpen} handleClose={handleClose}>
       <Container>
         <H2>New Milestone</H2>
         <H3>Title</H3>
@@ -79,6 +79,6 @@ export const MilestoneAddModal = ({ modalOpen, handleClose, milestones, setMiles
           Create Milestone
         </Button>
       </Container>
-    </BasicModal>
+    </ResponsiveModal>
   );
 };
